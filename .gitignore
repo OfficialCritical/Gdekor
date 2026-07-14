@@ -1,0 +1,37 @@
+# Build kimenetek
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Lokális / titkos config (ha később használnád)
+appsettings.*.local.json
+*.local.json
+.env
+.env.*
+
+# Publish
+publish/
+[Dd]ebug/
+[Rr]elease/
+
+# NuGet
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# OS fájlok
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE (opcionális)
+.idea/
+*.swp
+*~

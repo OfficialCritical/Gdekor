@@ -1,0 +1,395 @@
+﻿@page
+@model Gdekor.Pages.G_Oldalak.ProjektekModel
+@{
+}
+<style>
+
+    .kozepResz {
+        background: url(/images/feher_top.webp);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+
+    .cardMezok {
+        max-width: 100vw;
+        overflow-y: hidden;
+    }
+    .cardMezok.aktiv {
+        overflow-y: auto;
+    }
+
+    #p_Valaszto{
+        display: flex;
+    }
+    #p_Valaszto select{
+        max-width: 100%;
+    }
+
+    
+    #p_reszletek{
+        opacity: 0;
+        pointer-events: none;
+        max-height: 0;
+        transition: opacity 0.4s ease-out, max-height 0.4s ease-out;
+        border-top: none !important;
+    }
+    #p_reszletek.aktiv{
+        opacity: 1;
+        max-height: 1500px;
+        pointer-events: auto;
+    }
+
+    .cim_Div{
+        width:100%;
+        padding-top: 0.5rem;
+        cursor: pointer;
+    }
+    .cim_Szoveg{
+        font-weight: bold;
+        color: #5c3a28;
+    }
+
+    .forgoNyil{
+        display:inline-block;
+        transform: rotate(90deg);
+        transition: transform 0.4s ease-out;
+    }
+    .forgoNyil.srehen {
+        transform: rotate(120deg);
+    }
+
+    .reszletek_Div{
+        background: rgba(255,255,255,0.7);
+        padding: 1rem;
+        border-radius: 10px;
+        opacity:0;
+        max-height: 0;
+        transition: opacity 0.4s ease-out, max-height 0.4s ease-out;
+        pointer-events: none;
+    }
+    .reszletek_Div.elohiv {
+        opacity: 1;
+        max-height: 1500px;
+        pointer-events: auto;
+    }
+    .reszletek_Div select{
+        max-width:100%;
+    }
+    .cimkeEsMezo{
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .szHozza_Div {
+        padding: 0.5rem;
+        padding-right: 1.5rem;
+        border-radius:5px;
+        max-width: 100%;
+        transition: border 0.4s ease-out;
+    }
+
+    .szHozza_Div.kiemel{        
+        /*border: solid 0.5px gray;*/
+    }
+
+    #bttn_szList_Megtek{
+        opacity:1;
+        max-width:1000px;
+        transition: opacity 0.4s ease-out, max-width 0.4s ease-out;
+    }
+    #bttn_szList_Megtek.elrejt{
+        opacity:0;
+        max-width:0;
+        display:none;
+    }
+
+    #emHozza_select{
+        border: solid 0.5px #0d6efd;
+        color: #0d6efd;
+        opacity: 0;
+        max-width: 0;
+        transition: opacity 0.4s ease-out, max-width 0.4s ease-out;
+
+    }
+    #emHozza_select.elohiv {
+        opacity: 1;
+        max-width: 1500px;
+    }
+
+    .userLista_Div{
+        opacity: 0;
+        max-height: 0;
+        transition: opacity 0.4s ease-out, max-height 0.4s ease-out;        
+    }
+    .userLista_Div.elohiv{
+        opacity: 1;
+        max-height: 1500px;            
+    }
+    #userList:empty {
+        display: none;
+    }
+
+    #userList .list-group-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    /*
+    .userDiv{
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 0.1rem 1rem;
+        gap: 1rem;
+        
+       
+        
+    }*/
+    @@media (min-width:768px){
+        .mezok {
+            max-width: 55vw;
+        }
+
+        #p_Valaszto select {
+            max-width: 39%;
+        }
+
+        .reszletek_Div select {
+            max-width: 39%;
+        }
+
+        .szHozza_Div {
+            max-width: fit-content;
+        }        
+    }
+</style>
+<div class="py-4">
+    
+    <a asp-page="/FelhOldalak/Fomenu" class="btn bttn_Tovabb mb-3">vissza</a>
+
+    @if (TempData["SikerUzenet"] is string siker)
+    {
+        <div class="alert alert-success alert-dismissible fade show mb-3">
+            @siker
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="cardMezok card egyCard animatedDiv">
+        <div class="card-header cardTeto">G Projektek</div>
+        <div class="card-body cardKozep">
+            <form id="form_Projekt" class="row" method="post" asp-page-handler="Mentes">
+                <input type="hidden" asp-for="Pro_ID_Edit" />
+
+                @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div asp-validation-summary="All" class="text-danger mb-3 col-12"></div>
+                    }
+
+                <div id="p_Valaszto_Div" class="d-flex gap-3 mb-4 col-9 col-md-7">
+                    <select id="p_Valaszto" class="form-select">
+                        <option value="" selected>Meglévő kiválasztása</option>
+                        @foreach (var pr in Model.Projektek_Lista)
+                            {
+                                <option value="@pr.Pro_ID"
+                                        data-nev="@pr.Pro_Nev"
+                                        data-allapot="@pr.Pro_Allapot"
+                                        data-leir="@pr.Pro_Leir"
+                                        data-kik="@pr.Pro_KikDolgoznak"
+                                        data-terv-kezd="@pr.Pro_Terv_Kezdet"
+                                        data-terv-veg="@pr.Pro_Terv_Veg"
+                                        data-valos-kezd="@pr.Pro_Valos_Kezdet"
+                                        data-valos-veg="@pr.ProValos_Veg"
+                                        data-bevetel="@pr.Pro_Bevetel"
+                                        data-koltseg="@pr.Pro_Koltseg"
+                                        data-profit="@pr.Pro_Profit">
+                                    @pr.Pro_Nev
+                                </option>
+                            }
+                    </select>
+                    <button type="button" class="bttn_uj btn btn-outline-primary flex-shrink-0">új projekt</button>
+                </div>
+
+                <div id="p_reszletek" class="col-12 col-md-8">
+
+                    <div class="mb-1">
+                        <div class="cim_Div mb-2">
+                            <span class="cim_Szoveg">Alapadatok </span><span class="forgoNyil">➤</span>
+                        </div>
+                        <div class="reszletek_Div ms-3">
+
+                            <div class="cimkeEsMezo mb-3">
+                                <label asp-for="Nev_Edit" class="fw-bold form-label">Név</label>
+                                <input asp-for="Nev_Edit" placeholder="pl.:Hungaroring dekorácó" class="form-control" />
+                                <span asp-validation-for="Nev_Edit" class="text-danger"></span>
+                            </div>
+
+                            <div class="cimkeEsMezo mb-3">
+                                <label asp-for="Allapot_Edit" class="fw-bold form-label">Állapot </label>
+                                <select asp-for="Allapot_Edit" class="form-select">
+                                    <option value="">Kérem válasszon</option>
+                                    <option value="ElokeszitesAlatt">Előkészítés alatt</option>
+                                    <option value="Folyamatban">Folyamatban</option>
+                                    <option value="Befejezett">Befejezett</option>
+                                    <option value="Lemondva">Lemondva</option>
+                                </select>
+                                <span asp-validation-for="Allapot_Edit" class="text-danger"></span>
+                            </div>
+
+                            <div class="cimkeEsMezo mb-3">
+                                <label asp-for="Leir_Edit" class="fw-bold form-label">Leírás </label>
+                                <textarea asp-for="Leir_Edit" placeholder="pl.:2026-os Hungaroringen történő kerítésmolinók felrakás és bárpultok lematricázása." class="form-control"></textarea>
+                                <span asp-validation-for="Leir_Edit" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-1">
+                        <div class="cim_Div mb-2">
+                            <span class="cim_Szoveg">Erőforrás-adatok  </span><span class="forgoNyil">➤</span>
+                        </div>
+                        <div class="reszletek_Div ms-3">
+
+                            <div class="cimkeEsMezo mb-4" style="padding-left:0.5rem;">
+                                <label asp-for="KikDolgoznak_Edit"  class="fw-bold form-label">Kik dolgoznak rajta?</label>
+                                <select asp-for="KikDolgoznak_Edit" id="szTipus_select" class="form-select">
+                                    <option value="mindenki" selected>mindenki</option>
+                                    @*<option value="egyeni">egyéni válogatás</option>*@
+                                </select>
+                            </div>
+
+                            <div class="szHozza_Div d-flex flex-column mb-2">
+
+                                <div class="d-flex align-items-center gap-3">
+                                    <label class="fw-bold form-label flex-shrink-0">Személyek listája</label>
+                                    <button type="button" id="bttn_szList_Megtek" class="bttn_uj btn btn-outline-primary btn-sm">megtekintés</button>
+                                    <select id="emHozza_select" class="form-select">
+                                        <option value="" selected>hozzáadás</option>
+                                        @foreach (var use in Model.Userek_Lista)
+                                        {
+                                            <option value="@use.Id">@use.Nev</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="userLista_Div ms-2 mt-4">
+                                    <ul id="userList" class="list-group">
+                                        @foreach (var use in Model.Userek_Lista)
+                                        {
+                                            <li class="list-group-item">
+                                                <span>@use.Nev</span>
+                                                <button type="button" class="btn btn-sm btn-outline-danger bttnSz_Torol">törlés</button>
+                                            </li>
+                                            
+                                        }
+                                    </ul>
+                                </div>
+                            </div>                            
+                            
+                        </div>
+                    </div>
+
+                    <div class="mb-1">
+                        <div class="cim_Div mb-2">
+                            <span class="cim_Szoveg">Időbeli adatok  </span><span class="forgoNyil">➤</span>
+                        </div>
+                        <div class="reszletek_Div ms-3">
+
+                            <div class="cimkeEsMezo mb-3">
+                                <label asp-for="TervKezd_Edit" class="fw-bold form-label">Tervezett</label>
+                                <div class="d-flex flex-column ms-3 gap-1">
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <lbl class="form-label">kezdet</lbl>
+                                        <input asp-for="TervKezd_Edit" placeholder="pl.:2026-07-10" class="datumvalaszto form-control" />
+                                    </div>
+                                    <span asp-validation-for="TervKezd_Edit" class="text-danger"></span>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <lbl asp-for="TervVeg_Edit" class="form-label">vég</lbl>
+                                        <input asp-for="TervVeg_Edit" placeholder="pl.:2026-07-10" class="datumvalaszto form-control" />
+                                    </div>
+                                    <span asp-validation-for="TervVeg_Edit" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="cimkeEsMezo mb-3">
+                                <label asp-for="ValosKezd_Edit" class="fw-bold form-label">Valós</label>
+                                <div class="d-flex flex-column ms-3 gap-1">
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <label asp-for="ValosKezd_Edit" class="form-label">kezdet</label>
+                                        <input asp-for="ValosKezd_Edit" placeholder="pl.:2026-07-10" class="datumvalaszto form-control" />
+                                    </div>
+                                    <span asp-validation-for="ValosKezd_Edit" class="text-danger"></span>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <label asp-for="ValosVeg_Edit" class="form-label">vég</label>
+                                        <input asp-for="ValosVeg_Edit" placeholder="pl.:2026-07-27" class="datumvalaszto form-control" />
+                                    </div>
+                                    <span asp-validation-for="ValosVeg_Edit" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="cim_Div mb-2">
+                            <span class="cim_Szoveg">Pénzügyi adatok  </span><span class="forgoNyil">➤</span>
+                        </div>
+                        <div class="reszletek_Div ms-3">
+
+                            <div class="cimkeEsMezo mb-3">
+                                <label asp-for="Bevetel_Edit" class="fw-bold form-label">Befolyt összeg (Ft)</label>
+                                <input asp-for="Bevetel_Edit" class="form-control" />
+                                <span asp-validation-for="Bevetel_Edit" class="text-danger"></span>
+                            </div>
+
+                            <div class="cimkeEsMezo mb-3">
+                                <label asp-for="Koltseg_Edit" class="fw-bold form-label">Költségek (Ft)</label>
+                                <input asp-for="Koltseg_Edit" class="form-control" />
+                                <span asp-validation-for="Koltseg_Edit" class="text-danger"></span>
+                            </div>
+
+                            <div class="cimkeEsMezo mb-3">
+                                <label asp-for="Profit_Edit" class="fw-bold form-label">Profit (Ft)</label>
+                                <input asp-for="Profit_Edit" class="form-control" />
+                                <span asp-validation-for="Profit_Edit" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mb-3">
+                        <button type="submit" class="btn btn-lg bttn_Action">mentés</button>
+                    </div>
+
+
+                    
+                </div>
+
+            </form>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js//datum_valaszto.js" asp-append-version="true"></script>
+    <script src="~/js/projektek.js" asp-append-version="true"></script>
+}
+
+
+
+
+
+

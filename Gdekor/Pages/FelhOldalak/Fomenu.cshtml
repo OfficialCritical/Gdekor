@@ -1,0 +1,96 @@
+﻿@page
+@model Gdekor.Pages.FelhOldalak.FomenuModel
+@{
+}
+<style>
+    .kozepResz{
+        background: url(/images/feher_top.webp);
+        background-size:cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    
+</style>
+
+@if (User.IsInRole(Szerepkorok.Admin))
+{
+    <div class="py-4">
+        <a asp-page="/NyitoOldalak/Bejelentkezes" class="btn bttn_Tovabb mb-3">kijelentkezés</a>
+
+        <div class="row gap-3 justify-content-center justify-content-md-start">
+            <div class="col-12 col-md-4">
+                <div class="card egyCard animatedCard">
+                    <div class="card-header cardTeto fw-bold">Projektjeim</div>
+                    <div class="card-body cardKozep">
+                        <p>Új projektek felvétele, meglévőek áttekintése és szerkesztése.</p>
+                        <div class="mt-auto text-end">
+                            <a asp-page="/G_Oldalak/Projektek" class="btn btn-sm bttn_Tovabb">tovább</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="card egyCard animatedCard">
+                    <div class="card-header cardTeto fw-bold">Embereim</div>
+                    <div class="card-body cardKozep">
+                        <p>Felhasználói profilok megtekintése, változtatása és törlése.</p>
+                        <div class="mt-auto text-end">
+                            <a asp-page="/FelhOldalak/Adataim" class="btn btn-sm bttn_Tovabb">tovább</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="card egyCard animatedCard">
+                    <div class="card-header cardTeto fw-bold">Adataim</div>
+                    <div class="card-body cardKozep">
+                        <p>Személyes adatok megváltoztatása, megadása és frissitése.</p>
+                        <div class="mt-auto text-end">
+                            <a asp-page="/FelhOldalak/Adataim" class="btn btn-sm bttn_Tovabb">tovább</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (User.IsInRole(Szerepkorok.Mugli))
+{
+    <div class="py-4">
+
+        <a asp-page="/NyitoOldalak/Bejelentkezes" class="btn bttn_Tovabb mb-3">kijelentkezés</a>
+
+        <div class="row gap-3 justify-content-center justify-content-md-start">
+
+            <div class="col-12 col-md-4">
+                <div class="card egyCard animatedCard">
+                    <div class="card-header cardTeto fw-bold">Munkaóráim</div>
+                    <div class="card-body cardKozep">
+                        <p>Ledolgoztt munkaórák megadása és szerkesztése.</p>
+                        <div class="mt-auto text-end">
+                            <a asp-page="/FelhOldalak/Munkaoraim" class="btn btn-sm bttn_Tovabb">tovább</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="card egyCard animatedCard">
+                    <div class="card-header cardTeto fw-bold">Adataim</div>
+                    <div class="card-body cardKozep">
+                        <p>Személyes adatok megváltoztatása és megadása.</p>
+                        <div class="mt-auto text-end">
+                            <a asp-page="/FelhOldalak/Adataim" class="btn btn-sm bttn_Tovabb">tovább</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+}
+

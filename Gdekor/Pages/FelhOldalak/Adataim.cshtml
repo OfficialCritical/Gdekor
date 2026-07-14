@@ -1,0 +1,134 @@
+@page
+@model Gdekor.Pages.FelhOldalak.AdataimModel
+@{
+}
+<style>
+    .kozepResz{
+        background: url(/images/feher_top.webp);
+        background-size:cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .egyCard {
+        backdrop-filter: blur(14px);
+    }
+
+
+    form label{
+        font-weight:bold;
+    }
+</style>
+
+
+<div class="py-4">
+
+    <a asp-page="/FelhOldalak/Fomenu" class="btn bttn_Tovabb mb-3">vissza</a>
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="card egyCard animatedDiv">
+
+        <div class="card-header cardTeto">Adataim</div>
+
+        <form method="post" asp-page-handler="Adataim" enctype="multipart/form-data">
+            <div class="card-body cardKozep">
+                <div class="row">
+                    <div class="col-12 col-md-7">
+                        <div class="lbl_Input mb-3">
+                            <label class="form-label">E-mail</label>
+                            <input asp-for="EditEmail" class="form-control" />
+                            <span asp-validation-for="EditEmail" class="text-danger"></span>
+                        </div>
+                        <div class="lbl_Input mb-3">
+                            <label class="form-label">Jelszó</label>
+                            <input asp-for="EditJelszo" type="password" placeholder="hagyd üresen, ha nem változtatod"  class="form-control" />
+                            <span asp-validation-for="EditJelszo" class="text-danger"></span>
+                        </div>
+                        <div class="lbl_Input mb-3">
+                            <label class="form-label">Teljes név</label>
+                            <input asp-for="EditNev" class="form-control" />
+                            <span asp-validation-for="EditNev" class="text-danger"></span>
+                        </div>
+                        <div class="lbl_Input mb-3">
+                            <label class="form-label">Személyi igazolvány száma</label>
+                            <input asp-for="EditSzemelyi" class="form-control" />
+                            <span asp-validation-for="EditSzemelyi" class="text-danger"></span>
+                        </div>
+                        <div class="lbl_Input mb-3">
+                            <label class="form-label">Telefonszám</label>
+                            <div class="row gap-1 mx-0 align-items-center">
+                                <div class="col-auto px-0">+36</div>
+                                <div class="col-auto px-0">
+                                    <select class="telKorzetValaszto form-select w-auto" asp-for="EditTel_Korzet">
+                                        <option value="30">30</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                        <option value="70">70</option>
+                                    </select>
+                                </div>
+                                <div class="col px-0">
+                                    <input asp-for="EditTel_Szemelyi" class="form-control" maxlength="7" placeholder="1234567" />
+                                </div>
+                            </div>
+                            <span asp-validation-for="EditTel_Korzet" class="text-danger"></span>
+                            <span asp-validation-for="EditTel_Szemelyi" class="text-danger"></span>
+                        </div>
+                        <div class="lbl_Input mb-3">
+                            <label class="form-label">Születési hely</label>
+                            <input asp-for="EditSzulHely" class="form-control" />
+                            <span asp-validation-for="EditSzulHely" class="text-danger"></span>
+                        </div>
+                        <div class="lbl_Input mb-3">
+                            <label class="form-label">Születési idő</label>
+                            <input asp-for="EditSzulIdo" class="datumvalaszto form-control" />
+                            <span asp-validation-for="EditSzulIdo" class="text-danger"></span>
+                        </div>
+                        <div class="lbl_Input mb-4">
+                            <label class="form-label">Anyja neve</label>
+                            <input asp-for="EditAnyjaNeve" class="form-control" />
+                            <span asp-validation-for="EditAnyjaNeve" class="text-danger"></span>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.AktualProfKep)){
+                            <div class="lbl_Input mb-4">
+                                <label class="form-label">Jelenlegi profilkép</label>
+                                <img src="@Model.AktualProfKep" alt="profilkép" class="rounded-circle mb-2" style="height:80px; width:80px; object-fit:cover;" />
+                            </div>
+                            <div class="lbl_Input mb-4">
+                                <label class="form-label">Új profilkép</label>
+                                <input asp-for="EditProfKep" type="file" accept="image/jpeg,image/png,image/webp" class="form-control" />
+                                <span asp-validation-for="EditProfKep" class="text-danger"></span>
+                            </div>
+                        }
+                        else{
+                            <div class="lbl_Input mb-4">
+                                <label class="form-label">Új profilkép</label>
+                                <input asp-for="EditProfKep" type="file" accept="image/jpeg,image/png,image/webp" class="form-control" />
+                                <span asp-validation-for="EditProfKep" class="text-danger"></span>
+                            </div>
+                        }
+
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-lg bttn_Action">mentés</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/datum_valaszto.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded',function(){
+
+            const animatedDiv = document.querySelector('.animatedDiv');
+
+            if(!animatedDiv) return;
+
+            animatedDiv.classList.add('elohiv');
+        });
+    </script>
+}

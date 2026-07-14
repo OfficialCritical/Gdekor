@@ -1,0 +1,165 @@
+@page
+@model Gdekor.Pages.NyitoOldalak.RegisztralasModel
+@{
+}
+<style>
+    .kozepResz {
+        background: linear-gradient(to bottom right,#5c3a28 0%, #5c3a28 5.8%, white 7%, white 69.8%, #5c3a28 71%, #5c3a28 100%);
+    }
+
+    .formSzuk{
+        min-width: 25vw;
+        padding: 1.5rem 1.75rem;
+        border-radius: 16px;
+        border: solid 1px rgba(255,255,255,0.6);
+        background:rgba(255,255,255,0.75);
+        box-shadow: 8px 8px 24px rgba(60,40,28,0.15);
+        display:flex;
+        gap: 3rem;
+    }
+
+    .formSzuk label{
+        font-weight: bold;
+    }
+
+
+    .mezok_Div{
+        flex-grow:1;
+        min-width:0;
+    }
+    .bttnLe_Div {
+        border-top:none !important;
+        flex-shrink: 0;
+        opacity:0;
+        transition: opacity 0.7s ease-out;
+    }
+    .bttnLe_Div.aktiv {
+        flex-shrink: 0;
+        opacity:1;
+    }
+
+    .bttnLe{
+        background: white;
+        border: solid 0.5px rgba(255,255,255,0.95);
+        color: #5c3a28;
+        transform: rotate(90deg);
+        transition: transform 0.7s ease-out;
+        position: sticky;
+        top: 30%;
+    }
+    .bttnLe:hover{
+        background: white;
+        border: solid 0.5px rgba(255,255,255,0.95);
+        color: #5c3a28;
+        transform: translateY(8px) rotate(90deg);
+    }
+    .bttnLe:focus,
+    .bttnLe:active {
+        outline: none!important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+    .telKorzetValaszto{
+        border-radius: 9px;
+        border: solid 0.5px #dee2e6;
+    }
+
+</style>
+<div class="container py-4 mezo">
+
+
+    <div class="mb-5">
+        <a id="bejelentLink" class="btn nyito_link inaktiv btn-lg" asp-page="/NyitoOldalak/Bejelentkezes">Bejelentkezés</a>
+        <a id="bejelentLink" class="btn nyito_link aktiv btn-lg">Regisztrálás</a>
+    </div>
+
+    <form method="post" id="regForm" asp-page-handler="Regisztracio" enctype="multipart/form-data" class="row animatedDiv">
+        <div class="col-12 col-md-7">
+            <div class="formSzuk">
+                <div class="mezok_Div">
+                    <div class="lbl_Input mb-3 mb-md-4">
+                        <label class="form-label">E-mail</label>
+                        <input asp-for="RegEmail" placeholder="pl.:pelda@gmail.com" class="form-control" />
+                        <span asp-validation-for="RegEmail" class="text-danger"></span>
+                    </div>
+
+                    <div class="lbl_Input mb-3 mb-md-4">
+                        <label class="form-label">Jelszó</label>
+                        <input asp-for="RegJelszo" type="password" placeholder="pl.:Titkos79!" class="form-control" />
+                        <span asp-validation-for="RegJelszo" class="text-danger"></span>
+                    </div>
+
+                    <div class="lbl_Input mb-3 mb-md-4">
+                        <label class="form-label">Teljes név</label>
+                        <input asp-for="RegNev" placeholder="pl.:Dekor Tamás" class="form-control" />
+                        <span asp-validation-for="RegNev" class="text-danger"></span>
+                    </div>
+
+                    <div class="lbl_Input mb-3 mb-md-4">
+                        <label class="form-label">Személyi azonosító</label>
+                        <input asp-for="RegSzemelyi" placeholder="12345678AE" class="form-control" />
+                        <span asp-validation-for="RegSzemelyi" class="text-danger"></span>
+                    </div>
+
+                    <div class="lbl_Input mb-3 mb-md-4">
+                        <label class="form-label">Telefonszám</label>
+                        <div class="row gap-1 mx-0 align-items-center">
+                            <div class="col-auto px-0">+36</div>
+                            <div class="col-auto px-0">
+                                <select class="telKorzetValaszto form-select w-auto" asp-for="RegTel_Korzet">
+                                    <option value="30" selected>30</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="70">70</option>
+                                </select>
+                            </div>
+                            <div class="col px-0">
+                                <input asp-for="RegTel_Egyeni" class="form-control" maxlength="7" placeholder="1234567" />
+                            </div>
+                        </div>
+                        <span asp-validation-for="RegTel_Egyeni" class="text-danger"></span>
+                    </div>
+
+                    <div class="lbl_Input mb-3 mb-md-4">
+                        <label class="form-label">Születési hely</label>
+                        <input asp-for="RegSzulHely" placeholder="" class="form-control" />
+                        <span asp-validation-for="RegSzulHely" class="text-danger"></span>
+                    </div>
+
+                    <div class="lbl_Input mb-3 mb-md-4">
+                        <label class="form-label">Születési idő</label>
+                        <input asp-for="RegSzulIdo" class="datumvalaszto form-control" />
+                        <span asp-validation-for="RegSzulIdo" class="text-danger"></span>
+                    </div>
+
+                    <div class="lbl_Input mb-3 mb-md-4">
+                        <label class="form-label">Anyja neve</label>
+                        <input asp-for="RegAnyjaNeve" class="form-control" />
+                        <span asp-validation-for="RegAnyjaNeve" class="text-danger"></span>
+                    </div>
+
+                    <div class="lbl_Input mb-4 mb-md-5">
+                        <label class="form-label">Profilkép</label>
+                        <input asp-for="RegProfKep" type="file" accept="image/jpeg,image/png,image/webp" class="form-control" />
+                        <span asp-validation-for="RegProfKep" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button id="bttn_reg" type="submit" class="btn btn-outline-primary mx-auto">
+                            regisztrácó
+                        </button>
+
+                    </div>
+                </div>
+                <div id="bttnLe_Div" class="bttnLe_Div">
+                    <button type="button" id="bttnLe" class="btn bttnLe fs-3">➤</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+@section Scripts{
+    <script src="~/js/datum_valaszto.js" asp-append-version="true"></script>
+    <script src="~/js/regiszt.js" asp-append-version="true"></script>
+}

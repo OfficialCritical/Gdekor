@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - G Dekor Solutions</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Gdekor.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <style>
+        .kozepResz{
+            overflow:auto;
+        }
+
+        .nyito_link {
+            border-radius: 0 !important;
+            height: fit-content;
+            width: fit-content;
+            padding: 10px 25px;
+        }
+
+        .aktiv {
+            border-top: 2px solid black;
+        }
+        .aktiv:hover {
+            border-top: 2px solid black;
+        }
+
+        .inaktiv {
+            opacity: 0.8;
+            color: gray;
+            border-top: 0.5px solid gray;
+            transition: all 0.5s ease-out;
+        }
+        .inaktiv:hover {
+            color: #444;
+            border-top: 0.5px solid #444;
+        }
+
+        .lbl_Input {
+            display: flex;
+            flex-direction: column;
+        }
+
+        
+
+
+
+        .animatedCard {
+            transform-origin: center;
+            opacity: 0;
+            animation: szetnyilik 1.5s ease-out forwards;
+        }
+
+        @@keyframes szetnyilik {
+            from {
+                transform: scaleX(0);
+                opacity: 0;
+            }
+
+            to {
+                transform: scaleX(1);
+                opacity: 1;
+            }
+        }
+
+        .egyCard {
+            border-radius: 20px;
+            border-top: 4px solid #5c3a28;
+            border-bottom: 4px solid #5c3a28;
+            background: transparent;
+            backdrop-filter: blur(8px);
+            overflow-y: auto;
+
+        }
+
+        .cardTeto {
+            background: white;
+            color: #5c3a28;
+        }
+
+        .cardKozep {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bttn_Tovabb {
+            border: solid 1px #5c3a28;
+            background: white;
+            color: #5c3a28;
+            transition: all 0.7s ease-out;
+        }
+        .bttn_Tovabb:hover {
+            border: solid 1px #5c3a28;
+            background: white;
+            color: #5c3a28;
+            transform: scale(1.08);
+        }
+
+        .bttn_Action {
+            width: 90%;
+            background: linear-gradient(160deg, #a67c52 0%, #7a4f35 45%, #5c3a28 100%);
+            color: white;
+            transition: all 0.7s ease-out;
+        }
+        .bttn_Action:hover {
+            background: linear-gradient(160deg, #a67c52 0%, #7a4f35 45%, #5c3a28 100%);
+            color: white;
+            transform: scale(1.08);
+        }
+
+        .bttn_uj {
+            
+            transition: all 0.4s ease-out;
+        }
+        .bttn_uj.aktiv {
+            background: #0d6efd;
+            color: white;
+        }
+
+        .animatedDiv{
+            opacity:0;
+            transition: opacity 1.2s ease-out;
+        }
+        .animatedDiv.elohiv{
+            opacity:1;
+            
+        }
+
+
+        @@media (max-width:768px){
+
+            .kozepResz{
+                padding-left:5%;
+            }
+        }
+    </style>
+</head>
+<body class="d-flex flex-column vh-100">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">G-Dekor Solutions</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="kozepResz flex-grow-1">
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+   
+    
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - G-Dekor Solutions - <a href="mailto:gdekorsolutions@gmail.com">gdekorsolutions@gmail.com</a> - <a href="tel:+36308545232">+36 30 8545 232</a>
+        </div>
+    </footer>
+    
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/hu.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

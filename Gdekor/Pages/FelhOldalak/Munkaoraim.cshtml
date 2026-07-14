@@ -1,0 +1,249 @@
+﻿@page
+@model Gdekor.Pages.FelhOldalak.MunkaoraimModel
+@{
+    ViewData["Title"] = "Munkaóráim";
+}
+
+<style>
+    .kozepResz {
+        background: url(/images/feher_top.webp);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .munkaOrakWrap {
+        max-width: 700px; /* ez az irányadó szélesség */
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .egyCard {
+        backdrop-filter: none;
+    }
+
+    .naptar-kartya {
+        width: 100%;
+        /* max-width: 700px;  ← ezt vedd ki, a wrapper adja */
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 16px;
+        border-top: 4px solid #5c3a28;
+        overflow: hidden;
+    }
+
+
+    .fc .fc-toolbar.fc-header-toolbar {
+        margin: 0;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #333;
+        text-transform: capitalize;
+    }
+
+    .fc .fc-button {
+        background: #fff !important;
+        border: 1px solid #ddd !important;
+        color: #333 !important;
+    }
+
+    .fc .fc-button:hover {
+        background: #f5f5f5 !important;
+        color: #5c3a28 !important;
+    }
+
+    .fc .fc-honapFel-button,
+    .fc .fc-honapLe-button {
+        border: 1px solid #5c3a28 !important;
+    }
+    /* ===== Hét napjai (fejléc sor) ===== */
+    .fc .fc-col-header {
+        background: #7c513a;
+    }
+
+    .fc .fc-col-header-cell-cushion {
+        color: #fff;
+        font-weight: 700;
+        text-decoration: none;
+    }
+    /* ===== Normál nap cellák ===== */
+    .fc .fc-daygrid-day {
+        background: #f3eadf !important;
+        cursor:pointer;
+    }
+
+    .fc .fc-daygrid-day-number {
+        color: #000;
+        text-decoration: none;
+    }
+    /* ===== Más hónap napjai (halványabb) ===== */
+    .fc .fc-day-other .fc-daygrid-day {
+        background: #b8956e !important;
+    }
+
+    .fc .fc-day-other .fc-daygrid-day-number {
+        color: gray;
+    }
+    /* ===== Mai nap – betöltéskor / ha ő a kiválasztott ===== */
+    .fc .fc-daygrid-day.fc-day-today {
+        background: #fff !important;
+    }
+        /* ===== Mai nap – ha MÁS nap van kiválasztva (JS: mai-visszaallitva) ===== */
+        .fc .fc-daygrid-day.fc-day-today.mai-visszaallitva {
+            background: #f3eadf !important;
+            outline: none;
+        }
+    /* ===== Kiválasztott nap (JS: kivalasztott-nap) ===== */
+    .fc .fc-daygrid-day.kivalasztott-nap {
+        background: #fff !important;
+        outline: 2px solid #5c3a28;
+    }
+    /* ===== Rács keret ===== */
+    .fc .fc-scrollgrid {
+        border: none !important;
+    }
+
+
+
+    .munkaDiv, .szunetDiv{
+        background: rgba(255,255,255, 0.75);
+        border-radius: 12px;
+        padding: 1rem;
+    }
+
+    .valasszDatumot{
+        display: flex;
+        justify-content: center;
+        color: black;
+        font-weight: bold;
+        transition: all 0.4s ease-out;
+    }
+    .valasszDatumot.elrejt{
+        opacity:0;
+        max-height:0;
+    }
+
+    #form_mOrak{
+        opacity:0;
+        max-height: 0;
+        transition: opacity 0.4s ease-out, max-height 0.4s ease-out;
+        overflow:hidden;
+        pointer-events: none;
+    }
+    #form_mOrak.elohiv{
+        opacity:1;
+        max-height: 1500px;
+        overflow: visible;
+        pointer-events: auto;
+    }
+
+    .form_Belso{
+        opacity:0.5;
+        pointer-events:none;
+        transition: opacity 0.4s ease-out;
+        border: none !important;
+    }
+    .form_Belso.aktiv{
+        opacity:1;
+        pointer-events:auto;
+    }
+
+    #szunetekLista:empty{
+        display:none;
+    }
+    #szunetekLista .list-group-item{
+        display:flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+
+<div class="py-4">
+
+    <a asp-page="/FelhOldalak/Fomenu" class="btn bttn_Tovabb mb-3">vissza</a>
+
+    <div class="munkaOrakWrap animatedDiv">
+        <div class="naptar-kartya mb-3">
+            <div id="naptar"></div>
+        </div>
+
+        <div class="card egyCard">
+            <div class="cardTeto card-header">Részletek</div>
+            <div class="cardKozep card-body">
+                <form method="post" asp-page-handler="Mentes">
+
+                </form>
+                <p class="valasszDatumot">Válassz ki egy dátumot!</p>
+
+                <form id="form_mOrak" class="d-flex flex-column">
+                    <select id="select_Projekt" asp-for="Projekt_Id_Edit" class=" form-select mb-2">
+                        <option value="" selected>Válassz ki egy projektet</option>
+                        @foreach(var pr in Model.Projektek_Lista)
+                            {
+                                <option value="@pr.Pro_ID">@pr.Pro_Nev</option>
+                            }
+                    </select>
+                    <span asp-validation-for="Projekt_Id_Edit" class="text-danger"></span>
+                    <div class="form_Belso">
+                        <div class="munkaDiv mb-3">
+                            <lbl class="fw-bold form-label">Munkaidő megadása</lbl>
+                            <div class="row p-1">
+                                <div class="lbl_Input mb-3 col-12 col-md-7">
+                                    <lbl asp-for="Munka_Kezdete" class="form-label">Kezdete</lbl>
+                                    <input asp-for="Munka_Kezdete_Edit" id="m_kezdete" type="time" class="form-control" />
+                                    <span asp-validation-for="Munka_Kezdete_Edit" class="text-danger"></span>
+                                </div>
+                                <div class="lbl_Input mb-3 col-12 col-md-7">
+                                    <lbl asp-for="Munka_Vege" class="form-label">Vége</lbl>
+                                    <input asp-for="Munka_Vege_Edit" id="m_vege" type="time" class="form-control" />
+                                    <span asp-validation-for="Munka_Vege_Edit" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="szunetDiv mb-3">
+                            <lbl class="fw-bold form-label">Szünet(ek) megadása</lbl>
+                            <div class="row p-1">
+                                <div class="lbl_Input mb-3 col-12 col-md-7">
+                                    <lbl class="form-label">Kezdete</lbl>
+                                    <input id="sz_kezdete" type="time" class="form-control" />
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="lbl_Input mb-3 col-12 col-md-7">
+                                    <lbl class="form-label">Vége</lbl>
+                                    <input id="sz_vege" type="time" class="form-control" />
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="d-flex mb-4">
+                                    <button type="button" id="btt_szHozzaad" class="btn btn-sm btn-outline-primary">hozzáad</button>
+                                </div>
+                                <div class="lbl_Input mb-5 col-12 col-md-7">
+                                    <lbl class="fw-bold form-label">Szünetek listája</lbl>
+                                    <ul id="szunetekLista" class="ms-2 list-group"></ul>
+                                    <span id="noSzunet" class="text-muted small ms-2">Még nincs szünet hozzáadva</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                            <button id="bttn_mNapMentes" type="submit" class="btn btn-lg bttn_Action">mentés</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@fullcalendar/core@6.1.15/locales/hu.global.min.js"></script>
+    <script src="~/js/munka_naptar_fc.js" asp-append-version="true"></script>
+    <script src="~/js/m_Orak.js" asp-append-version="true"></script>
+}
