@@ -116,7 +116,7 @@ namespace Gdekor.Pages.FelhOldalak
             }
 
             //ORA
-            munka_Ora.M_Nap_ID = MNap_ID_Edit;
+            munka_Ora.M_Nap_ID = munkanap_ID;
             munka_Ora.MOra_ID = Guid.NewGuid().ToString();
             munka_Ora.M_Kezdete = Munka_Kezdete_Edit;
             munka_Ora.M_Vege = Munka_Vege_Edit;
