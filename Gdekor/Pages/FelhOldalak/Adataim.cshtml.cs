@@ -164,7 +164,7 @@ namespace Gdekor.Pages.FelhOldalak
                     return Page();
                 }
             }
-
+            TempData["SikerUzenet"] = "Sikeres mentés.";
             return RedirectToPage();
             
         }

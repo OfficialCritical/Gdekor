@@ -127,16 +127,7 @@
         opacity: 1;
         max-height: 1500px;            
     }
-    #userList:empty {
-        display: none;
-    }
 
-    #userList .list-group-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    /*
     .userDiv{
         display: flex;
         align-items: center;
@@ -144,9 +135,9 @@
         padding: 0.1rem 1rem;
         gap: 1rem;
         
-       
+        /*border-bottom: solid 0.5px gray;*/
         
-    }*/
+    }
     @@media (min-width:768px){
         .mezok {
             max-width: 55vw;
@@ -275,14 +266,17 @@
                                 </div>
 
                                 <div class="userLista_Div ms-2 mt-4">
-                                    <ul id="userList" class="list-group">
+                                    <ul>
                                         @foreach (var use in Model.Userek_Lista)
                                         {
-                                            <li class="list-group-item">
+                                            <li>
                                                 <span>@use.Nev</span>
                                                 <button type="button" class="btn btn-sm btn-outline-danger bttnSz_Torol">törlés</button>
                                             </li>
-                                            
+                                            <div class="userDiv">
+                                                <label class="form-label flex-shrink-0">@use.Nev</label>
+                                                <button type="button" class="btn btn-outline-danger btn-sm">törlés</button>
+                                            </div>
                                         }
                                     </ul>
                                 </div>

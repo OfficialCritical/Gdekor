@@ -1,10 +1,23 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
 
     const animatedDiv = document.querySelector('.animatedDiv');
+    const form_mOrak = document.getElementById('form_mOrak');
 
     const m_kezdete = document.getElementById('m_kezdete');
     const m_vege = document.getElementById('m_vege');
+    
+    
+    const bttn_mNapMentes = document.getElementById('bttn_mNapMentes');
+    
+    if (!m_kezdete || !m_vege || !animatedDiv) {
+        return;
+    }
+    
+    animatedDiv.classList.add('elohiv');
 
+
+
+    /*
     const sz_kezdete = document.getElementById('sz_kezdete');
     const sz_vege = document.getElementById('sz_vege');
     
@@ -12,14 +25,28 @@
     const szunetekLista = document.getElementById('szunetekLista');
     const noSzunet = document.getElementById('noSzunet');
 
-    const bttn_mNapMentes = document.getElementById('bttn_mNapMentes');
-    
-    if (!m_kezdete || !m_vege || !sz_kezdete || !sz_vege || !btt_szHozzaad || !szunetekLista || !animatedDiv) {
-        return;
-    }
-
-    animatedDiv.classList.add('elohiv');
-
+        form_mOrak?.addEventListener('submit', function (e) {
+        const datum = document.getElementById('Datum_Edit')?.value;
+        const projekt = document.getElementById('select_Projekt')?.value;
+        if (!datum) {
+            e.preventDefault();
+            alert('Válassz ki egy dátumot a naptárban!');
+            return;
+        }
+        if (!projekt) {
+            e.preventDefault();
+            alert('Válassz projektet!');
+            return;
+        }
+        const szunetek = [];
+        szunetekLista.querySelectorAll('li').forEach(li => {
+            szunetek.push({
+                Kezdete: li.dataset.kezdete,
+                Vege: li.dataset.vege
+            });
+        });
+        document.getElementById('Szunetek_Json').value = JSON.stringify(szunetek);
+    });
 
     function frissitUresSzoveg() {
         noSzunet.style.display = szunetekLista.children.length ? 'none' : 'block';
@@ -86,8 +113,7 @@
 
     
     frissitUresSzoveg();
-
-
+    */ 
 
 
 });

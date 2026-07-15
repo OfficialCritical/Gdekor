@@ -52,10 +52,10 @@
         color: #333 !important;
     }
 
-    .fc .fc-button:hover {
-        background: #f5f5f5 !important;
-        color: #5c3a28 !important;
-    }
+        .fc .fc-button:hover {
+            background: #f5f5f5 !important;
+            color: #5c3a28 !important;
+        }
 
     .fc .fc-honapFel-button,
     .fc .fc-honapLe-button {
@@ -74,21 +74,29 @@
     /* ===== Normál nap cellák ===== */
     .fc .fc-daygrid-day {
         background: #f3eadf !important;
-        cursor:pointer;
+        cursor: pointer;
     }
 
     .fc .fc-daygrid-day-number {
         color: #000;
         text-decoration: none;
     }
+
+
     /* ===== Más hónap napjai (halványabb) ===== */
-    .fc .fc-day-other .fc-daygrid-day {
-        background: #b8956e !important;
+    .fc .fc-daygrid-day.fc-day-other {
+        background: #f3eadf !important;
     }
+
+        .fc .fc-daygrid-day.fc-day-other,
+        .fc .fc-daygrid-day.fc-day-other * {
+            cursor: not-allowed !important;
+        }
 
     .fc .fc-day-other .fc-daygrid-day-number {
         color: gray;
     }
+
     /* ===== Mai nap – betöltéskor / ha ő a kiválasztott ===== */
     .fc .fc-daygrid-day.fc-day-today {
         background: #fff !important;
@@ -110,54 +118,61 @@
 
 
 
-    .munkaDiv, .szunetDiv{
+    .munkaDiv, .szunetDiv {
         background: rgba(255,255,255, 0.75);
         border-radius: 12px;
         padding: 1rem;
     }
 
-    .valasszDatumot{
+    .valasszDatumot {
         display: flex;
         justify-content: center;
         color: black;
         font-weight: bold;
         transition: all 0.4s ease-out;
     }
-    .valasszDatumot.elrejt{
-        opacity:0;
-        max-height:0;
-    }
 
-    #form_mOrak{
-        opacity:0;
+        .valasszDatumot.elrejt {
+            opacity: 0;
+            max-height: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+    #form_mOrak {
+        opacity: 0;
         max-height: 0;
         transition: opacity 0.4s ease-out, max-height 0.4s ease-out;
-        overflow:hidden;
+        overflow: hidden;
         pointer-events: none;
     }
-    #form_mOrak.elohiv{
-        opacity:1;
-        max-height: 1500px;
-        overflow: visible;
-        pointer-events: auto;
-    }
 
-    .form_Belso{
-        opacity:0.5;
-        pointer-events:none;
+        #form_mOrak.elohiv {
+            opacity: 1;
+            max-height: 1500px;
+            overflow: visible;
+            pointer-events: auto;
+        }
+
+    .form_Belso {
+        opacity: 0.5;
+        pointer-events: none;
         transition: opacity 0.4s ease-out;
         border: none !important;
     }
-    .form_Belso.aktiv{
-        opacity:1;
-        pointer-events:auto;
+
+        .form_Belso.aktiv {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+    #szunetekLista:empty {
+        display: none;
     }
 
-    #szunetekLista:empty{
-        display:none;
-    }
-    #szunetekLista .list-group-item{
-        display:flex;
+    #szunetekLista .list-group-item {
+        display: flex;
         justify-content: space-between;
         align-items: center;
     }
@@ -167,6 +182,14 @@
 
     <a asp-page="/FelhOldalak/Fomenu" class="btn bttn_Tovabb mb-3">vissza</a>
 
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    @if (TempData["SikerUzenet"] is string siker)
+    {
+        <div class="alert alert-success alert-dismissible fade show mb-3">
+            @siker
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
     <div class="munkaOrakWrap animatedDiv">
         <div class="naptar-kartya mb-3">
             <div id="naptar"></div>
@@ -175,20 +198,22 @@
         <div class="card egyCard">
             <div class="cardTeto card-header">Részletek</div>
             <div class="cardKozep card-body">
-                <form method="post" asp-page-handler="Mentes">
-
-                </form>
                 <p class="valasszDatumot">Válassz ki egy dátumot!</p>
 
-                <form id="form_mOrak" class="d-flex flex-column">
+                <form id="form_mOrak" class="d-flex flex-column" method="post" asp-page-handler="Mentes">
+
                     <select id="select_Projekt" asp-for="Projekt_Id_Edit" class=" form-select mb-2">
                         <option value="" selected>Válassz ki egy projektet</option>
-                        @foreach(var pr in Model.Projektek_Lista)
-                            {
-                                <option value="@pr.Pro_ID">@pr.Pro_Nev</option>
-                            }
+                        @foreach (var pr in Model.Projektek_Lista)
+                        {
+                            <option value="@pr.Pro_ID">@pr.Pro_Nev</option>
+                        }
                     </select>
                     <span asp-validation-for="Projekt_Id_Edit" class="text-danger"></span>
+
+                    <input type="hidden" asp-for="Datum_Edit" id="Datum_Edit" />
+                    <input type="hidden" asp-for="MNap_ID_Edit" id="MNap_ID_Edit" />
+
                     <div class="form_Belso">
                         <div class="munkaDiv mb-3">
                             <lbl class="fw-bold form-label">Munkaidő megadása</lbl>
@@ -205,7 +230,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        @*
                         <div class="szunetDiv mb-3">
                             <lbl class="fw-bold form-label">Szünet(ek) megadása</lbl>
                             <div class="row p-1">
@@ -229,7 +254,8 @@
                                 </div>
                             </div>
                         </div>
-
+                        <input type="hidden" asp-for="Szunetek_Json" id="szunetekJson" />
+                        *@
                         <div class="d-flex justify-content-center">
                             <button id="bttn_mNapMentes" type="submit" class="btn btn-lg bttn_Action">mentés</button>
                         </div>

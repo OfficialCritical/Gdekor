@@ -36,13 +36,26 @@
 
     function kijelolNap(info) {
         torolKijeloles();
-
+        select_Projekt.value = '';
+        document.getElementById('m_kezdete').value = '';
+        document.getElementById('m_vege').value = '';
+        form_Belso.classList.remove('aktiv');
         info.dayEl.classList.add('kivalasztott-nap');
         kivalasztottDatum = info.dateStr;
-
+        document.getElementById('Datum_Edit').value = info.dateStr;
         frissitMaiHatter();
     }
+    function napValtas(datumStr) {
+        document.getElementById('Datum_Edit').value = datumStr;
+        document.getElementById('MNap_ID_Edit').value = '';
+        document.getElementById('m_kezdete').value = '';
+        document.getElementById('m_vege').value = '';
 
+        const projektId = document.getElementById('select_Projekt').value;
+        if (projektId) {
+            betoltMunkaOra(datumStr, projektId);
+        }
+    }
     const calendar = new FullCalendar.Calendar(naptarEl, {
         initialView: 'dayGridMonth',
         locale: 'hu',
@@ -51,6 +64,9 @@
         fixedWeekCount: false,
 
         dateClick: function (info) {
+            if (info.dayEl.classList.contains('fc-day-other')) {
+                return;
+            }
             if (!form_mOrak.classList.contains('elohiv')) {
                 valasszDatumot.classList.add('elrejt');
                 form_mOrak.classList.add('elohiv');
@@ -104,11 +120,42 @@
 
     calendar.render();
 
-    select_Projekt.addEventListener('change', function () {
-        if (select_Projekt.value) {
-            form_Belso.classList.add('aktiv');
+    async function betoltMunkaOra(datum, projektId) {
+        const url = `/FelhOldalak/Munkaoraim?handler=Betoltes&datum=${encodeURIComponent(datum)}&projektId=${encodeURIComponent(projektId)}`;
+
+        const resp = await fetch(url, {
+            headers: { 'Accept': 'application/json' }
+        });
+
+        if (!resp.ok) return;
+
+        const data = await resp.json();
+
+        document.getElementById('Datum_Edit').value = data.datum;
+
+        if (data.vanMentett) {
+            document.getElementById('MNap_ID_Edit').value = data.mNapId;
+            document.getElementById('m_kezdete').value = data.kezdete ?? '';
+            document.getElementById('m_vege').value = data.vege ?? '';
         } else {
-            form_Belso.classList.remove('aktiv');
+            document.getElementById('MNap_ID_Edit').value = data.mNapId ?? ''; // ha munkanap van, de óra még nincs
+            document.getElementById('m_kezdete').value = '';
+            document.getElementById('m_vege').value = '';
         }
+    }
+
+    select_Projekt.addEventListener('change', function () {
+        const datum = document.getElementById('Datum_Edit').value;
+
+        if (select_Projekt.value && datum) {
+            betoltMunkaOra(datum, select_Projekt.value);
+        } else {
+            document.getElementById('MNap_ID_Edit').value = '';
+            document.getElementById('m_kezdete').value = '';
+            document.getElementById('m_vege').value = '';
+        }
+
+        // meglévő form_Belso aktiválás maradhat
+        form_Belso.classList.toggle('aktiv', !!select_Projekt.value);
     });
 });

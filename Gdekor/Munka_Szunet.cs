@@ -5,6 +5,9 @@
 
         public string? MSzunet_ID { get; set; } = string.Empty;
 
+
+        public string? MSzunet_CsoportID { get; set; } = string.Empty;
+        public string? Letrehoz { get; set; } = string.Empty;
         public string M_Nap_ID { get; set; } = string.Empty;
 
 

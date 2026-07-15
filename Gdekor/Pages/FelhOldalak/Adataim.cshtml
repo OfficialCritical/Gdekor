@@ -25,6 +25,13 @@
 
     <a asp-page="/FelhOldalak/Fomenu" class="btn bttn_Tovabb mb-3">vissza</a>
     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    @if (TempData["SikerUzenet"] is string siker)
+    {
+        <div class="alert alert-success alert-dismissible show fade">
+            @siker
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
     <div class="card egyCard animatedDiv">
 
         <div class="card-header cardTeto">Adataim</div>

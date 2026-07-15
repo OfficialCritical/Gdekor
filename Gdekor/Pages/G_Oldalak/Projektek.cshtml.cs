@@ -145,5 +145,7 @@ namespace Gdekor.Pages.G_Oldalak
                 .OrderBy(u => u.Nev)
                 .ToListAsync();
         }
+
+        //vege
     }
 }

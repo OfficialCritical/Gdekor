@@ -10,9 +10,9 @@ namespace Gdekor.Pages
             //return RedirectToPage("/NyitoOldalak/Bejelentkezes");
 
             //return RedirectToPage("/FelhOldalak/Fomenu");
-            //return RedirectToPage("/FelhOldalak/Munkaoraim");
+            return RedirectToPage("/FelhOldalak/Munkaoraim");
 
-            return RedirectToPage("/G_Oldalak/Projektek");
+            //return RedirectToPage("/G_Oldalak/Projektek");
             
         }
     }

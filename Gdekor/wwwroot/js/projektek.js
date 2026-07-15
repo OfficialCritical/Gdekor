@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
 
     const animatedDiv = document.querySelector('.animatedDiv');
     const cardMezok = document.querySelector('.cardMezok');
