@@ -47,8 +47,11 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
-using(var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
     string[] szerepkorok = { Szerepkorok.Admin, Szerepkorok.Mugli };
