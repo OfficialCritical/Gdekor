@@ -128,6 +128,16 @@
         max-height: 1500px;            
     }
 
+    #userekLista:empty {
+        display: none;
+    }
+
+    #userekLista .list-group-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .userDiv{
         display: flex;
         align-items: center;
@@ -266,17 +276,16 @@
                                 </div>
 
                                 <div class="userLista_Div ms-2 mt-4">
-                                    <ul>
+                                    <ul id="userekLista" class="list-group">
                                         @foreach (var use in Model.Userek_Lista)
                                         {
-                                            <li>
-                                                <span>@use.Nev</span>
-                                                <button type="button" class="btn btn-sm btn-outline-danger bttnSz_Torol">törlés</button>
-                                            </li>
-                                            <div class="userDiv">
-                                                <label class="form-label flex-shrink-0">@use.Nev</label>
-                                                <button type="button" class="btn btn-outline-danger btn-sm">törlés</button>
-                                            </div>
+                                            if (use.Email != "kerberosz@gmail.com")
+                                            {
+                                                <li class="list-group-item">
+                                                    <span>@use.Nev</span>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger bttnSz_Torol">törlés</button>
+                                                </li>
+                                            }                                            
                                         }
                                     </ul>
                                 </div>

@@ -29,6 +29,7 @@
         background: #fff;
         border-radius: 16px;
         border-top: 4px solid #5c3a28;
+        border-bottom: 4px solid #5c3a28;
         overflow: hidden;
     }
 
@@ -60,6 +61,7 @@
     .fc .fc-honapFel-button,
     .fc .fc-honapLe-button {
         border: 1px solid #5c3a28 !important;
+        font-size: large !important;
     }
     /* ===== Hét napjai (fejléc sor) ===== */
     .fc .fc-col-header {
@@ -132,13 +134,17 @@
         transition: all 0.4s ease-out;
     }
 
-        .valasszDatumot.elrejt {
+    .valasszDatumot.elrejt {
             opacity: 0;
             max-height: 0;
             margin: 0;
             padding: 0;
             overflow: hidden;
-        }
+    }
+
+    #select_Projekt{
+        width:80%;
+    }
 
     #form_mOrak {
         opacity: 0;
@@ -156,7 +162,7 @@
         }
 
     .form_Belso {
-        opacity: 0.5;
+        opacity: 0.4;
         pointer-events: none;
         transition: opacity 0.4s ease-out;
         border: none !important;
@@ -178,7 +184,7 @@
     }
 </style>
 
-<div class="py-4">
+<div class="py-1">
 
     <a asp-page="/FelhOldalak/Fomenu" class="btn bttn_Tovabb mb-3">vissza</a>
 
@@ -190,20 +196,17 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
-    <div class="munkaOrakWrap animatedDiv">
-        <div class="naptar-kartya mb-3">
-            <div id="naptar"></div>
-        </div>
+    <div class="munkaOrakWrap animatedDiv mb-2">
 
-        <div class="card egyCard">
+        <div class="card egyCard mb-2">
             <div class="cardTeto card-header">Részletek</div>
             <div class="cardKozep card-body">
                 <p class="valasszDatumot">Válassz ki egy dátumot!</p>
 
                 <form id="form_mOrak" class="d-flex flex-column" method="post" asp-page-handler="Mentes">
 
-                    <select id="select_Projekt" asp-for="Projekt_Id_Edit" class=" form-select mb-2">
-                        <option value="" selected>Válassz ki egy projektet</option>
+                    <select id="select_Projekt" asp-for="Projekt_Id_Edit" class="form-select mb-2 mx-auto">
+                        <option value="" class="fw-bolder" selected>Válassz ki egy projektet</option>
                         @foreach (var pr in Model.Projektek_Lista)
                         {
                             <option value="@pr.Pro_ID">@pr.Pro_Nev</option>
@@ -264,6 +267,13 @@
             </div>
 
         </div>
+
+
+        <div class="naptar-kartya mb-3">
+            <div id="naptar"></div>
+        </div>
+
+        
     </div>
 </div>
 

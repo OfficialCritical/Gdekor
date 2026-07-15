@@ -1,8 +1,132 @@
 ﻿@page
 @model PrivacyModel
 @{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Adatvédelmi tájékoztató";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-4">
+    <h1>@ViewData["Title"]</h1>
+    <p class="text-muted">Hatályos: 2026. július 15.</p>
+
+    <h2>1. Az adatkezelő</h2>
+    <p>
+        <strong>Név:</strong> G-Dekor Solutions<br />
+        <strong>Eamail:</strong> <a href="mailto:gdekorsolutions@gmail.com">gdekorsolutions@gmail.com</a><br />
+        <strong>Telefon:</strong> <a href="tel:+36308545232">+36 30 8545 232</a>
+    </p>
+
+    <h2>2. A tájékoztató célja</h2>
+    <p>
+        Jelen dokumentum ismerteti, hogy a G-Dekor Solutions munkaidő- és projektnyilvántartó
+        rendszer milyen személyes adatokat kezel,
+        milyen célból, milyen jogalapon, meddig és kikkel osztja meg azokat.
+    </p>
+
+    <h2>3. Kezelt személyes adatok köre</h2>
+    <p>A regisztráció és a Szolgáltatás használata során az alábbi adatokat kezelhetjük:</p>
+    <ul>
+        <li><strong>Azonosító és kapcsolattartási adatok:</strong> e-mail cím, név, telefonszám</li>
+        <li><strong>Azonosító okmány adatai:</strong> személyi szám, születési hely és idő, anyja neve</li>
+        <li><strong>Profiladatok:</strong> profilkép</li>
+        <li><strong>Munkavégzéssel kapcsolatos adatok:</strong> projektekhez rendelt munkaórák, munkanapok, szünetek</li>
+        <li><strong>Technikai adatok:</strong> bejelentkezési adatok, IP-cím, böngésző típusa, munkamenet-azonosítók</li>
+    </ul>
+
+    <h2>4. Az adatkezelés célja és jogalapja</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Cél</th>
+                <th>Jogalap (GDPR)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Felhasználói fiók létrehozása, azonosítás, bejelentkezés</td>
+                <td>6. cikk (1) b) – szerződés teljesítése</td>
+            </tr>
+            <tr>
+                <td>Munkaidő- és projektadatok nyilvántartása</td>
+                <td>6. cikk (1) b) – szerződés teljesítése</td>
+            </tr>
+            <tr>
+                <td>Rendszer működtetése, hibaelhárítás, biztonság</td>
+                <td>6. cikk (1) f) – jogos érdek</td>
+            </tr>
+            <tr>
+                <td>Jogszabályi kötelezettségek teljesítése (pl. munkaidő-nyilvántartás)</td>
+                <td>6. cikk (1) c) – jogi kötelezettség</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>5. Adattárolás időtartama</h2>
+    <ul>
+        <li><strong>Felhasználói fiók adatai:</strong> a fiók fennállásáig, majd legfeljebb 30 nappal a törlés után</li>
+        <li><strong>Munkaidő-nyilvántartási adatok:</strong> a vonatkozó jogszabályokban előírt megőrzési időig, de minimum 4 évig</li>
+        <li><strong>Technikai naplók:</strong> legfeljebb 90 napig</li>
+    </ul>
+
+    <h2>6. Adatfeldolgozók, adattovábbítás</h2>
+    <p>Az adatokat az alábbi szolgáltatók technikai infrastruktúráján tároljuk és dolgozzuk fel:</p>
+    <ul>
+        <li><strong>Microsoft Azure</strong> – alkalmazás üzemeltetése (West Europe régió)</li>
+        <li><strong>Supabase</strong> – PostgreSQL adatbázis szolgáltatás</li>
+        <li><strong>GitHub</strong> – forráskód és telepítési folyamatok</li>
+    </ul>
+    <p>
+        Az adatfeldolgozók az Európai Gazdasági Térségen belül, illetve megfelelő garanciák
+        mellett (pl. standard szerződési záradékok) dolgozhatják fel az adatokat.
+    </p>
+
+    <h2>7. Adatbiztonság</h2>
+    <p>
+        Az adatok védelme érdekében jelszóval védett hozzáférés, HTTPS titkosított adatátvitel,
+        szerepkör-alapú jogosultságkezelés (Admin, Mugli) és rendszeres biztonsági frissítések
+        alkalmazására törekszünk.
+    </p>
+
+    <h2>8. Az érintettek jogai</h2>
+    <p>Ön a GDPR alapján az alábbi jogokkal rendelkezik:</p>
+    <ul>
+        <li>hozzáférés kérése a kezelt adataihoz</li>
+        <li>helyesbítés kérése</li>
+        <li>törlés kérése („elfeledtetéshez való jog”)</li>
+        <li>adatkezelés korlátozása</li>
+        <li>adathordozhatóság</li>
+        <li>tiltakozás a jogos érdeken alapuló adatkezelés ellen</li>
+        <li>
+            panasz benyújtása a <strong>Nemzeti Adatvédelmi és Információszabadság Hatóságnál (NAIH)</strong>
+            (<a href="https://www.naih.hu" target="_blank" rel="noopener">www.naih.hu</a>)
+        </li>
+    </ul>
+    <p>
+        Jogai gyakorlásához írjon az <a href="mailto:info@gdekorsolutions.hu">info@gdekorsolutions.hu</a>
+        címre. Kérését 30 napon belül megválaszoljuk.
+    </p>
+
+    <h2>9. Sütik (cookie-k)</h2>
+    <p>
+        A Szolgáltatás működéséhez szükséges technikai sütiket használunk (pl. bejelentkezési
+        munkamenet). Ezek nélkül a rendszer nem használható. Marketing vagy analitikai sütiket
+        jelenleg nem alkalmazunk.
+    </p>
+
+    <h2>10. Kiskorúak</h2>
+    <p>
+        A Szolgáltatás 16 éven aluli személyek számára nem elérhető. Tudomásunkon kívül ilyen
+        adatok kezelése esetén az adatokat haladéktalanul töröljük.
+    </p>
+
+    <h2>11. A tájékoztató módosítása</h2>
+    <p>
+        Fenntartjuk a jogot a jelen tájékoztató módosítására. A változásokat ezen az oldalon
+        tesszük közzé. Jelentős változás esetén a regisztrált felhasználókat e-mailben is értesítjük.
+    </p>
+
+    <h2>12. Kapcsolat</h2>
+    <p>
+        Adatvédelmi kérdésekkel kapcsolatban forduljon hozzánk:<br />
+        <strong>E-mail:</strong> <a href="mailto:info@gdekorsolutions.hu">info@gdekorsolutions.hu</a>
+    </p>
+</div>

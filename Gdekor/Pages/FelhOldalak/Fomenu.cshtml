@@ -10,13 +10,25 @@
         background-repeat: no-repeat;
     }
 
-    
+    .egyCard {
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto; /* ez középre teszi */
+    }
+
+    @@media (min-width: 768px) {
+        .egyCard {
+            max-width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
 </style>
 
 @if (User.IsInRole(Szerepkorok.Admin))
 {
     <div class="py-4">
-        <a asp-page="/NyitoOldalak/Bejelentkezes" class="btn bttn_Tovabb mb-3">kijelentkezés</a>
+        <a asp-page="/NyitoOldalak/Bejelentkezes" class="btn bttn_Tovabb mb-5">kijelentkezés</a>
 
         <div class="row gap-3 justify-content-center justify-content-md-start">
             <div class="col-12 col-md-4">
@@ -69,7 +81,7 @@ else if (User.IsInRole(Szerepkorok.Mugli))
                 <div class="card egyCard animatedCard">
                     <div class="card-header cardTeto fw-bold">Munkaóráim</div>
                     <div class="card-body cardKozep">
-                        <p>Ledolgoztt munkaórák megadása és szerkesztése.</p>
+                        <p>Ledolgozott munkaórák megadása és szerkesztése.</p>
                         <div class="mt-auto text-end">
                             <a asp-page="/FelhOldalak/Munkaoraim" class="btn btn-sm bttn_Tovabb">tovább</a>
                         </div>

@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const reszletek = cim.nextElementSibling;
                 const nyil = cim.querySelector('.forgoNyil');
 
-                reszletek.classList.add('elohiv');
-                nyil.classList.add('srehen');            
+                reszletek.classList.remove('elohiv');
+                nyil.classList.remove('srehen');            
             });
             const d = opt.dataset;
             console.table({
