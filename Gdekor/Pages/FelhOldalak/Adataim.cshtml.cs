@@ -116,7 +116,7 @@ namespace Gdekor.Pages.FelhOldalak
                     }
                 }
             }
-
+            /*
             if (EditProfKep != null && EditProfKep.Length>0)
             {
                 var engedelyezett = new[] { ".jpg", ".jpeg", ".png", ".webp" };
@@ -152,7 +152,7 @@ namespace Gdekor.Pages.FelhOldalak
                 }
                 user.ProfKepUtovnal = $"/images/profKepek/{ujFajlNev}";
             }
-
+            */
 
             var f_result = await _userManager.UpdateAsync(user);
 
