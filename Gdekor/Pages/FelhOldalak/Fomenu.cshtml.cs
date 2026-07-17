@@ -8,6 +8,7 @@ namespace Gdekor.Pages.FelhOldalak
     public class FomenuModel : PageModel
     {
         public void OnGet()
+
         {
         }
     }

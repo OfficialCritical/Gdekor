@@ -11,9 +11,13 @@
         background-repeat: no-repeat;        
     }
 
+    .animatedCard {
+        min-width: 55vw;
+    }
+
     .formSzuk{
-        min-width: 25vw;
-       
+        min-width: 85vw;
+        max-width: 98vw;
         padding: 1.5rem 1.75rem;
         border-radius:16px;
         border: solid 1px rgba(255,255,255,0.6);
@@ -24,11 +28,12 @@
     }
 
     .formSzuk label{
-        color: #5c3a28;
+            color: #5d4037;
     }
 
     @@media (min-width: 768px) {
         .formSzuk {
+            min-width:auto;
             max-width: 30vw;
         }
 
@@ -37,35 +42,37 @@
         }
     }
 </style>
-<div class="py-4 mezo">
+<div class="ps-4 pt-4 mezo d-flex flex-column flex-grow-1" style="border:solid 1px red;">
 
-    <div class="mb-5">
+    <div class="mb-5 flex-shrink-0">
         <a id="bejelentLink" class="btn nyito_link aktiv btn-lg">Bejelentkezés</a>
         <a id="bejelentLink" class="btn nyito_link inaktiv btn-lg" asp-page="/NyitoOldalak/Regisztralas">Regisztrálás</a>
     </div>
 
-    <form method="post" class="row animatedCard">
-        <div class="col-12 col-md-7">
-            <div class="formSzuk">
-                <div class="lbl_Input mb-2 mb-md-4 ">
-                    <label class="fw-semibold form-label">E-mail</label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
+    <div id="formDiv" class="d-flex flex-grow-1 align-items-center align-items-md-start" style="border:solid 1px green;">
+        <form method="post" class="row animatedCard">
+            <div class="col-12 col-md-7">
+                <div class="formSzuk">
+                    <div class="lbl_Input mb-2 mb-md-4 ">
+                        <label class="fw-semibold form-label">E-mail</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
 
-                <div class="lbl_Input mb-3 mb-md-5">
-                    <label class="fw-semibold form-label">Jelszó</label>
-                    <input asp-for="Jelszo" class="form-control" />
-                    <span asp-validation-for="Jelszo" class="text-danger"></span>
-                </div>
+                    <div class="lbl_Input mb-3 mb-md-5">
+                        <label class="fw-semibold form-label">Jelszó</label>
+                        <input asp-for="Jelszo" class="form-control" />
+                        <span asp-validation-for="Jelszo" class="text-danger"></span>
+                    </div>
 
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-outline-primary ms-auto bttn_Tovabb">bejelentkezés</button>
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-outline-primary ms-auto bttn_Tovabb">bejelentkezés</button>
+                    </div>
                 </div>
             </div>
-        </div>        
-    </form>
-    
+        </form>
+    </div>
+
 </div>
 @section Scripts{
     <script>
