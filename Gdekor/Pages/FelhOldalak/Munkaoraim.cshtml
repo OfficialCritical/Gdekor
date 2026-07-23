@@ -118,7 +118,11 @@
         border: none !important;
     }
 
-
+    .felirat_Div {
+        width:98%;
+        display:flex;
+        justify-content: flex-end;
+    }
 
     .munkaDiv, .szunetDiv {
         background: rgba(255,255,255, 0.75);
@@ -182,6 +186,17 @@
         justify-content: space-between;
         align-items: center;
     }
+
+    @@media (max-width: 767.98px) {
+        .fc .fc-daygrid-day-frame {
+            min-height: 2.2rem !important; /* próbáld: 2rem / 2.5rem */
+        }
+
+        .fc .fc-daygrid-day-number {
+            font-size: 0.85rem;
+            padding: 2px 4px;
+        }
+    }
 </style>
 
 <div class="py-1">
@@ -206,7 +221,7 @@
                 <form id="form_mOrak" class="d-flex flex-column" method="post" asp-page-handler="Mentes">
 
                     <select id="select_Projekt" asp-for="Projekt_Id_Edit" class="form-select mb-2 mx-auto">
-                        <option value="" class="fw-bolder" selected>Válassz ki egy projektet</option>
+                        <option value="" selected>Válassz ki egy projektet</option>
                         @foreach (var pr in Model.Projektek_Lista)
                         {
                             <option value="@pr.Pro_ID">@pr.Pro_Nev</option>
@@ -218,8 +233,11 @@
                     <input type="hidden" asp-for="MNap_ID_Edit" id="MNap_ID_Edit" />
 
                     <div class="form_Belso">
-                        <div class="munkaDiv mb-3">
-                            <lbl class="fw-bold form-label">Munkaidő megadása</lbl>
+                        <div class="munkaDiv mb-2 mb-md-3">
+                            <div class="felirat_Div">
+                                <lbl class="fw-bold form-label">munkaidő megadása</lbl>
+                            </div>
+                            
                             <div class="row p-1">
                                 <div class="lbl_Input mb-3 col-12 col-md-7">
                                     <lbl asp-for="Munka_Kezdete" class="form-label">Kezdete</lbl>
@@ -269,7 +287,7 @@
         </div>
 
 
-        <div class="naptar-kartya mb-3">
+        <div class="naptar-kartya mb-3" style="width: 92%;">
             <div id="naptar"></div>
         </div>
 

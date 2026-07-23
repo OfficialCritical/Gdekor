@@ -14,6 +14,8 @@ namespace Gdekor.Pages.NyitoOldalak
             _signInManager = signInManager;
         }
 
+        public bool Emlekezz { get; set; }
+
         [BindProperty]
         [Required(ErrorMessage ="e-mail megáda kötelező !")]
         public string Email { get; set; }

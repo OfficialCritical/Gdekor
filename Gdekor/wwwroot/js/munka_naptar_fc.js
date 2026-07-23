@@ -61,6 +61,7 @@
         locale: 'hu',
         firstDay: 1,
         height: 'auto',
+        aspectRatio: window.innerWidth < 786 ? 1.8 : 1.35,
         fixedWeekCount: false,
 
         dateClick: function (info) {
@@ -143,6 +144,13 @@
             document.getElementById('m_vege').value = '';
         }
     }
+
+    window.addEventListener('resize', () => {
+        calendar.setOption(
+            'aspectRatio',
+            window.innerWidth < 768 ? 1.8 : 1.35
+        );
+    });
 
     select_Projekt.addEventListener('change', function () {
         const datum = document.getElementById('Datum_Edit').value;
