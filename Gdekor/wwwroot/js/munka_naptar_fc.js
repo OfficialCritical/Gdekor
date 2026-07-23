@@ -60,8 +60,7 @@
         initialView: 'dayGridMonth',
         locale: 'hu',
         firstDay: 1,
-        height: 'auto',
-        aspectRatio: window.innerWidth < 786 ? 1.8 : 1.35,
+        height: 'auto',        
         fixedWeekCount: false,
 
         dateClick: function (info) {
