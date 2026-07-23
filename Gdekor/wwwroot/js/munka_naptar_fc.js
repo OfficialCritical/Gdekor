@@ -148,7 +148,7 @@
     window.addEventListener('resize', () => {
         calendar.setOption(
             'aspectRatio',
-            window.innerWidth < 768 ? 1.8 : 1.35
+            window.innerWidth < 768 ? 1.97 : 1.35
         );
     });
 
