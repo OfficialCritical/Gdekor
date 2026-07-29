@@ -8,6 +8,7 @@ namespace Gdekor
         public string? SzemelyiSzam { get; set; }
         public string? Nev { get; set; }
         public string? Tel_Korzet {  get; set; }
+        public string? Lakcim { get; set; }
         public string? SzulHely { get; set; }
         public string? SzulIdo { get; set; }
         public string? AnyjaNeve { get; set; }

@@ -43,6 +43,10 @@ namespace Gdekor.Pages.NyitoOldalak
         public string RegTel_Egyeni { get; set; }
 
         [BindProperty]
+        [Required(ErrorMessage ="lakcím megadása kötelező")]
+        public string RegLakcim { get; set; }
+
+        [BindProperty]
         [Required(ErrorMessage = "születési hely megadása kötelező")]
         public string RegSzulHely {  get; set; }
 
@@ -96,7 +100,8 @@ namespace Gdekor.Pages.NyitoOldalak
                 EmailConfirmed = true,
                 Nev = RegNev.Trim(),
                 Tel_Korzet = RegTel_Korzet.Trim(),
-                PhoneNumber = RegTel_Egyeni.Trim(),                
+                PhoneNumber = RegTel_Egyeni.Trim(),
+                Lakcim = RegLakcim.Trim(),
                 SzemelyiSzam = RegSzemelyi.Trim(),
                 AnyjaNeve = RegAnyjaNeve.Trim(),
                 SzulHely = RegSzulHely.Trim(),

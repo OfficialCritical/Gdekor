@@ -36,6 +36,10 @@ namespace Gdekor.Pages.FelhOldalak
         public string EditTel_Szemelyi { get; set; } = "";
 
         [BindProperty]
+        [Required(ErrorMessage ="lakcím megadása kötelező")]
+        public string EditLakcim { get; set; }
+
+        [BindProperty]
         [Required(ErrorMessage = "születési hely megadása kötelező")]
         public string EditSzulHely { get; set; } = "";
 
@@ -71,6 +75,7 @@ namespace Gdekor.Pages.FelhOldalak
             EditSzemelyi = user.SzemelyiSzam ?? "";
             EditTel_Korzet = user.Tel_Korzet ?? "";
             EditTel_Szemelyi = user.PhoneNumber ?? "";
+            EditLakcim = user.Lakcim ?? "";
             EditSzulHely = user.SzulHely ?? "";
             EditSzulIdo = user.SzulIdo ?? "";
             EditAnyjaNeve = user.AnyjaNeve ?? "";
@@ -95,6 +100,7 @@ namespace Gdekor.Pages.FelhOldalak
             user.SzemelyiSzam = EditSzemelyi.Trim();
             user.Tel_Korzet = EditTel_Korzet.Trim();
             user.PhoneNumber = EditTel_Szemelyi.Trim();
+            user.Lakcim = EditLakcim.Trim();
             user.SzulHely = EditSzulHely.Trim();
             user.SzulIdo = EditSzulIdo.Trim();
             user.AnyjaNeve = EditAnyjaNeve.Trim();
