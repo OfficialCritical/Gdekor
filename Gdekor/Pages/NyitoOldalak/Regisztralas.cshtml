@@ -132,18 +132,18 @@
                                 <div class="lbl_Input mb-2 gap-2">
                                     <label class="form-label">Telefonszám</label>
                                     <div class="d-flex flex-column">
-                                        <div class="row gap-1 mx-0 align-items-center">
-                                            <div class="col-auto px-0">+36</div>
-                                            <div class="col-auto px-0">
-                                                <select class="telKorzetValaszto form-select w-auto" asp-for="RegTel_Korzet">
+                                        <div class="row mx-0 flex-nowrap align-items-center">
+                                            <div class="col-4 px-0" style="min-width:0;">
+                                                <select class="telKorzetValaszto form-select w-100" asp-for="RegTel_Korzet">
                                                     <option value="30" selected>30</option>
                                                     <option value="20">20</option>
                                                     <option value="50">50</option>
                                                     <option value="70">70</option>
                                                 </select>
                                             </div>
-                                            <div class="col px-0">
-                                                <input asp-for="RegTel_Egyeni" class="form-control" maxlength="7" placeholder="1234567" />
+                                            <div class="col-1"></div>
+                                            <div class="col-7 px-0" style="min-width:0;">
+                                                <input asp-for="RegTel_Egyeni" class="form-control w-100" maxlength="7" placeholder="1234567" />
                                             </div>
                                         </div>
                                         <span asp-validation-for="RegTel_Egyeni" class="text-danger"></span>
@@ -201,7 +201,7 @@
                         <div class="d-flex flex-column">
                             <label class="brwn_Grdnt_Font form-label">Jármű</label>
 
-                            <div class="lbl_Input mb-4 gap-2">
+                            <div class="lbl_Input ms-2 mb-5 gap-2">
                                 <label class="form-label">Rendszám</label>
                                 <input class="form-control" />
                                 <span class="text-danger"></span>
