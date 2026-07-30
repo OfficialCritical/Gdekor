@@ -113,7 +113,7 @@
                             <div class="d-flex flex-column ms-2">
                                 <div class="lbl_Input mb-3 gap-2">
                                     <label class="form-label">E-mail</label>
-                                    <input asp-for="RegEmail" placeholder="pl.:pelda@gmail.com" class="form-control" />
+                                    <input asp-for="RegEmail" readonly onfocus="this.removeAttribute('readonly');" placeholder="pl.:pelda@gmail.com" class="form-control" />
                                     <span asp-validation-for="RegEmail" class="text-danger"></span>
                                 </div>
 
