@@ -147,6 +147,16 @@
                 return;
 
             formSzuk.classList.add('shAdOw');
+
+            function focusLe() {
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    document.activeElement.blur();
+                }
+            }
+            focusLe();
+            setTimeout(focusLe, 0);
+            setTimeout(focusLe, 100);   // autofill után is
+            window.addEventListener('load', focusLe);
         });
     </script>
 }
