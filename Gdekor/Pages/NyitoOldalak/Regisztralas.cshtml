@@ -26,9 +26,12 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-
+        
     }
-
+    .lbl_Input .form-control {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
     .formSzuk label{
         font-weight: bold;
     }
@@ -75,7 +78,7 @@
 
     .telKorzetValaszto{
         border-radius: 9px;
-        border: solid 0.5px #dee2e6;
+        border: solid 1px #dee2e6;
     }
 
     @@media (min-width: 768px) {
@@ -111,25 +114,26 @@
                             <label class="brwn_Grdnt_Font form-label">Bejelentkezési adatok</label>
 
                             <div class="d-flex flex-column ms-2">
-                                <div class="lbl_Input mb-2 gap-2">
+                                <div class="lbl_Input gap-2">
                                     <label class="form-label">E-mail</label>
-                                    <input asp-for="RegEmail" readonly onfocus="this.removeAttribute('readonly');" placeholder="pl.:pelda@gmail.com" class="form-control" />
-                                    <span asp-validation-for="RegEmail" class="text-danger"></span>
+                                    <input asp-for="RegEmail" readonly onfocus="this.removeAttribute('readonly');" placeholder="pl.:pelda@gmail.com" class="form-control" />                                    
                                 </div>
+                                <span asp-validation-for="RegEmail" class="text-center mb-2 text-danger"></span>
 
-                                <div class="lbl_Input mb-2 gap-2">
+                                <div class="lbl_Input gap-2">
                                     <label class="form-label">Jelszó</label>
-                                    <input asp-for="RegJelszo" type="password" placeholder="pl.:Titkos79!" class="form-control" />
-                                    <span asp-validation-for="RegJelszo" class="text-danger"></span>
+                                    <input asp-for="RegJelszo" type="password" placeholder="pl.:Titkos79!" class="form-control" />                                    
                                 </div>
+                                <span asp-validation-for="RegJelszo" class="text-center mb-3 text-danger"></span>
+
                             </div>
                         </div>
 
                         <div class="d-flex flex-column">
                             <label class="brwn_Grdnt_Font form-label">Elérhetőség</label>
 
-                            <div class="d-flex flex-column ms-3">
-                                <div class="lbl_Input mb-2 gap-2">
+                            <div class="d-flex flex-column ms-2">
+                                <div class="lbl_Input gap-2">
                                     <label class="form-label">Telefonszám</label>
                                     <div class="d-flex gap-1 align-items-center">
                                         <select class="telKorzetValaszto form-select" style="flex-shrink:0; width:fit-content;" asp-for="RegTel_Korzet">
@@ -141,66 +145,72 @@
                                         <div style="flex-grow:1;">
                                             <input asp-for="RegTel_Egyeni" class="form-control" maxlength="7" placeholder="1234567" />
                                         </div>
-                                        <span asp-validation-for="RegTel_Egyeni" class="text-danger"></span>
-                                    </div>
+                                        
+                                    </div>                                    
                                 </div>
-                                <div class="lbl_Input mb-2 gap-2">
+                                <span asp-validation-for="RegTel_Egyeni" class="text-center mb-2 text-danger"></span>
+
+                                <div class="lbl_Input gap-2">
                                     <label class="form-label">Lakcím</label>
                                     <input asp-for="RegLakcim" placeholder="lakcím" class="form-control" />
-                                    <span asp-validation-for="RegLakcim" class="text-danger"></span>
+                                    
                                 </div>
+                                <span asp-validation-for="RegLakcim" class="text-center mb-3 text-danger"></span>
+
                             </div>
                         </div>
 
                         <div class="d-flex flex-column">
                             <label class="brwn_Grdnt_Font form-label">Személyes adatok</label>
-                            <div class="d-flex flex-column ms-3">
-                                <div class="lbl_Input mb-2 gap-2">
+                            <div class="d-flex flex-column ms-2">
+                                <div class="lbl_Input gap-2">
                                     <label class="form-label">Teljes név</label>
-                                    <input asp-for="RegNev" placeholder="pl.:Dekor Tamás" class="form-control" />
-                                    <span asp-validation-for="RegNev" class="text-danger"></span>
+                                    <input asp-for="RegNev" placeholder="pl.:Dekor Tamás" class="form-control" />                                    
                                 </div>
+                                <span asp-validation-for="RegNev" class="text-center mb-2 text-danger"></span>
 
-                                <div class="lbl_Input mb-2 gap-2">
+                                <div class="lbl_Input gap-2">
                                     <label class="form-label">Személyi azonosító</label>
                                     <input asp-for="RegSzemelyi" placeholder="12345679AE" class="form-control" />
-                                    <span asp-validation-for="RegSzemelyi" class="text-danger"></span>
+                                    
                                 </div>
+                                <span asp-validation-for="RegSzemelyi" class="text-center mb-2 text-danger"></span>
 
-                                <div class="lbl_Input mb-2 gap-2">
+                                <div class="lbl_Input gap-2">
                                     <label class="form-label">Születési hely</label>
-                                    <input asp-for="RegSzulHely" placeholder="" class="form-control" />
-                                    <span asp-validation-for="RegSzulHely" class="text-danger"></span>
+                                    <input asp-for="RegSzulHely" placeholder="" class="form-control" />                                    
                                 </div>
+                                <span asp-validation-for="RegSzulHely" class="text-center mb-2 text-danger"></span>
 
-                                <div class="lbl_Input mb-2 gap-2">
+                                <div class="lbl_Input gap-2">
                                     <label class="form-label">Születési idő</label>
-                                    <input asp-for="RegSzulIdo" class="datumvalaszto form-control" />
-                                    <span asp-validation-for="RegSzulIdo" class="text-danger"></span>
+                                    <input asp-for="RegSzulIdo" class="datumvalaszto form-control" />                                    
                                 </div>
+                                <span asp-validation-for="RegSzulIdo" class="text-center mb-2 text-danger"></span>
 
-                                <div class="lbl_Input mb-2 gap-2">
+                                <div class="lbl_Input gap-2">
                                     <label class="form-label">Anyja neve</label>
-                                    <input asp-for="RegAnyjaNeve" class="form-control" />
-                                    <span asp-validation-for="RegAnyjaNeve" class="text-danger"></span>
+                                    <input asp-for="RegAnyjaNeve" class="form-control" />                                    
                                 </div>
+                                <span asp-validation-for="RegAnyjaNeve" class="text-center mb-2 text-danger"></span>
 
-                                <div class="lbl_Input mb-2 gap-2">
+                                <div class="lbl_Input gap-2">
                                     <label class="form-label">Profilkép</label>
-                                    <input asp-for="RegProfKep" type="file" accept="image/jpeg,image/png,image/webp" class="form-control" />
-                                    <span asp-validation-for="RegProfKep" class="text-danger"></span>
+                                    <input asp-for="RegProfKep" type="file" accept="image/jpeg,image/png,image/webp" class="form-control" />                                    
                                 </div>
+                                <span asp-validation-for="RegProfKep" class="text-center mb-3 text-danger"></span>
+
                             </div>
                         </div>
 
                         <div class="d-flex flex-column">
                             <label class="brwn_Grdnt_Font form-label">Jármű</label>
 
-                            <div class="lbl_Input ms-2 mb-5 gap-2">
+                            <div class="lbl_Input ms-2 gap-2">
                                 <label class="form-label">Rendszám</label>
-                                <input class="form-control" />
-                                <span class="text-danger"></span>
+                                <input class="form-control" />                                
                             </div>
+                            <span class="mb-5 text-danger"></span>
                         </div>
                            
                     </div>
