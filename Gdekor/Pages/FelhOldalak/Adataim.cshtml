@@ -16,8 +16,12 @@
 
     .lbl_Input{
         gap: 1rem;
+        margin-left:0.5rem;
     }
-
+    .lbl_Input .form-control {
+        flex:1 1 auto;
+        min-width:0;
+    }
     form label{
         font-weight:bold;
         margin-top: 4px;
@@ -49,12 +53,12 @@
                 <div class="row">
                     <div class="col-12 col-md-7 d-flex flex-column">
 
-                        <label class="ms-auto brwn_Grdnt_Font form-label">bejelentkezési adatok</label>
+                        <label class="brwn_Grdnt_Font form-label">Bejelentkezési adatok</label>
                         <div class="lbl_Input">
                             <label class="form-label">E-mail</label>
                             <input asp-for="EditEmail" class="form-control" />                            
                         </div>
-                        <span asp-validation-for="EditEmail" class="mb-3 text-danger"></span>
+                        <span asp-validation-for="EditEmail" class="mb-2 text-danger"></span>
 
                         <div class="lbl_Input">
                             <label class="form-label">Jelszó</label>
@@ -63,44 +67,42 @@
                         </div>
                         <span asp-validation-for="EditJelszo" class="mb-3 text-danger"></span>
 
-                        <label class="ms-auto brwn_Grdnt_Font form-label mt-1">elérhetőség</label>
-                        <div class="lbl_Input">
+                        <label class="brwn_Grdnt_Font form-label mt-1">Elérhetőség</label>
+                        <div class="lbl_Input gap-2">
                             <label class="form-label">Telefonszám</label>
-                            <div class="row gap-1 mx-0 align-items-center">
-                                <div class="col-auto px-0 fw-semibold">+36</div>
-                                <div class="col-auto px-0">
-                                    <select class="telKorzetValaszto form-select w-auto" asp-for="EditTel_Korzet">
-                                        <option value="30">30</option>
-                                        <option value="20">20</option>
-                                        <option value="50">50</option>
-                                        <option value="70">70</option>
-                                    </select>
-                                </div>
-                                <div class="col px-0">
+                            <div class="d-flex gap-1 align-items-center">
+                                <select class="telKorzetValaszto form-select" style="flex-shrink:0; width:fit-content;" asp-for="EditTel_Korzet">
+                                    <option value="30" selected>30</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="70">70</option>
+                                </select>
+                                <div style="flex-grow:1;">
                                     <input asp-for="EditTel_Szemelyi" class="form-control" maxlength="7" placeholder="1234567" />
                                 </div>
+
                             </div>
                         </div>
-                        <span asp-validation-for="EditTel_Szemelyi" class="mb-3 text-danger"></span>
+                        <span asp-validation-for="EditTel_Szemelyi" class="mb-2 text-danger text-center"></span>
 
                         <div class="lbl_Input">
                             <label class="form-label">Lakcím</label>
                             <input asp-for="EditLakcim" class="form-control" />
                         </div>
-                        <span asp-validation-for="EditLakcim" class="mb-3 text-danger"></span>
+                        <span asp-validation-for="EditLakcim" class="mb-3 text-danger text-center"></span>
 
-                        <label class="ms-auto brwn_Grdnt_Font form-label mt-1">személyes adatok</label>
+                        <label class="brwn_Grdnt_Font form-label mt-1">Személyes adatok</label>
                         <div class="lbl_Input">
                             <label class="form-label">Teljes név</label>
                             <input asp-for="EditNev" class="w-100 form-control" />                            
                         </div>
-                        <span asp-validation-for="EditNev" class="mb-3 text-danger"></span>
+                        <span asp-validation-for="EditNev" class="mb-2 text-danger"></span>
 
                         <div class="lbl_Input">
                             <label class="form-label">Személyi igazolvány száma</label>
                             <input asp-for="EditSzemelyi" class="form-control" />                            
                         </div>
-                        <span asp-validation-for="EditSzemelyi" class="mb-3 text-danger"></span>
+                        <span asp-validation-for="EditSzemelyi" class="mb-2 text-danger"></span>
 
                         
 
@@ -108,19 +110,19 @@
                             <label class="form-label">Születési hely</label>
                             <input asp-for="EditSzulHely" class="form-control" />                            
                         </div>
-                        <span asp-validation-for="EditSzulHely" class="mb-3 text-danger"></span>
+                        <span asp-validation-for="EditSzulHely" class="mb-2 text-danger"></span>
 
                         <div class="lbl_Input">
                             <label class="form-label">Születési idő</label>
                             <input asp-for="EditSzulIdo" class="datumvalaszto form-control" />                            
                         </div>
-                        <span asp-validation-for="EditSzulIdo" class="w-100 mb-3 text-danger"></span>
+                        <span asp-validation-for="EditSzulIdo" class="w-100 mb-2 text-danger"></span>
 
                         <div class="lbl_Input">
                             <label class="form-label">Anyja neve</label>
                             <input asp-for="EditAnyjaNeve" class="form-control" />                            
                         </div>
-                        <span asp-validation-for="EditAnyjaNeve" class="mb-3 text-danger"></span>
+                        <span asp-validation-for="EditAnyjaNeve" class="mb-2 text-danger"></span>
 
                         @if (!string.IsNullOrEmpty(Model.AktualProfKep)){
                             <div class="lbl_Input mb-4" style="flex-direction:column; gap:0.75rem;">

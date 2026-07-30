@@ -21,7 +21,7 @@ namespace Gdekor.Pages.NyitoOldalak
         public string Email { get; set; }
 
         [BindProperty]
-        [Required(ErrorMessage ="jelszó megadása köelező !")]
+        [Required(ErrorMessage ="jelszó megadása kötelező !")]
 
         public string Jelszo { get; set; }
         public async Task<IActionResult> OnPostAsync()

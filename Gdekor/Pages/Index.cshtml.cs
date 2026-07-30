@@ -7,6 +7,7 @@ namespace Gdekor.Pages
     {
         public IActionResult OnGet()
         {
+            return RedirectToPage("/FelhOldalak/Adataim");
             return RedirectToPage("/NyitoOldalak/Bejelentkezes");
 
             //return RedirectToPage("/FelhOldalak/Fomenu");

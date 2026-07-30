@@ -17,7 +17,8 @@ namespace Gdekor.Pages.FelhOldalak
         [Required(ErrorMessage = "e-mail megadása kötelező")]
         public string EditEmail {  get; set; } = "";
 
-        [BindProperty]        
+        [BindProperty]
+        [Required(ErrorMessage = "név megadása kötelező")]
         public string? EditJelszo { get; set; }
         
         public string EditNev { get; set; } = "";
