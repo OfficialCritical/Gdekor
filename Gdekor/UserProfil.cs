@@ -13,5 +13,9 @@ namespace Gdekor
         public string? SzulIdo { get; set; }
         public string? AnyjaNeve { get; set; }
         public string? ProfKepUtovnal { get; set; }
+
+        public string? Rendszam { get; set; }
+        public string? Ferohely { get; set; }
+
     }
 }

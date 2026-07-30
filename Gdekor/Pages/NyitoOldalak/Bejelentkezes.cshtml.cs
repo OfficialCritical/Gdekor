@@ -28,7 +28,7 @@ namespace Gdekor.Pages.NyitoOldalak
         {
             if (!ModelState.IsValid) return Page();
 
-            var result = await _signInManager.PasswordSignInAsync(Email, Jelszo, isPersistent: false, lockoutOnFailure: true);
+            var result = await _signInManager.PasswordSignInAsync(Email, Jelszo, isPersistent: true, lockoutOnFailure: true);
 
             if (result.Succeeded)
                 return RedirectToPage("/FelhOldalak/Fomenu");
