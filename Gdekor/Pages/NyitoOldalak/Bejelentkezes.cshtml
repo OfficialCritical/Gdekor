@@ -98,7 +98,7 @@
                                 E-mail
                             </td>
                             <td class="w-100">
-                                <input asp-for="Email" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" class="form-control" />
+                                <input asp-for="Email" readonly onfocus="this.removeAttribute('readonly');" id="emailInput" class="form-control" />
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </td>
                         </tr>
@@ -142,11 +142,14 @@
         document.addEventListener('DOMContentLoaded', function () {
 
             const formSzuk = document.querySelector('.formSzuk');
+            const emailInput = document.getElementById('emailInput');
 
             if(!formSzuk)
                 return;
 
             formSzuk.classList.add('shAdOw');
+
+            emailInput.blur();
 
             function focusLe() {
                 if (document.activeElement && document.activeElement.tagName === 'INPUT') {
