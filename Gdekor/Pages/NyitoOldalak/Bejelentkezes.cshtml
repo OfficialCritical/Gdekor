@@ -101,7 +101,7 @@
                                 E-mail
                             </td>
                             <td class="w-100">
-                                <input asp-for="Email" readonly onfocus="this.removeAttribute('readonly');" id="emailInput" class="form-control" />
+                                <input asp-for="Email" autocomplete="off" id="emailInput" class="form-control" />
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </td>
                         </tr>
@@ -151,20 +151,7 @@
             if(!formSzuk)
                 return;
 
-            formSzuk.classList.add('shAdOw');
-
-            emailInput.blur();
-            formSzuk.focus();
-            function focusLe() {
-                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
-                    document.activeElement.blur();
-                }
-            }
-            focusLe();
-            setTimeout(focusLe, 0);
-            setTimeout(focusLe, 100);   // autofill után is
-            window.addEventListener('load', focusLe);
-            formSzuk.focus();
+            formSzuk.classList.add('shAdOw');            
         });
     </script>
 }
