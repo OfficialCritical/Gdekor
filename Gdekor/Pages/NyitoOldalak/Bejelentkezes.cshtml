@@ -95,10 +95,10 @@
                     <table class="w-100 mb-1 mb-md-2" style="border-collapse:separate; border-spacing: 1rem;">
                         <tr>
                             <td class="blckBrwn_Grdnt_Font pe-3 align-middle text-nowrap fw-semibold" style="color:#5d4037;">
-                                Email
+                                E-mail
                             </td>
                             <td class="w-100">
-                                <input asp-for="Email" readonly onfocus="this.removeAttribute('readonly');" class="form-control" />
+                                <input asp-for="Email" class="form-control" />
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </td>
                         </tr>
@@ -148,7 +148,15 @@
 
             formSzuk.classList.add('shAdOw');
 
-            
+            function focusLe() {
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    document.activeElement.blur();
+                }
+            }
+            focusLe();
+            setTimeout(focusLe, 0);
+            setTimeout(focusLe, 100);   // autofill után is
+            window.addEventListener('load', focusLe);
         });
     </script>
 }
