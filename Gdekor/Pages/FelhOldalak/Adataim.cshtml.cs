@@ -148,7 +148,7 @@ namespace Gdekor.Pages.FelhOldalak
                     return Page();
                 }
 
-                var profKepMappa = Path.Combine(_env.WebRootPath, "images", "profkepek");
+                var profKepMappa = Path.Combine(_env.WebRootPath, "images", "profKepek");
                 Directory.CreateDirectory(profKepMappa);
 
                 if (!string.IsNullOrEmpty(user.ProfKepUtovnal))

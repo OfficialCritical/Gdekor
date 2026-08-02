@@ -135,7 +135,7 @@ namespace Gdekor.Pages.NyitoOldalak
                 var kiterjeszteS = Path.GetExtension(RegProfKep.FileName).ToLowerInvariant();
                 var ujFajlNev = $"{user.Id}_{Guid.NewGuid()}{kiterjeszteS}";
 
-                var profkepMappa = Path.Combine(_env.WebRootPath, "images", "profkepek");
+                var profkepMappa = Path.Combine(_env.WebRootPath, "images", "profKepek");
                 Directory.CreateDirectory(profkepMappa);
 
                 var mentesiVonal = Path.Combine(profkepMappa, ujFajlNev);
