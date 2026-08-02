@@ -127,7 +127,7 @@ namespace Gdekor.Pages.NyitoOldalak
             }
 
             await _userManager.AddToRoleAsync(user, Szerepkorok.Mugli);
-            /*
+            
             if (RegProfKep != null && RegProfKep.Length > 0)
             {
                 var kiterjeszteS = Path.GetExtension(RegProfKep.FileName).ToLowerInvariant();
@@ -143,9 +143,9 @@ namespace Gdekor.Pages.NyitoOldalak
                 user.ProfKepUtovnal = $"/images/profKepek/{ujFajlNev}";
                 await _userManager.UpdateAsync(user);
             }
-            */
+            
 
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            await _signInManager.SignInAsync(user, isPersistent: true);
             return RedirectToPage("/FelhOldalak/Fomenu");
         }
         public void OnGet()
