@@ -52,11 +52,12 @@
         color: #5c3a28;
     }
 
-    .forgoNyil{
-        display:inline-block;
+    .forgoNyil {
+        display: inline-block;
         transform: rotate(90deg);
         transition: transform 0.4s ease-out;
     }
+
     .forgoNyil.srehen {
         transform: rotate(120deg);
     }
@@ -270,9 +271,12 @@
                                     <select id="emHozza_select" class="form-select">
                                         <option value="" selected>hozzáadás</option>
                                         @foreach (var use in Model.Userek_Lista)
-                                        {
-                                            <option value="@use.Id">@use.Nev</option>
-                                        }
+                                            {
+                                                if (use.Email != "kerberosz@gmail.com")
+                                                {
+                                                    <option value="@use.Id">@use.Nev</option>
+                                                }
+                                            }
                                     </select>
                                 </div>
 

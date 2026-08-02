@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -5,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gdekor.Pages.G_Oldalak
 {
+    [Authorize(Roles =$"{Szerepkorok.Admin}")]
     public class AlkalmazottakModel : PageModel
     {
         private readonly AppDbContext _appContext;
@@ -17,10 +19,10 @@ namespace Gdekor.Pages.G_Oldalak
             _appContext= appDbContext;
         }
 
-        public List<UserProfil> Felhasznalok_Lst;
-        public async  void OnGet()
+        public List<UserProfil> Felhasznalok_Lst = new();
+        public async Task OnGetAsync()
         {
-            Felhasznalok_Lst = await _appContext.Users
+            Felhasznalok_Lst = await _userManager.Users
                 .OrderBy(u => u.Nev)
                 .ToListAsync();
         }

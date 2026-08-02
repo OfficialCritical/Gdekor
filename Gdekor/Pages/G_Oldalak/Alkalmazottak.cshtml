@@ -3,6 +3,80 @@
 @{
     ViewData["Title"] = "Alkalmazottak";
 }
-<div class="d-flex w-100 h-100 align-items-center justify-content-center">
-    <h1>G Alkalmazottak listája.</h1>
+<style>
+    .teloLink{
+        text-decoration:none;
+        font-style:italic;
+        color:black;
+        display: inline-block;
+        transition: transform 0.4s ease-out;
+    }
+
+    .teloLink:hover{
+        transform: scale(1.05);
+    }
+
+
+    .blckBrwn_Grdnt_Font {
+        background: linear-gradient(135deg, black 0%, black 19%, #5c3a28);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        width: fit-content;
+    }
+
+    
+</style>
+
+<div class="card egyCard animatedDiv">
+    <div class="card-header cardTeto">
+        <span class="blckBrwn_Grdnt_Font">Alkalmazottak</span>
+    </div>
+    <div class="cardKozep card-body">
+        <table class="table table-borderless" style="table-layout:auto; width:100%;">
+            <thead>
+                <tr>
+                    <th class="text-center">Név</th>
+                    <th class="text-center">Telefon</th>
+                    <th class="text-center">Részletek</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Felhasznalok_Lst.Count<1)
+                {
+                    <tr>
+                        <th>Nincsenek elmentett felhasználók.</th>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var ember in Model.Felhasznalok_Lst)
+                    {
+                        if (ember.Email != "kerberosz@gmail.com")
+                        {
+                            <tr>
+                                <td class="col-4 col-md-2 text-center">
+                                    <span class="brwn_Grdnt_Font">@ember.Nev</span>
+                                </td>
+                                <td class="col-4 col-md-2 text-center">
+                                    <a class="teloLink" href="tel:+35@(ember.Tel_Korzet)@(ember.PhoneNumber)">+36 @ember.Tel_Korzet @ember.PhoneNumber</a>
+                                </td>
+                                <td class="col-4 col-md-2 text-center">
+                                    <span class="forgoNyil brwn_Grdnt_Font">➤</span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+@section Scripts{
+    <script>
+        document.addEventListener('DOMContentLoaded',function(){
+            document.querySelector('.animatedDiv')?.classList.add('elohiv');
+        });
+    </script>
+}
