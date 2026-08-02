@@ -60,6 +60,11 @@ namespace Gdekor.Pages.NyitoOldalak
 
         [BindProperty]
         public IFormFile? RegProfKep { get; set; }
+
+        [BindProperty]
+        public string? RegRendszam { get; set; }
+        [BindProperty]
+        public string? RegFerohely { get; set; }
         #endregion
 
         public async Task<IActionResult> OnPostRegisztracioAsync()
@@ -105,7 +110,9 @@ namespace Gdekor.Pages.NyitoOldalak
                 SzemelyiSzam = RegSzemelyi.Trim(),
                 AnyjaNeve = RegAnyjaNeve.Trim(),
                 SzulHely = RegSzulHely.Trim(),
-                SzulIdo = RegSzulIdo.Trim()
+                SzulIdo = RegSzulIdo.Trim(),
+                Rendszam=RegRendszam?.Trim(),
+                Ferohely =RegFerohely?.Trim()
             };
 
 

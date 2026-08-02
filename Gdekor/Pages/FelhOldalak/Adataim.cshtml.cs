@@ -57,7 +57,11 @@ namespace Gdekor.Pages.FelhOldalak
         [BindProperty]
         public IFormFile? EditProfKep { get; set; }
 
+        [BindProperty]
+        public string? EditRendszam { get; set; } = "";
 
+        [BindProperty]
+        public string? EditFerohely { get; set; } = "";
         #endregion
 
 
@@ -81,6 +85,8 @@ namespace Gdekor.Pages.FelhOldalak
             EditSzulIdo = user.SzulIdo ?? "";
             EditAnyjaNeve = user.AnyjaNeve ?? "";
             AktualProfKep = user.ProfKepUtovnal ?? "";
+            EditRendszam = user.Rendszam ?? "";
+            EditFerohely = user.Ferohely ?? "";
             EditJelszo = null;  // jelszó sosem töltődik vissza
 
             return Page();
@@ -105,7 +111,8 @@ namespace Gdekor.Pages.FelhOldalak
             user.SzulHely = EditSzulHely.Trim();
             user.SzulIdo = EditSzulIdo.Trim();
             user.AnyjaNeve = EditAnyjaNeve.Trim();
-            
+            user.Rendszam = EditRendszam?.Trim();
+            user.Ferohely = EditFerohely?.Trim();
 
             if (!string.IsNullOrWhiteSpace(EditJelszo))
             {
@@ -121,7 +128,7 @@ namespace Gdekor.Pages.FelhOldalak
                     }
                 }
             }
-            /*
+            
             if (EditProfKep != null && EditProfKep.Length>0)
             {
                 var engedelyezett = new[] { ".jpg", ".jpeg", ".png", ".webp" };
@@ -157,7 +164,7 @@ namespace Gdekor.Pages.FelhOldalak
                 }
                 user.ProfKepUtovnal = $"/images/profKepek/{ujFajlNev}";
             }
-            */
+            
 
             var f_result = await _userManager.UpdateAsync(user);
 

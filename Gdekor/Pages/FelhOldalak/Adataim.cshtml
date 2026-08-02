@@ -133,15 +133,29 @@
                                 <label class="form-label">Új profilkép</label>
                                 <input asp-for="EditProfKep" type="file" accept="image/jpeg,image/png,image/webp" class="form-control" />                                
                             </div>
-                            <span asp-validation-for="EditProfKep" class="mb-4 text-danger"></span>
+                            <span asp-validation-for="EditProfKep" class="mb-2 "></span>
                         }
                         else{
                             <div class="lbl_Input" style="flex-direction:column; gap:0.75rem;">
                                 <label class="form-label">Új profilkép</label>
                                 <input asp-for="EditProfKep" type="file" accept="image/jpeg,image/png,image/webp" class="form-control" />                                
                             </div>
-                            <span asp-validation-for="EditProfKep" class="mb-4 text-danger"></span>
+                            <span asp-validation-for="EditProfKep" class="mb-3 text-danger"></span>
                         }
+
+                        <label class="brwn_Grdnt_Font form-label">Jármű</label>
+                        <div class="lbl_Input">
+                            <label class="form-label">Rendszám</label>
+                            <input asp-for="EditRendszam" class="form-control" />                            
+                        </div>
+                        <span asp-validation-for="EditRendszam" class="mb-2 text-danger"></span>
+
+                        <div class="lbl_Input">
+                            <label class="form-label">Férőhelyek száma</label>
+                            <input asp-for="EditFerohely" class="form-control" />
+                            
+                        </div>
+                        <span asp-validation-for="EditFerohely" class="mb-4 text-danger"></span>
 
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-lg bttn_Action">mentés</button>
