@@ -9,10 +9,12 @@ namespace Gdekor.Pages.NyitoOldalak
     {
         private readonly UserManager<UserProfil> _userManager;
         private readonly SignInManager<UserProfil> _signInManager;
-        public RegisztralasModel(UserManager<UserProfil> userManager,SignInManager<UserProfil> signInManager)
+        private readonly IWebHostEnvironment _env;
+        public RegisztralasModel(UserManager<UserProfil> userManager,SignInManager<UserProfil> signInManager,IWebHostEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _env = env;
         }
 
 
@@ -132,9 +134,11 @@ namespace Gdekor.Pages.NyitoOldalak
             {
                 var kiterjeszteS = Path.GetExtension(RegProfKep.FileName).ToLowerInvariant();
                 var ujFajlNev = $"{user.Id}_{Guid.NewGuid()}{kiterjeszteS}";
-                var mentesiVonal = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "profKepek", ujFajlNev);
 
-                Directory.CreateDirectory(Path.GetDirectoryName(mentesiVonal)!);
+                var profkepMappa = Path.Combine(_env.WebRootPath, "images", "profkepek");
+                Directory.CreateDirectory(profkepMappa);
+
+                var mentesiVonal = Path.Combine(profkepMappa, ujFajlNev);
 
                 using (var stream = new FileStream(mentesiVonal, FileMode.Create))
                 {

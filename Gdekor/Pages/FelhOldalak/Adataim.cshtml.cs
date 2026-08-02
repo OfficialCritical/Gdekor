@@ -11,6 +11,7 @@ namespace Gdekor.Pages.FelhOldalak
     {
 
         private readonly UserManager<UserProfil> _userManager;
+        private readonly IWebHostEnvironment _env;
 
         #region Props
         [BindProperty]
@@ -65,9 +66,10 @@ namespace Gdekor.Pages.FelhOldalak
         #endregion
 
 
-        public AdataimModel(UserManager<UserProfil> userManager)
+        public AdataimModel(UserManager<UserProfil> userManager, IWebHostEnvironment env)
         {
             _userManager = userManager;
+            _env = env;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -146,17 +148,18 @@ namespace Gdekor.Pages.FelhOldalak
                     return Page();
                 }
 
+                var profKepMappa = Path.Combine(_env.WebRootPath, "images", "profkepek");
+                Directory.CreateDirectory(profKepMappa);
+
                 if (!string.IsNullOrEmpty(user.ProfKepUtovnal))
                 {
-                    var regiUtvonal = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", user.ProfKepUtovnal.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                    var regiUtvonal = Path.Combine(_env.WebRootPath, user.ProfKepUtovnal.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
                     if ((System.IO.File.Exists(regiUtvonal)))
                         System.IO.File.Delete(regiUtvonal);
                 }
 
                 var ujFajlNev = $"{user.Id}_{Guid.NewGuid()}{kiterjesztes}";
-                var mentesiVonal = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","images", "profKepek",ujFajlNev);
-
-                Directory.CreateDirectory(Path.GetDirectoryName(mentesiVonal)!);
+                var mentesiVonal = Path.Combine(profKepMappa,ujFajlNev);
 
                 using (var stream = new FileStream(mentesiVonal, FileMode.Create))
                 {
