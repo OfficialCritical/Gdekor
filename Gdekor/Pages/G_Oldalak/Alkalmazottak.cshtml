@@ -30,48 +30,54 @@
     
 </style>
 
-<div class="card egyCard animatedDiv">
-    <div class="card-header cardTeto">
-        <span class="blckBrwn_Grdnt_Font">Alkalmazottak</span>
-    </div>
-    <div class="cardKozep card-body">
-        <table class="table table-borderless" style="table-layout:auto; width:100%;">
-            <thead>
-                <tr>
-                    <th class="text-center">Név</th>
-                    <th class="text-center">Telefon</th>
-                    <th class="text-center">Részletek</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Felhasznalok_Lst.Count<1)
-                {
+
+
+<div class="py-4">
+    <a asp-page="/FelhOldalak/Fomenu" class="btn bttn_Tovabb mb-3">vissza</a>
+
+    <div class="card egyCard animatedDiv">
+        <div class="card-header cardTeto">
+            <span class="blckBrwn_Grdnt_Font">Alkalmazottak</span>
+        </div>
+        <div class="cardKozep card-body">
+            <table class="table table-borderless" style="table-layout:auto; width:100%;">
+                <thead>
                     <tr>
-                        <th>Nincsenek elmentett felhasználók.</th>
+                        <th class="text-center">Név</th>
+                        <th class="text-center">Telefon</th>
+                        <th class="text-center">Részletek</th>
                     </tr>
-                }
-                else
-                {
-                    @foreach (var ember in Model.Felhasznalok_Lst)
+                </thead>
+                <tbody>
+                    @if (Model.Felhasznalok_Lst.Count < 1)
                     {
-                        if (ember.Email != "kerberosz@gmail.com")
+                        <tr>
+                            <th>Nincsenek elmentett felhasználók.</th>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var ember in Model.Felhasznalok_Lst)
                         {
-                            <tr>
-                                <td class="col-5 col-md-2 text-center">
-                                    <span class="brwn_Grdnt_Font">@ember.Nev</span>
-                                </td>
-                                <td class="col-5 col-md-2 text-center">
-                                    <a class="teloLink" href="tel:+35@(ember.Tel_Korzet)@(ember.PhoneNumber)">+36 @ember.Tel_Korzet @ember.PhoneNumber</a>
-                                </td>
-                                <td class="col-2 col-md-2 text-center">
-                                    <span class="forgoNyil brwn_Grdnt_Font">➤</span>
-                                </td>
-                            </tr>
+                            if (ember.Email != "kerberosz@gmail.com")
+                            {
+                                <tr>
+                                    <td class="col-5 col-md-2 text-center">
+                                        <span class="brwn_Grdnt_Font">@ember.Nev</span>
+                                    </td>
+                                    <td class="col-5 col-md-2 text-center">
+                                        <a class="teloLink" href="tel:+35@(ember.Tel_Korzet)@(ember.PhoneNumber)">+36 @ember.Tel_Korzet @ember.PhoneNumber</a>
+                                    </td>
+                                    <td class="col-2 col-md-2 text-center">
+                                        <span class="forgoNyil brwn_Grdnt_Font">➤</span>
+                                    </td>
+                                </tr>
+                            }
                         }
                     }
-                }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 @section Scripts{
