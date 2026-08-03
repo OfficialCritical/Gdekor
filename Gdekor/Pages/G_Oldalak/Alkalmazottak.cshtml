@@ -108,14 +108,13 @@
                                         <a class="teloLink" href="tel:+35@(ember.Tel_Korzet)@(ember.PhoneNumber)">+36 @ember.Tel_Korzet @ember.PhoneNumber</a>
                                     </td>
                                     <td class="col-2 col-md-2 text-center align-middle">
-                                        <span class="forgoNyil brwn_Grdnt_Font">➤</span>
+                                        <span class="forgoNyil brwn_Grdnt_Font fs-2">➤</span>
                                     </td>
                                 </tr>                             
 
                                 <tr class="reszletek_Row">
                                     <td colspan="3" class="reszleted_Td">
                                         <div class="small d-flex flex-column align-items-center mb-5">
-                                            <button class="btn btn-sm btn-outline-danger">új jelszó</button>
                                             <div class="d-flex gap-1">
                                                 <span class="reszletek_Lbl">E-mail:</span>
                                                 <span class="reszletek_Txt">@ember.Email</span>
@@ -142,15 +141,21 @@
                                             </div>
                                             <div class="d-flex gap-1">
                                                 <span class="reszletek_Lbl">Rendszám:</span>
-                                                <span class="reszletek_Txt">@ember.Rendszam</span>
+                                                <span class="reszletek_Txt">@(string.IsNullOrWhiteSpace(ember.Rendszam) ? "-" : ember.Rendszam)</span>
                                             </div>
                                             <div class="d-flex gap-1">
                                                 <span class="reszletek_Lbl">Férhőhelyek száma:</span>
-                                                <span class="reszletek_Txt">@ember.Ferohely</span>
+                                                <span class="reszletek_Txt">@(string.IsNullOrWhiteSpace(ember.Ferohely) ? "-" : ember.Ferohely)</span>
                                             </div>
                                             <div class="d-flex gap-1">
                                                 <span class="reszletek_Lbl">Profilkép:</span>
-                                                <span class="reszletek_Txt">@ember.Ferohely</span>
+                                                @if (!string.IsNullOrWhiteSpace(ember.ProfKepUtovnal))
+                                                {
+                                                    <img src="ember.ProfKepUtovnal" alt="ember.Nev" class="rounded-circle" style="height: 80px; width: 80px; object-fit:cover;"/>
+                                                }
+                                                else{
+                                                    <span>nincs elmentett kép</span>
+                                                }
                                             </div>
                                             <button class="bttn_Trls btn btn-sm btn-danger">törlés</button>
                                         </div>
