@@ -34,7 +34,7 @@ namespace Gdekor
                 e.HasOne<UserProfil>()
                     .WithMany()
                     .HasForeignKey(r => r.User_ID)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 e.HasIndex(r => r.Pro_ID);
             });
@@ -46,12 +46,12 @@ namespace Gdekor
                 e.HasOne<Projekt>()
                     .WithMany()
                     .HasForeignKey(m => m.Projekt_ID)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 e.HasOne<UserProfil>()
                     .WithMany()
                     .HasForeignKey(m => m.Prof_ID)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 e.HasMany<Munka_Ora>()
                     .WithOne()

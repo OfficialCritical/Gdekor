@@ -74,6 +74,16 @@
 <div class="py-4">
     <a asp-page="/FelhOldalak/Fomenu" class="btn bttn_Tovabb mb-3">vissza</a>
 
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+    @if(TempData["SikerUzenet"] is string siker)
+    {
+        <div class="alert alert-success alert-dismissible show fade">
+            @siker
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     <div class="card egyCard animatedDiv">
         <div class="card-header cardTeto">
             <span class="blckBrwn_Grdnt_Font">Alkalmazottak</span>
@@ -151,13 +161,16 @@
                                                 <span class="reszletek_Lbl">Profilkép:</span>
                                                 @if (!string.IsNullOrWhiteSpace(ember.ProfKepUtovnal))
                                                 {
-                                                    <img src="ember.ProfKepUtovnal" alt="ember.Nev" class="rounded-circle" style="height: 80px; width: 80px; object-fit:cover;"/>
+                                                    <img src="@ember.ProfKepUtovnal" alt="@ember.Nev" class="rounded-circle" style="height: 80px; width: 80px; object-fit:cover;"/>
                                                 }
                                                 else{
                                                     <span>nincs elmentett kép</span>
                                                 }
                                             </div>
-                                            <button class="bttn_Trls btn btn-sm btn-danger">törlés</button>
+                                            <form method="post" asp-page-handler="Torles" onsubmit="return confirm('Biztosan törli a felhasználót?');" >
+                                                <input type="hidden" name="id" value="@ember.Id" />
+                                                <button type="submit" class="bttn_Trls btn btn-sm btn-danger">törlés</button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
