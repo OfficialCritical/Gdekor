@@ -4,6 +4,13 @@
     ViewData["Title"] = "Alkalmazottak";
 }
 <style>
+    .kozepResz{
+        background: url(/images/feher_top.webp);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
     .teloLink{
         text-decoration:none;
         font-style:italic;
@@ -19,7 +26,7 @@
 
 
     .blckBrwn_Grdnt_Font {
-        background: linear-gradient(135deg, black 0%, black 19%, #5c3a28);
+        background: linear-gradient(135deg, black 0%, black 17.5%, #5c3a28);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -27,7 +34,39 @@
         width: fit-content;
     }
 
-    
+    th {
+        padding-bottom: 0.7rem !important;
+        background: transparent !important;
+    }
+    td {
+        padding-bottom: 0.5rem !important;
+        background: transparent !important;
+    }
+
+
+    .reszletek_Row{
+        max-height: 0;
+        opacity: 0;
+        transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+    }
+    .reszletek_Row.active{
+        max-height: 1000px;
+        opacity: 1;
+        
+    }
+
+    .reszleted_Td{
+        display: none;
+        
+    }
+    .reszleted_Td.active{
+        display: table-cell;
+        text-align: center;
+    }
+
+    .reszletek_Lbl{
+        font-weight: bold;
+    }
 </style>
 
 
@@ -40,7 +79,7 @@
             <span class="blckBrwn_Grdnt_Font">Alkalmazottak</span>
         </div>
         <div class="cardKozep card-body">
-            <table class="table table-borderless" style="table-layout:auto; width:100%;">
+            <table class="table table-borderless">
                 <thead>
                     <tr>
                         <th class="text-center">Név</th>
@@ -71,6 +110,51 @@
                                     <td class="col-2 col-md-2 text-center align-middle">
                                         <span class="forgoNyil brwn_Grdnt_Font">➤</span>
                                     </td>
+                                </tr>                             
+
+                                <tr class="reszletek_Row">
+                                    <td colspan="3" class="reszleted_Td">
+                                        <div class="small d-flex flex-column align-items-center mb-5">
+                                            <button class="btn btn-sm btn-outline-danger">új jelszó</button>
+                                            <div class="d-flex gap-1">
+                                                <span class="reszletek_Lbl">E-mail:</span>
+                                                <span class="reszletek_Txt">@ember.Email</span>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <span class="reszletek_Lbl">Lakcím:</span>
+                                                <span class="reszletek_Txt">@ember.Lakcim</span>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <span class="reszletek_Lbl">Személyi azonosító</span>
+                                                <span class="reszletek_Txt">@ember.SzemelyiSzam</span>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <span class="reszletek_Lbl">Születési idő:</span>
+                                                <span class="reszletek_Txt">@ember.SzulIdo</span>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <span class="reszletek_Lbl">Születési hely:</span>
+                                                <span class="reszletek_Txt">@ember.SzulHely</span>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <span class="reszletek_Lbl">Anyja neve:</span>
+                                                <span class="reszletek_Txt">@ember.AnyjaNeve</span>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <span class="reszletek_Lbl">Rendszám:</span>
+                                                <span class="reszletek_Txt">@ember.Rendszam</span>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <span class="reszletek_Lbl">Férhőhelyek száma:</span>
+                                                <span class="reszletek_Txt">@ember.Ferohely</span>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <span class="reszletek_Lbl">Profilkép:</span>
+                                                <span class="reszletek_Txt">@ember.Ferohely</span>
+                                            </div>
+                                            <button class="bttn_Trls btn btn-sm btn-danger">törlés</button>
+                                        </div>
+                                    </td>
                                 </tr>
                             }
                         }
@@ -84,6 +168,32 @@
     <script>
         document.addEventListener('DOMContentLoaded',function(){
             document.querySelector('.animatedDiv')?.classList.add('elohiv');
+
+            document.querySelectorAll('.forgoNyil').forEach( function(nyil) {
+                nyil.addEventListener('click', function(){
+                    const fo_Row = nyil.closest('tr');
+                    const reszl_Row = fo_Row.nextElementSibling;
+
+                    if (!reszl_Row || !reszl_Row.classList.contains('reszletek_Row')) return;
+
+                    const reszl_Td = reszl_Row.querySelector('.reszleted_Td');
+
+                    document.querySelectorAll('.reszletek_Row.active').forEach( function(sor){
+                        if(sor !== reszl_Row){
+                            sor.classList.remove('active');
+                            const masikTd = sor.querySelector('.reszleted_Td');
+                            masikTd.classList.remove('active');
+                            const masikNyil = sor.previousElementSibling?.querySelector('.forgoNyil');
+                            masikNyil?.classList.remove('srehen');
+                        }
+                    });
+
+                    reszl_Row.classList.toggle('active');
+                    reszl_Td.classList.toggle('active');
+                    nyil.classList.toggle('srehen');
+                });
+            });
+
         });
     </script>
 }
