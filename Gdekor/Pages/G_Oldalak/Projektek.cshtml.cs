@@ -30,13 +30,14 @@ namespace Gdekor.Pages.G_Oldalak
         public string Nev_Edit { get; set; } = "";
 
         [BindProperty]
-        [Required(ErrorMessage = "Az állapot megadása kötelező")]
+        [Required(ErrorMessage = "az állapot megadása kötelező")]
         public string Allapot_Edit { get; set; } = "";
 
         [BindProperty]        
         public string? Leir_Edit { get; set; } = "";
 
         [BindProperty]
+        [Required(ErrorMessage = "a részvevők megadása kötelező")]
         public string KikDolgoznak_Edit { get; set; } = "mindenki";
 
         [BindProperty]        
@@ -52,15 +53,15 @@ namespace Gdekor.Pages.G_Oldalak
         public string? ValosVeg_Edit { get; set; } = "";
 
         [BindProperty]
-        [RegularExpression(@"^\d*$", ErrorMessage = "A bevétel csak szám lehet")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "bevétel csak szám lehet")]
         public string? Bevetel_Edit { get; set; } = "";
 
         [BindProperty]
-        [RegularExpression(@"^\d*$", ErrorMessage = "A költség csak szám lehet")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "költség csak szám lehet")]
         public string? Koltseg_Edit { get; set; } = "";
 
         [BindProperty]
-        [RegularExpression(@"^\d*$", ErrorMessage = "A profit csak szám lehet")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "profit csak szám lehet")]
         public string? Profit_Edit { get; set; } = "";
 
         #endregion

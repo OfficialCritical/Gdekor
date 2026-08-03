@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
     bttn_szList_Megtek.addEventListener('click', function () {
 
         bttn_szList_Megtek.classList.add('elrejt');
-        emHozza_select.classList.add('elohiv');
+        /*emHozza_select.classList.add('elohiv');*/
         szHozza_Div.classList.add('kiemel');
         userLista_Div.classList.add('elohiv');
     });
