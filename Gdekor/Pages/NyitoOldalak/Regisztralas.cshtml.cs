@@ -37,6 +37,18 @@ namespace Gdekor.Pages.NyitoOldalak
         public string RegSzemelyi { get; set; }
 
         [BindProperty]
+        [Required(ErrorMessage = "lakcím kártya számának megadása kötelező")]
+        public string RegLakcKartyaSzam { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "adószám megadása kötelező")]
+        public string RegAdoszam { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "tajszám megadása kötelező")]
+        public string RegTajszam { get; set; }
+
+        [BindProperty]
         public string RegTel_Korzet {  get; set; }
 
         [BindProperty]
@@ -63,6 +75,11 @@ namespace Gdekor.Pages.NyitoOldalak
         [BindProperty]
         public IFormFile? RegProfKep { get; set; }
 
+
+        [BindProperty]
+        public string? RegJogsiSzama { get; set; }
+        [BindProperty]
+        public string? RegJogsiKateg { get; set; }
         [BindProperty]
         public string? RegRendszam { get; set; }
         [BindProperty]
@@ -110,11 +127,16 @@ namespace Gdekor.Pages.NyitoOldalak
                 PhoneNumber = RegTel_Egyeni.Trim(),
                 Lakcim = RegLakcim.Trim(),
                 SzemelyiSzam = RegSzemelyi.Trim(),
+                LakcimK_Szama = RegLakcKartyaSzam.Trim(),
+                Adoszam = RegAdoszam.Trim(),
+                Tajszam = RegTajszam.Trim(),
                 AnyjaNeve = RegAnyjaNeve.Trim(),
                 SzulHely = RegSzulHely.Trim(),
                 SzulIdo = RegSzulIdo.Trim(),
-                Rendszam=RegRendszam?.Trim(),
-                Ferohely =RegFerohely?.Trim()
+                JogsiSzama = RegJogsiSzama?.Trim(),
+                JogsiKateg = RegJogsiKateg?.Trim(),
+                Rendszam = RegRendszam?.Trim(),
+                Ferohely = RegFerohely?.Trim()
             };
 
 
@@ -128,7 +150,7 @@ namespace Gdekor.Pages.NyitoOldalak
                 return Page();
             }
 
-            await _userManager.AddToRoleAsync(user, Szerepkorok.Admin);
+            await _userManager.AddToRoleAsync(user, Szerepkorok.Mugli);
             
             if (RegProfKep != null && RegProfKep.Length > 0)
             {

@@ -29,6 +29,18 @@ namespace Gdekor.Pages.FelhOldalak
         public string EditSzemelyi { get; set; } = "";
 
         [BindProperty]
+        [Required(ErrorMessage = "lakcím kártya számának megadása kötelező")]
+        public string EditLakcKartyaSzam { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "adószám megadása kötelező")]
+        public string EditAdoszam { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "tajszám megadása kötelező")]
+        public string EditTajszam { get; set; }
+
+        [BindProperty]
         [Required(ErrorMessage = "körzetszám megadása kötelező")]
         public string EditTel_Korzet {  get; set; }
 
@@ -58,6 +70,11 @@ namespace Gdekor.Pages.FelhOldalak
         [BindProperty]
         public IFormFile? EditProfKep { get; set; }
 
+
+        [BindProperty]
+        public string? EditJogsiSzama { get; set; }
+        [BindProperty]
+        public string? EditJogsiKateg { get; set; }
         [BindProperty]
         public string? EditRendszam { get; set; } = "";
 
@@ -82,11 +99,16 @@ namespace Gdekor.Pages.FelhOldalak
             EditSzemelyi = user.SzemelyiSzam ?? "";
             EditTel_Korzet = user.Tel_Korzet ?? "";
             EditTel_Szemelyi = user.PhoneNumber ?? "";
+            EditLakcKartyaSzam = user.LakcimK_Szama ?? "";
+            EditAdoszam = user.Adoszam ?? "";
+            EditTajszam = user.Tajszam ?? "";
             EditLakcim = user.Lakcim ?? "";
             EditSzulHely = user.SzulHely ?? "";
             EditSzulIdo = user.SzulIdo ?? "";
             EditAnyjaNeve = user.AnyjaNeve ?? "";
             AktualProfKep = user.ProfKepUtovnal ?? "";
+            EditJogsiSzama = user.JogsiSzama ?? "";
+            EditJogsiKateg = user.JogsiKateg ?? "";
             EditRendszam = user.Rendszam ?? "";
             EditFerohely = user.Ferohely ?? "";
             EditJelszo = null;  // jelszó sosem töltődik vissza
@@ -101,18 +123,23 @@ namespace Gdekor.Pages.FelhOldalak
 
            
             var user = await _userManager.GetUserAsync(User);
-            //if(user == null) return RedirectToPage("/NyitoOldalak/Bejelentkezes");
+            if(user == null) return RedirectToPage("/NyitoOldalak/Bejelentkezes");
 
             user.Email = EditEmail.Trim();
             user.UserName = EditEmail.Trim();
             user.Nev = EditNev.Trim();
             user.SzemelyiSzam = EditSzemelyi.Trim();
+            user.LakcimK_Szama=EditLakcKartyaSzam.Trim();
+            user.Adoszam=EditAdoszam.Trim();
+            user.Tajszam=EditTajszam.Trim();
             user.Tel_Korzet = EditTel_Korzet.Trim();
             user.PhoneNumber = EditTel_Szemelyi.Trim();
             user.Lakcim = EditLakcim.Trim();
             user.SzulHely = EditSzulHely.Trim();
             user.SzulIdo = EditSzulIdo.Trim();
             user.AnyjaNeve = EditAnyjaNeve.Trim();
+            user.JogsiSzama = EditJogsiSzama?.Trim();
+            user.JogsiKateg = EditJogsiKateg?.Trim();
             user.Rendszam = EditRendszam?.Trim();
             user.Ferohely = EditFerohely?.Trim();
 

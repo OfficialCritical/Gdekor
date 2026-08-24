@@ -3,6 +3,7 @@ using System;
 using Gdekor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Gdekor.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260824173458_AdoszTajSzLakcimSz")]
+    partial class AdoszTajSzLakcimSz
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,12 +196,6 @@ namespace Gdekor.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Ferohely")
-                        .HasColumnType("text");
-
-                    b.Property<string>("JogsiKateg")
-                        .HasColumnType("text");
-
-                    b.Property<string>("JogsiSzama")
                         .HasColumnType("text");
 
                     b.Property<string>("Lakcim")
