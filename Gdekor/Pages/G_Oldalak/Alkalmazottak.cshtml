@@ -24,6 +24,10 @@
         transform: scale(1.05);
     }
 
+    .cardTeto{
+        display: flex;
+        justify-content:space-between;
+    }
 
     .blckBrwn_Grdnt_Font {
         background: linear-gradient(135deg, black 0%, black 17.5%, #5c3a28);
@@ -55,6 +59,34 @@
         
     }
 
+    .csoves_Tbl_Div{
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+    }
+    .csoves_Tbl_Div.active{
+        max-height: 1000px;
+        opacity: 1;
+        overflow: auto;
+    }
+
+    .modern_Tbl_Div{
+        max-height: 1000px;
+        opacity: 1;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+    }
+    .modern_Tbl_Div.inactive{
+        max-height: 0;
+        opacity: 0;
+    }
+
+
+    th, td{
+        white-space: nowrap;        
+    }   
+
     .reszleted_Td{
         display: none;
         
@@ -66,6 +98,39 @@
 
     .reszletek_Lbl{
         font-weight: bold;
+    }
+
+    .lbl_Input {
+        gap: 0.5rem;
+    }
+    .lbl_Input_Valaszto{
+        margin-bottom: 0.25rem;
+    }
+
+    .menusor{
+        display:flex;
+        justify-content: center;
+        gap: 1rem;
+        padding: 1rem 0.5rem;
+        background: rgba(255,255,255,0.5);
+        backdrop-filter: blur(4px);
+        border-bottom-right-radius: 12px;
+        border-bottom-left-radius: 12px;
+    }
+    .menusor .btn{
+        flex: none;
+        width: auto;
+    }
+
+    #bttn_mdrn{
+        display: none;
+    }
+    #bttn_mdrn.active{
+        display: inline-block;
+    }
+
+    #bttn_tbl.inactive{
+        display: none;
     }
 </style>
 
@@ -84,116 +149,236 @@
         </div>
     }
 
-    <div class="card egyCard animatedDiv">
+    <div class="card egyCard animatedDiv mb-2">
         <div class="card-header cardTeto">
             <span class="blckBrwn_Grdnt_Font">Alkalmazottak listája</span>
+            <div>
+                <button type="button" id="kicsinyit" class="btn"></button>
+                <button type="button" id="nagyit" class="btn"></button>
+            </div>
         </div>
         <div class="cardKozep card-body">
-            <table class="table table-borderless">
-                <thead>
-                    <tr>
-                        <th class="text-center">Név</th>
-                        <th class="text-center">Telefon</th>
-                        <th class="text-center">Részletek</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.Felhasznalok_Lst.Count < 1)
-                    {
+            
+            <div class="modern_Tbl_Div">
+                <table id="modern_Tbl" class="table table-borderless">
+                    <thead>
                         <tr>
-                            <th>Nincsenek elmentett felhasználók.</th>
+                            <th class="text-center">Név</th>
+                            <th class="text-center">Telefon</th>
+                            <th class="text-center">Részletek</th>
                         </tr>
-                    }
-                    else
-                    {
+                    </thead>
+                    <tbody>
+                        @if (Model.Felhasznalok_Lst.Count < 1)
+                        {
+                            <tr>
+                                <th>Nincsenek elmentett felhasználók.</th>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var ember in Model.Felhasznalok_Lst)
+                            {
+                                if (ember.Email != "kerberosz@gmail.com")
+                                {
+                                    <tr>
+                                        <td class="col-5 col-md-2 text-center align-middle">
+                                            <span class="brwn_Grdnt_Font">@ember.Nev</span>
+                                        </td>
+                                        <td class="col-5 col-md-2 text-center align-middle">
+                                            <a class="teloLink" href="tel:+35@(ember.Tel_Korzet)@(ember.PhoneNumber)">+36 @ember.Tel_Korzet @ember.PhoneNumber</a>
+                                        </td>
+                                        <td class="col-2 col-md-2 text-center align-middle">
+                                            <span class="forgoNyil brwn_Grdnt_Font fs-2">➤</span>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="reszletek_Row">
+                                        <td colspan="3" class="reszleted_Td" style="margin-top:-10px;">
+                                            <div class="small d-flex flex-column align-items-center mb-5">
+                                                <div class="lbl_Input">
+                                                    <span class="reszletek_Lbl">E-mail:</span>
+                                                    <span class="reszletek_Txt">@ember.Email</span>
+                                                </div>
+                                                <div class="lbl_Input lbl_Input_Valaszto">
+                                                    <span class="reszletek_Lbl">Lakcím:</span>
+                                                    <span class="reszletek_Txt">@ember.Lakcim</span>
+                                                </div>
+
+                                                <div class="lbl_Input">
+                                                    <span class="reszletek_Lbl">Születési idő:</span>
+                                                    <span class="reszletek_Txt">@ember.SzulIdo</span>
+                                                </div>
+                                                <div class="lbl_Input">
+                                                    <span class="reszletek_Lbl">Születési hely:</span>
+                                                    <span class="reszletek_Txt">@ember.SzulHely</span>
+                                                </div>
+                                                <div class="lbl_Input lbl_Input_Valaszto">
+                                                    <span class="reszletek_Lbl">Anyja neve:</span>
+                                                    <span class="reszletek_Txt">@ember.AnyjaNeve</span>
+                                                </div>
+
+                                                <div class="lbl_Input">
+                                                    <span class="reszletek_Lbl">Személyi azonosító:</span>
+                                                    <span class="reszletek_Txt">@ember.SzemelyiSzam</span>
+                                                </div>
+                                                <div class="lbl_Input">
+                                                    <span class="reszletek_Lbl">Lakcímkártya száma:</span>
+                                                    <span class="reszletek_Txt">@ember.LakcimK_Szama</span>
+                                                </div>
+                                                <div class="lbl_Input">
+                                                    <span class="reszletek_Lbl">Adószám:</span>
+                                                    <span class="reszletek_Txt">@ember.Adoszam</span>
+                                                </div>
+                                                <div class="lbl_Input">
+                                                    <span class="reszletek_Lbl">Tajszám:</span>
+                                                    <span class="reszletek_Txt">@ember.Tajszam</span>
+                                                </div>
+
+                                                @if (!string.IsNullOrWhiteSpace(ember.ProfKepUtovnal))
+                                                {
+                                                    <div class="d-flex flex-column gap-1 lbl_Input_Valaszto">
+                                                        <span class="reszletek_Lbl">Profilkép:</span>
+                                                        <img src="@ember.ProfKepUtovnal" alt="@ember.Nev" class="rounded-circle mb-1 mx-auto" style="height: 80px; width: 80px; object-fit:cover; border:solid 0.5px #7a4f35;" />
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="lbl_Input lbl_Input_Valaszto">
+                                                        <span class="reszletek_Lbl">Profilkép:</span>
+                                                        <span>nincs elmentett kép</span>
+                                                    </div>
+
+                                                }
+
+                                                @if (!string.IsNullOrWhiteSpace(ember.JogsiSzama))
+                                                {
+                                                    <div class="lbl_Input">
+                                                        <span class="reszletek_Lbl">Jogosítvány száma:</span>
+                                                        <span class="reszletek_Txt">@(string.IsNullOrWhiteSpace(ember.JogsiSzama) ? "-" : ember.JogsiSzama)</span>
+                                                    </div>
+                                                    <div class="lbl_Input">
+                                                        <span class="reszletek_Lbl">Legmagasabb kategória:</span>
+                                                        <span class="reszletek_Txt">@(string.IsNullOrWhiteSpace(ember.JogsiKateg) ? "-" : ember.JogsiKateg)</span>
+                                                    </div>
+                                                    <div class="lbl_Input">
+                                                        <span class="reszletek_Lbl">Rendszám:</span>
+                                                        <span class="reszletek_Txt">@(string.IsNullOrWhiteSpace(ember.Rendszam) ? "-" : ember.Rendszam)</span>
+                                                    </div>
+                                                    <div class="lbl_Input mb-3">
+                                                        <span class="reszletek_Lbl">Férhőhelyek száma:</span>
+                                                        <span class="reszletek_Txt">@(string.IsNullOrWhiteSpace(ember.Ferohely) ? "-" : ember.Ferohely)</span>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="lbl_Input mb-3">
+                                                        <span class="reszletek_Lbl">Jogosítvány:</span>
+                                                        <span class="reszletek_Txt">nem áll rendelkezésre</span>
+                                                    </div>
+                                                }
+
+
+                                                <form method="post" asp-page-handler="Torles" onsubmit="return confirm('Biztosan törli a felhasználót?');">
+                                                    <input type="hidden" name="id" value="@ember.Id" />
+                                                    <button type="submit" class="bttn_Trls btn btn-sm btn-danger">törlés</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="csoves_Tbl_Div">
+                <table id="csoves_Tbl" class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Név</th>
+                            <th class="text-center">E-mail</th>
+                            <th class="text-center">Telefon</th>
+                            <th class="text-center">Lakcím</th>
+                            <th class="text-center">Születési idő</th>
+                            <th class="text-center">Születési hely</th>
+                            <th class="text-center">Anyja neve</th>
+                            <th class="text-center">Személyi azonosító</th>
+                            <th class="text-center">Lakcímkártya száma</th>
+                            <th class="text-center">Adószám</th>
+                            <th class="text-center">Tajszám</th>
+                            <th class="text-center">Jogosítvány száma</th>
+                            <th class="text-center">Legmagasabb kategória</th>
+                            <th class="text-center">Rendszám</th>
+                            <th class="text-center">Férhőhelyek száma</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         @foreach (var ember in Model.Felhasznalok_Lst)
                         {
                             if (ember.Email != "kerberosz@gmail.com")
                             {
                                 <tr>
-                                    <td class="col-5 col-md-2 text-center align-middle">
-                                        <span class="brwn_Grdnt_Font">@ember.Nev</span>
-                                    </td>
-                                    <td class="col-5 col-md-2 text-center align-middle">
-                                        <a class="teloLink" href="tel:+35@(ember.Tel_Korzet)@(ember.PhoneNumber)">+36 @ember.Tel_Korzet @ember.PhoneNumber</a>
-                                    </td>
-                                    <td class="col-2 col-md-2 text-center align-middle">
-                                        <span class="forgoNyil brwn_Grdnt_Font fs-2">➤</span>
-                                    </td>
-                                </tr>                             
-
-                                <tr class="reszletek_Row">
-                                    <td colspan="3" class="reszleted_Td" style="margin-top:-10px;">
-                                        <div class="small d-flex flex-column align-items-center mb-5">
-                                            <div class="d-flex gap-1">
-                                                <span class="reszletek_Lbl">E-mail:</span>
-                                                <span class="reszletek_Txt">@ember.Email</span>
-                                            </div>
-                                            <div class="d-flex gap-1">
-                                                <span class="reszletek_Lbl">Lakcím:</span>
-                                                <span class="reszletek_Txt">@ember.Lakcim</span>
-                                            </div>
-                                            <div class="d-flex gap-1">
-                                                <span class="reszletek_Lbl">Személyi azonosító</span>
-                                                <span class="reszletek_Txt">@ember.SzemelyiSzam</span>
-                                            </div>
-                                            <div class="d-flex gap-1">
-                                                <span class="reszletek_Lbl">Születési idő:</span>
-                                                <span class="reszletek_Txt">@ember.SzulIdo</span>
-                                            </div>
-                                            <div class="d-flex gap-1">
-                                                <span class="reszletek_Lbl">Születési hely:</span>
-                                                <span class="reszletek_Txt">@ember.SzulHely</span>
-                                            </div>
-                                            <div class="d-flex gap-1">
-                                                <span class="reszletek_Lbl">Anyja neve:</span>
-                                                <span class="reszletek_Txt">@ember.AnyjaNeve</span>
-                                            </div>
-
-                                            @if (!string.IsNullOrWhiteSpace(ember.ProfKepUtovnal))
-                                            {
-                                                <div class="d-flex flex-column gap-1">
-                                                    <span class="reszletek_Lbl">Profilkép:</span>
-                                                    <img src="@ember.ProfKepUtovnal" alt="@ember.Nev" class="rounded-circle mb-1 mx-auto" style="height: 80px; width: 80px; object-fit:cover;" />
-                                                </div>                                                
-                                            }
-                                            else
-                                            {
-                                                <div class="d-flex gap-1">
-                                                    <span class="reszletek_Lbl">Profilkép:</span>
-                                                    <span>nincs elmentett kép</span>
-                                                </div>
-                                                
-                                            }
-
-                                            <div class="d-flex gap-1">
-                                                <span class="reszletek_Lbl">Rendszám:</span>
-                                                <span class="reszletek_Txt">@(string.IsNullOrWhiteSpace(ember.Rendszam) ? "-" : ember.Rendszam)</span>
-                                            </div>
-                                            <div class="d-flex gap-1 mb-2">
-                                                <span class="reszletek_Lbl">Férhőhelyek száma:</span>
-                                                <span class="reszletek_Txt">@(string.IsNullOrWhiteSpace(ember.Ferohely) ? "-" : ember.Ferohely)</span>
-                                            </div>
-
-                                            <form method="post" asp-page-handler="Torles" onsubmit="return confirm('Biztosan törli a felhasználót?');" >
-                                                <input type="hidden" name="id" value="@ember.Id" />
-                                                <button type="submit" class="bttn_Trls btn btn-sm btn-danger">törlés</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
+                                <td>@ember.Nev</td>
+                                <td>@ember.Email</td>
+                                <td>@ember.Tel_Korzet @ember.PhoneNumber</td>
+                                <td>@ember.Lakcim</td>
+                                <td>@ember.SzulIdo</td>
+                                <td>@ember.SzulHely</td>
+                                <td>@ember.AnyjaNeve</td>
+                                <td>@ember.SzemelyiSzam</td>
+                                <td>@ember.LakcimK_Szama</td>
+                                <td>@ember.Adoszam</td>
+                                <td>@ember.Tajszam</td>
+                                <td>@(string.IsNullOrWhiteSpace(ember.JogsiSzama) ? "-" : ember.JogsiSzama)</td>
+                                <td>@ember.JogsiKateg</td>
+                                <td>@ember.Rendszam</td>
+                                <td>@ember.Ferohely</td>
+                            </tr>
+                            }                            
                         }
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
+    </div>
+
+    <div class="menusor">
+        <button id="bttn_mdrn" class="btn bttn_Action">Modern</button>        
+        <button id="bttn_tbl" class="btn bttn_Action">Táblázat</button>        
+        <button id="bttn_tovabb" class="btn bttn_Action">Továbbítás ➤</button>
     </div>
 </div>
 @section Scripts{
     <script>
         document.addEventListener('DOMContentLoaded',function(){
+            const bttn_mdrn = document.getElementById('bttn_mdrn');
+            const bttn_tbl = document.getElementById('bttn_tbl');
+            const csoves_Tbl_Div = document.querySelector('.csoves_Tbl_Div');
+            const modern_Tbl_Div = document.querySelector('.modern_Tbl_Div');
+            
             document.querySelector('.animatedDiv')?.classList.add('elohiv');
+
+            bttn_tbl.addEventListener('click',function(){
+                modern_Tbl_Div.classList.add('inactive');
+                csoves_Tbl_Div.classList.add('active');
+
+                bttn_mdrn.classList.add('active');
+                bttn_tbl.classList.add('inactive');
+
+            });
+
+            bttn_mdrn.addEventListener('click',function(){
+                modern_Tbl_Div.classList.remove('inactive');
+                csoves_Tbl_Div.classList.remove('active');
+
+                bttn_mdrn.classList.remove('active');
+                bttn_tbl.classList.remove('inactive');
+
+            });
+
+
 
             document.querySelectorAll('.forgoNyil').forEach( function(nyil) {
                 nyil.addEventListener('click', function(){

@@ -88,7 +88,7 @@
                                         <option value="70">70</option>
                                     </select>
                                     <div style="flex-grow:1;">
-                                        <input asp-for="EditTel_Szemelyi" class="form-control" maxlength="7" placeholder="1234567" />
+                                        <input asp-for="EditTel_Szemelyi" class="form-control" maxlength="7" placeholder="pl.:1234567" />
                                     </div>
 
                                 </div>
@@ -107,16 +107,16 @@
                         <label class="brwn_Grdnt_Font form-label">Születési adatok</label>
                         <div class="input_Collection">
                             <div class="lbl_Input">
-                                <label class="form-label">Születési hely</label>
-                                <input asp-for="EditSzulHely" placeholder="pl.:Budapest" class="form-control" />
-                            </div>
-                            <span asp-validation-for="EditSzulHely" class="mb-2 text-danger"></span>
-
-                            <div class="lbl_Input">
                                 <label class="form-label">Születési idő</label>
                                 <input asp-for="EditSzulIdo" class="datumvalaszto form-control" />
                             </div>
                             <span asp-validation-for="EditSzulIdo" class="w-100 mb-2 text-danger"></span>
+
+                            <div class="lbl_Input">
+                                <label class="form-label">Születési hely</label>
+                                <input asp-for="EditSzulHely" placeholder="pl.:Budapest" class="form-control" />
+                            </div>
+                            <span asp-validation-for="EditSzulHely" class="mb-2 text-danger"></span>                            
 
                             <div class="lbl_Input">
                                 <label class="form-label">Anyja neve</label>
@@ -142,7 +142,7 @@
                             <span asp-validation-for="EditSzemelyi" class="mb-2 text-danger"></span>
 
                             <div class="lbl_Input">
-                                <label class="form-label">Lakcím kártya száma</label>
+                                <label class="form-label">Lakcímkártya száma</label>
                                 <input asp-for="EditLakcKartyaSzam" placeholder="pl.:123456AB" class="form-control" />
 
                             </div>
@@ -157,7 +157,7 @@
 
                             <div class="lbl_Input">
                                 <label class="form-label">Tajszám</label>
-                                <input asp-for="EditTajszam" placeholder="pl.:123 456 789" class="form-control" />
+                                <input asp-for="EditTajszam" placeholder="pl.:123-456-789" class="form-control" />
 
                             </div>
                             <span asp-validation-for="EditTajszam" class="text-center mb-2 text-danger"></span>
@@ -185,8 +185,7 @@
                             }
                         </div>
                         
-
-                        <label class="brwn_Grdnt_Font form-label">Jármű</label>
+                        <label class="brwn_Grdnt_Font form-label">Jármű és jogosítvány</label>
                         <div class="input_Collection">
                             <div class="lbl_Input">
                                 <label class="form-label">Jogosítvány száma</label>
