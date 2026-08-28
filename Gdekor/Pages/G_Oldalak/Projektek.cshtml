@@ -121,8 +121,8 @@
     }
 
     .userLista_Div{
-        opacity: 0;
-        max-height: 0;
+        /*opacity: 0;
+        max-height: 0;*/
         transition: opacity 0.4s ease-out, max-height 0.4s ease-out;        
     }
     .userLista_Div.elohiv{
@@ -130,15 +130,7 @@
         max-height: 1500px;            
     }
 
-    #userekLista:empty {
-        display: none;
-    }
-
-    #userekLista .list-group-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+    
 
     .userDiv{
         display: flex;
@@ -185,7 +177,7 @@
         <div class="card-body cardKozep">
             <form id="form_Projekt" class="row" method="post" asp-page-handler="Mentes">
                 <input type="hidden" asp-for="Pro_ID_Edit" />
-
+                <input type="hidden" asp-for="Resztvevok_Json" id="Resztvevok_Json" />
                 @if (!ViewData.ModelState.IsValid)
                     {
                         <div asp-validation-summary="All" class="text-danger mb-3 col-12"></div>
@@ -255,10 +247,11 @@
                         </div>
                         <div class="reszletek_Div ms-3">
 
-                            <div class="cimkeEsMezo mb-4" style="padding-left:0.5rem;">
+                            <div class="cimkeEsMezo mb-4" >
                                 <label asp-for="KikDolgoznak_Edit"  class="fw-bold form-label">Kik dolgoznak rajta?</label>
                                 <select asp-for="KikDolgoznak_Edit" id="szTipus_select" class="form-select">
-                                    <option value="mindenki" selected>mindenki</option>
+                                    <option value="" selected disabled hidden>kérem, válasszon</option>
+                                    <option value="mindenki">mindenki</option>
                                     <option value="egyeni">egyéni válogatás</option>
                                 </select>
                             </div>
@@ -266,8 +259,7 @@
                             <div class="szHozza_Div d-flex flex-column mb-2">
 
                                 <div class="d-flex align-items-center gap-3">
-                                    <label class="fw-bold form-label flex-shrink-0">Személyek listája</label>
-                                    <button type="button" id="bttn_szList_Megtek" class="bttn_uj btn btn-outline-primary btn-sm">megtekintés</button>
+                                    <label class="fw-bold form-label flex-shrink-0">Személyek listája</label>                                    
                                     <select id="emHozza_select" class="form-select">
                                         <option value="" selected>hozzáadás</option>
                                         @foreach (var use in Model.Userek_Lista)
@@ -281,18 +273,17 @@
                                 </div>
 
                                 <div class="userLista_Div ms-2 mt-4">
-                                    <ul id="userekLista" class="list-group">
-                                        @foreach (var use in Model.Userek_Lista)
-                                        {
-                                            if (use.Email != "kerberosz@gmail.com")
-                                            {
-                                                <li class="list-group-item">
-                                                    <span>@use.Nev</span>                                                    
-                                                    @*<button type="button" class="btn btn-sm btn-outline-danger bttnSz_Torol">törlés</button>*@
-                                                </li>
-                                            }                                            
-                                        }
-                                    </ul>
+                                    <table class="userLista_Tbl table">
+                                        <thead>
+                                            <th></th>
+                                            <th>Név</th>
+                                            <th>Órabér(Ft)</th>
+                                            <th>Napibér(Ft)</th>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>                            
                             

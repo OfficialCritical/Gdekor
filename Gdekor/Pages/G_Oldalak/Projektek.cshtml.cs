@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace Gdekor.Pages.G_Oldalak
 {
@@ -21,6 +22,16 @@ namespace Gdekor.Pages.G_Oldalak
 
 
         #region Projekt_Mentes_Props
+        [BindProperty]
+        public string? Resztvevok_Json { get; set; }
+        public class ResztvevoDto
+        {
+            public string? Id { get; set; }
+            public string? UserId { get; set; }
+            public string? Nev { get; set; }
+            public string? Oraber { get; set; }
+            public string? Napiber { get; set; }
+        }
 
         [BindProperty]
         public string? Pro_ID_Edit { get; set; }
@@ -37,9 +48,11 @@ namespace Gdekor.Pages.G_Oldalak
         public string? Leir_Edit { get; set; } = "";
 
         [BindProperty]
-        [Required(ErrorMessage = "a részvevők megadása kötelező")]
-        public string KikDolgoznak_Edit { get; set; } = "mindenki";
+        [Required(ErrorMessage = "a résztvevők megadása kötelező")]
+        public string KikDolgoznak_Edit { get; set; } = "";
 
+        [BindProperty]
+        public List<Resztvevo_Projektben> ReszvevokList_Edit { get; set; } = new();
         [BindProperty]        
         public string? TervKezd_Edit { get; set; } = "";
 
@@ -115,6 +128,8 @@ namespace Gdekor.Pages.G_Oldalak
             projekt.Pro_Koltseg = Koltseg_Edit?.Trim();
             projekt.Pro_Profit = Profit_Edit?.Trim();
 
+            await ResztvevokMentesAsync(projekt.Pro_ID);
+
             await _dbContext.SaveChangesAsync();
 
             TempData["SikerUzenet"] = string.IsNullOrWhiteSpace(Pro_ID_Edit)
@@ -145,8 +160,55 @@ namespace Gdekor.Pages.G_Oldalak
             Userek_Lista = await _dbContext.Users
                 .OrderBy(u => u.Nev)
                 .ToListAsync();
+
+
         }
 
+        private async Task ResztvevokMentesAsync(string proId)
+        {
+            var regiek = _dbContext.ResztvevokProBen_Tbl
+                .Where(r => r.Pro_ID == proId);
+            _dbContext.ResztvevokProBen_Tbl.RemoveRange(regiek);
+
+            var dtoLista = string.IsNullOrWhiteSpace(Resztvevok_Json) ? new List<ResztvevoDto>() : JsonSerializer.Deserialize<List<ResztvevoDto>>(Resztvevok_Json,new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+
+            foreach (var r in dtoLista)
+            {
+                if (string.IsNullOrWhiteSpace(r.Nev) && string.IsNullOrWhiteSpace(r.UserId))
+                    continue;
+                _dbContext.ResztvevokProBen_Tbl.Add(new Resztvevo_Projektben
+                {
+                    ID = Guid.NewGuid().ToString(),
+                    Pro_ID = proId,
+                    User_ID = r.UserId,
+                    Nev = r.Nev?.Trim(),
+                    Oraber = r.Oraber?.Trim(),
+                    Napiber = r.Napiber?.Trim()
+                });
+            }
+            await Task.CompletedTask;
+
+        }
+
+        public async Task<IActionResult> OnGetResztvevokAsync(string proId)
+        {
+            if (string.IsNullOrWhiteSpace(proId))
+                return BadRequest();
+
+            var lista = await _dbContext.ResztvevokProBen_Tbl
+                .Where(r => r.Pro_ID == proId)
+                .Select(r=> new
+                {
+                    id=r.ID,
+                    userId= r.User_ID,
+                    nev = r.Nev,
+                    oraber= r.Oraber,
+                    napiber= r.Napiber
+                })
+                .ToListAsync();
+
+            return new JsonResult(lista);
+        }
         //vege
     }
 }
