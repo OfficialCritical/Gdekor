@@ -110,14 +110,7 @@
     #emHozza_select{
         border: solid 0.5px #0d6efd;
         color: #0d6efd;
-        opacity: 0;
-        max-width: 0;
-        transition: opacity 0.4s ease-out, max-width 0.4s ease-out;
-
-    }
-    #emHozza_select.elohiv {
         opacity: 1;
-        max-width: 1500px;
     }
 
     .userLista_Div{
@@ -249,7 +242,7 @@
 
                             <div class="cimkeEsMezo mb-4" >
                                 <label asp-for="KikDolgoznak_Edit"  class="fw-bold form-label">Kik dolgoznak rajta?</label>
-                                <select id="emHozza_select" class="form-select">
+                                <select id="emHozza_select" class="form-select ms-2">
                                     <option value="" selected>hozzáadás</option>
                                     @foreach (var use in Model.Userek_Lista)
                                     {
@@ -276,16 +269,62 @@
                                             <th>Órabér(Ft)</th>
                                             <th>Napibér(Ft)</th>
                                         </thead>
+                                        @*
                                         <tbody>
+
                                                 @foreach(var emb in Model.Resztvevok_Lista)
                                                 {
                                                     <tr>
                                                         <td>
                                                             <button class="btn btn-outline-danger">törlés</button>
                                                         </td>
+                                                        <td>
+                                                            @emb.Nev
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" class="form-control userOraber" min="0" value="@emb.Oraber" placeholder="Ft">
+                                                            
+                                                        </td>
+                                                        <td>
+                                                        <input type="number" class="form-control userNapiber" value="@emb.Napiber" min="0" placeholder="Ft">
+                                                        </td>
                                                     </tr>
                                                 }
                                         </tbody>
+                                        *@
+                                        <tbody>
+    @foreach (var emb in Model.Resztvevok_Lista)
+    {
+        <tr data-id="@emb.ID" data-user-id="@emb.User_ID">
+            <td>
+                <button type="button"
+                        class="btn btn-outline-danger bttn_userTorol">
+                    törlés
+                </button>
+            </td>
+
+            <td class="userNev">
+                @emb.Nev
+            </td>
+
+            <td>
+                <input type="number"
+                       class="form-control userOraber"
+                       min="0"
+                       value="@emb.Oraber"
+                       placeholder="Ft">
+            </td>
+
+            <td>
+                <input type="number"
+                       class="form-control userNapiber"
+                       min="0"
+                       value="@emb.Napiber"
+                       placeholder="Ft">
+            </td>
+        </tr>
+    }
+</tbody>
                                     </table>
                                 </div>
                             </div>                            

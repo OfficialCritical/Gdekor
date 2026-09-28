@@ -84,6 +84,10 @@ namespace Gdekor.Pages.G_Oldalak
         public async Task OnGet()
         {
             await Frissit_Pro_Lista();
+
+            Userek_Lista = await _dbContext.Users
+                .OrderBy(u => u.Nev)
+                .ToListAsync();
         }
 
         public async Task<IActionResult> OnPostMentesAsync()

@@ -261,17 +261,62 @@ document.addEventListener('DOMContentLoaded', function () {
         szTipus_select.addEventListener('change', szTipusFrissit);
     }
 
-    if (emHozza_select) {
-        emHozza_select.addEventListener('change', function () {
-            if (szTipus_select?.value !== 'egyeni') return;
+    emHozza_select.addEventListener('change', function () {
 
-            const option = emHozza_select.selectedOptions[0];
-            if (!option?.value) return;
+        const option = this.selectedOptions[0];
 
-            userSorHozzaad(option);
-            emHozza_select.value = '';
-        });
-    }
+        if (!option.value) return;
+
+        // Ellenőrizzük, hogy szerepel-e már a táblázatban
+        const letezik = Array.from(userLista_Tbl_Bdy.rows).some(
+            sor => sor.dataset.userId === option.value
+        );
+
+        if (letezik) {
+            this.value = '';
+            return;
+        }
+
+        // Új sor létrehozása
+        const tr = document.createElement('tr');
+
+        tr.dataset.userId = option.value;
+        tr.dataset.id = '';
+
+        tr.innerHTML = `
+        <td>
+            <button type="button"
+                    class="btn btn-outline-danger bttn_userTorol">
+                törlés
+            </button>
+        </td>
+
+        <td class="userNev"></td>
+
+        <td>
+            <input type="number"
+                   class="form-control userOraber"
+                   min="0"
+                   placeholder="Ft">
+        </td>
+
+        <td>
+            <input type="number"
+                   class="form-control userNapiber"
+                   min="0"
+                   placeholder="Ft">
+        </td>
+    `;
+
+        tr.querySelector('.userNev').textContent = option.textContent.trim();
+
+        userLista_Tbl_Bdy.appendChild(tr);
+
+        // Select visszaállítása
+        this.value = '';
+    });
+
+    /*
 
     if (userLista_Tbl_Bdy) {
         userLista_Tbl_Bdy.addEventListener('click', function (e) {
@@ -286,7 +331,15 @@ document.addEventListener('DOMContentLoaded', function () {
             resztvevokJsonBeallit();
         });
     }
+    */
+    userLista_Tbl_Bdy.addEventListener('click', function (e) {
 
+        const torolGomb = e.target.closest('.bttn_userTorol');
+
+        if (!torolGomb) return;
+
+        torolGomb.closest('tr').remove();
+    });
     document.querySelectorAll('.cim_Div').forEach(function (cim) {
         cim.addEventListener('click', function () {
             const reszletek = cim.nextElementSibling;
