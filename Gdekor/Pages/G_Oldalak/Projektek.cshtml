@@ -243,16 +243,21 @@
 
                     <div class="mb-1">
                         <div class="cim_Div mb-2">
-                            <span class="cim_Szoveg">Erőforrás-adatok  </span><span class="forgoNyil">➤</span>
+                            <span class="cim_Szoveg">Munkaórák / bérek </span><span class="forgoNyil">➤</span>
                         </div>
                         <div class="reszletek_Div ms-3">
 
                             <div class="cimkeEsMezo mb-4" >
                                 <label asp-for="KikDolgoznak_Edit"  class="fw-bold form-label">Kik dolgoznak rajta?</label>
-                                <select asp-for="KikDolgoznak_Edit" id="szTipus_select" class="form-select">
-                                    <option value="" selected disabled hidden>kérem, válasszon</option>
-                                    <option value="mindenki">mindenki</option>
-                                    <option value="egyeni">egyéni válogatás</option>
+                                <select id="emHozza_select" class="form-select">
+                                    <option value="" selected>hozzáadás</option>
+                                    @foreach (var use in Model.Userek_Lista)
+                                    {
+                                        if (use.Email != "kerberosz@gmail.com")
+                                        {
+                                            <option value="@use.Id">@use.Nev</option>
+                                        }
+                                    }
                                 </select>
                             </div>
 
@@ -260,16 +265,7 @@
 
                                 <div class="d-flex align-items-center gap-3">
                                     <label class="fw-bold form-label flex-shrink-0">Személyek listája</label>                                    
-                                    <select id="emHozza_select" class="form-select">
-                                        <option value="" selected>hozzáadás</option>
-                                        @foreach (var use in Model.Userek_Lista)
-                                            {
-                                                if (use.Email != "kerberosz@gmail.com")
-                                                {
-                                                    <option value="@use.Id">@use.Nev</option>
-                                                }
-                                            }
-                                    </select>
+                                    
                                 </div>
 
                                 <div class="userLista_Div ms-2 mt-4">
@@ -281,7 +277,14 @@
                                             <th>Napibér(Ft)</th>
                                         </thead>
                                         <tbody>
-
+                                                @foreach(var emb in Model.Resztvevok_Lista)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <button class="btn btn-outline-danger">törlés</button>
+                                                        </td>
+                                                    </tr>
+                                                }
                                         </tbody>
                                     </table>
                                 </div>
@@ -334,7 +337,7 @@
                     
                     <div class="mb-3">
                         <div class="cim_Div mb-2">
-                            <span class="cim_Szoveg">Pénzügyi adatok  </span><span class="forgoNyil">➤</span>
+                            <span class="cim_Szoveg">Pénzügyi összefoglaló  </span><span class="forgoNyil">➤</span>
                         </div>
                         <div class="reszletek_Div ms-3">
 

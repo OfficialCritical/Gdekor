@@ -150,7 +150,7 @@ namespace Gdekor.Pages.NyitoOldalak
                 return Page();
             }
 
-            await _userManager.AddToRoleAsync(user, Szerepkorok.Admin);
+            await _userManager.AddToRoleAsync(user, Szerepkorok.Mugli);
             
             if (RegProfKep != null && RegProfKep.Length > 0)
             {

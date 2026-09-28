@@ -18,7 +18,8 @@ namespace Gdekor.Pages.G_Oldalak
 
 
         public List<Projekt> Projektek_Lista { get; set; } = new();
-        public List<UserProfil> Userek_Lista { get; set; } = new();
+        public List<UserProfil> Userek_Lista { get; set; } = new();       
+        public List<Resztvevo_Projektben> Resztvevok_Lista { get; set; } = new();       
 
 
         #region Projekt_Mentes_Props
@@ -82,14 +83,14 @@ namespace Gdekor.Pages.G_Oldalak
 
         public async Task OnGet()
         {
-            await ListaToltesAsync();
+            await Frissit_Pro_Lista();
         }
 
         public async Task<IActionResult> OnPostMentesAsync()
         {
             if (!ModelState.IsValid)
             {
-                await ListaToltesAsync();
+                await Frissit_Pro_Lista();
                 return Page();
             }
 
@@ -111,7 +112,7 @@ namespace Gdekor.Pages.G_Oldalak
                 if (projekt==null)
                 {
                     ModelState.AddModelError(string.Empty, "Kiválasztott projekt nem található!");
-                    await ListaToltesAsync();
+                    await Frissit_Pro_Lista();
                     return Page();
                 }
             }
@@ -139,29 +140,24 @@ namespace Gdekor.Pages.G_Oldalak
             return RedirectToPage();
         }
 
-        private async Task ListaToltesAsync()
+        private async Task Frissit_Pro_Lista()
         {
             Projektek_Lista = await _dbContext.Projektek_Tbl
                 .OrderBy(pr => pr.Pro_Nev)
+                .ToListAsync();            
+        }
+
+        private async Task Frissit_vUserek_Lista(string proID)
+        {
+            var proResztvevok = await _dbContext.ResztvevokProBen_Tbl
+                .Where(u => u.Pro_ID == proID)
+                .Select(u=>u.User_ID)
                 .ToListAsync();
-
-            foreach (var projekt in Projektek_Lista)
-            {
-                Console.WriteLine(
-                    $"{projekt.Pro_Nev} | " +
-                    $"TervKezd: {projekt.Pro_Terv_Kezdet} | " +
-                    $"TervVeg: {projekt.Pro_Terv_Veg} | " +
-                    $"Bevetel: {projekt.Pro_Bevetel} | " +
-                    $"Koltseg: {projekt.Pro_Koltseg} | " +
-                    $"Profit: {projekt.Pro_Profit}"
-                );
-            }
-
+            
             Userek_Lista = await _dbContext.Users
-                .OrderBy(u => u.Nev)
-                .ToListAsync();
-
-
+                .Where(u => !proResztvevok.Contains(u.Id))
+                .OrderBy(u=>u.Nev)
+                .ToListAsync();            
         }
 
         private async Task ResztvevokMentesAsync(string proId)

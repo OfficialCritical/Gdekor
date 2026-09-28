@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const p_Valaszto = document.getElementById('p_Valaszto');
     const p_reszletek = document.getElementById('p_reszletek');
 
-    const szTipus_select = document.getElementById('szTipus_select');
+    //const szTipus_select = document.getElementById('szTipus_select');
     const emHozza_select = document.getElementById('emHozza_select');
     const userLista_Tbl_Bdy = document.querySelector('.userLista_Tbl tbody');
 
