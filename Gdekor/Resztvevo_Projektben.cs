@@ -9,6 +9,7 @@
         public string? User_ID { get; set; }
         public string? Nev { get; set; }
         public string? Oraber { get; set; }
-        public string? Napiber { get; set; }
+        public string? Napiber_Ft { get; set; }
+        public string? Napiber_Ora { get; set; }
     }
 }

@@ -82,12 +82,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input type="number" min="0" class="form-control userOraber" placeholder="Ft">
                 </td>
                 <td>
-                    <input type="number" min="0" class="form-control userNapiber" placeholder="Ft">
+                    <input type="number" min="0" class="form-control userNapiber_Ft" placeholder="Ft">
+                </td>
+                <td>
+                    <input type="number" min="0" class="form-control userNapiber_Ora" placeholder="max hány óra">
                 </td>
             `;
                 tr.querySelector('.userNev').textContent = emberke.nev ?? '';
                 tr.querySelector('.userOraber').value = emberke.oraber ?? '';
-                tr.querySelector('.userNapiber').value = emberke.napiber ?? '';
+                tr.querySelector('.userNapiber_Ft').value = emberke.napiber_Ft ?? '';
+                tr.querySelector('.userNapiber_Ora').value = emberke.napiber_Ora ?? '';
 
                 userLista_Tbl_Bdy.appendChild(tr);
         })
@@ -185,7 +189,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 <input type="number" class="form-control userOraber" min="0" placeholder="Ft">
             </td>
             <td>
-                <input type="number" class="form-control userNapiber" min="0" placeholder="Ft">
+                <input type="number" class="form-control userNapiber_Ft" min="0" placeholder="Ft">
+            </td>
+            <td>
+                <input type="number" class="form-control userNapiber_Ora" min="0" placeholder="max hány óra">
             </td>
         `;
         tr.querySelector('.userNev').textContent = userNev;
@@ -208,7 +215,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 UserId: tr.dataset.userId || null,
                 Nev: tr.querySelector('.userNev').textContent.trim(),
                 Oraber: tr.querySelector('.userOraber').value,
-                Napiber: tr.querySelector('.userNapiber').value
+                Napiber_Ft: tr.querySelector('.userNapiber_Ft').value,
+                Napiber_Ora: tr.querySelector('.userNapiber_Ora').value
             });
         });
         document.getElementById('Resztvevok_Json').value = JSON.stringify(resztvevok);

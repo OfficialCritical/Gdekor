@@ -274,6 +274,7 @@
                                             <th>Név</th>
                                             <th>Órabér(Ft)</th>
                                             <th>Napibér(Ft)</th>
+                                            <th>Napibér(órában)</th>
                                         </thead>                                        
                                         <tbody>
                                             @foreach (var emb in Model.Resztvevok_Lista)
@@ -300,10 +301,18 @@
 
                                                     <td>
                                                         <input type="number"
-                                                               class="form-control userNapiber"
+                                                               class="form-control userNapiber_Ft"
                                                                min="0"
-                                                               value="@emb.Napiber"
+                                                               value="@emb.Napiber_Ft"
                                                                placeholder="Ft">
+                                                    </td>
+
+                                                    <td>
+                                                        <input type="number"
+                                                               class="form-control userNapiber_Ora"
+                                                               min="0"
+                                                               value="@emb.Napiber_Ora"
+                                                               placeholder="max hány óra">
                                                     </td>
                                                 </tr>
                                             }

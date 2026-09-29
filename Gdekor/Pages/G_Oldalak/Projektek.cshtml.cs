@@ -31,7 +31,8 @@ namespace Gdekor.Pages.G_Oldalak
             public string? UserId { get; set; }
             public string? Nev { get; set; }
             public string? Oraber { get; set; }
-            public string? Napiber { get; set; }
+            public string? Napiber_Ft { get; set; }
+            public string? Napiber_Ora { get; set; }
         }
 
         [BindProperty]
@@ -183,7 +184,8 @@ namespace Gdekor.Pages.G_Oldalak
                     User_ID = r.UserId,
                     Nev = r.Nev?.Trim(),
                     Oraber = r.Oraber?.Trim(),
-                    Napiber = r.Napiber?.Trim()
+                    Napiber_Ft = r.Napiber_Ft?.Trim(),
+                    Napiber_Ora = r.Napiber_Ora?.Trim()
                 });
             }
 
@@ -202,7 +204,8 @@ namespace Gdekor.Pages.G_Oldalak
                     userId= r.User_ID,
                     nev = r.Nev,
                     oraber= r.Oraber,
-                    napiber= r.Napiber
+                    napiber_Ft= r.Napiber_Ft,
+                    napiber_Ora=r.Napiber_Ora
                 })
                 .ToListAsync();
 
