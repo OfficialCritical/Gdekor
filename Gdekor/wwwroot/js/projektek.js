@@ -54,6 +54,50 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    async function betoltResztvevok(proId) {
+        userLista_Tbl_Bdy.innerHTML = '';
+        const response = await fetch(`?handler=Resztvevok&proId=${encodeURIComponent(proId)}`);
+
+        if (!response.ok) {
+            alert('Hiba lépet fel!');
+            return;
+        }
+
+        const lista = await response.json();
+
+        if (p_Valaszto.value !== proId) return;
+
+        try {
+            lista.forEach(emberke => {
+                const tr = document.createElement('tr');
+                tr.dataset.id = emberke.id || '';
+                tr.dataset.userId = emberke.userId || '';
+                tr.innerHTML = `
+                <td>
+                    <button type="button" class="btn btn-outline-danger bttn_userTorol"> törlés </button>
+                </td>
+                <td class="userNev">                    
+                </td>
+                <td>
+                    <input type="number" min="0" class="form-control userOraber" placeholder="Ft">
+                </td>
+                <td>
+                    <input type="number" min="0" class="form-control userNapiber" placeholder="Ft">
+                </td>
+            `;
+                tr.querySelector('.userNev').textContent = emberke.nev ?? '';
+                tr.querySelector('.userOraber').value = emberke.oraber ?? '';
+                tr.querySelector('.userNapiber').value = emberke.napiber ?? '';
+
+                userLista_Tbl_Bdy.appendChild(tr);
+        })
+        }
+        catch (error) {
+            alert('Hiba történt a résztvevő személyek adatainak betöltésekor!');
+        }
+
+    }
+
     p_Valaszto.addEventListener('change', function () {
         const opt = p_Valaszto.selectedOptions[0];
 
@@ -65,8 +109,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const reszletek = cim.nextElementSibling;
                 const nyil = cim.querySelector('.forgoNyil');
 
-                reszletek.classList.add('elohiv');
-                nyil.classList.add('srehen');
+                reszletek.classList.remove('elohiv');
+                nyil.classList.remove('srehen');
             });
 
             const d = opt.dataset;
@@ -75,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('Nev_Edit').value = d.nev ?? '';
             document.getElementById('Allapot_Edit').value = d.allapot ?? '';
             document.getElementById('Leir_Edit').value = d.leir ?? '';
-            document.getElementById('szTipus_select').value = d.kik ?? '';
 
             document.getElementById('Bevetel_Edit').value = d.bevetel ?? '';
             document.getElementById('Koltseg_Edit').value = d.koltseg ?? '';
@@ -86,18 +129,21 @@ document.addEventListener('DOMContentLoaded', function () {
             mezoBeallit('ValosKezd_Edit', d.valosKezd);
             mezoBeallit('ValosVeg_Edit', d.valosVeg);
 
-
+            betoltResztvevok(p_Valaszto.value);
 
         } else {
             form_Projekt.reset();
             document.getElementById('Pro_ID_Edit').value = '';
+            userLista_Tbl_Bdy.innerHTML = '';
             p_reszletek.classList.remove('aktiv');
         }
     });
 
     bttn_uj?.addEventListener('click', function () {
         form_Projekt.reset();
+        userLista_Tbl_Bdy.innerHTML = '';
         document.getElementById('Pro_ID_Edit').value = '';
+        p_Valaszto.value = '';
         bttn_uj.classList.add('aktiv');
         p_reszletek.classList.add('aktiv');
 
@@ -112,29 +158,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-    function resztvevoSorLetrehoz(r) {
-        const tr = document.createElement('tr');
-        tr.dataset.id = r.id || '';
-        tr.dataset.userId = r.userId || '';
-
-        const egyeni = szTipus_select?.value === 'egyeni';
-
-        tr.innerHTML = `
-            <td>
-                ${egyeni ? '<button type="button" class="btn btn-sm btn-outline-danger bttn_userTorol">törlés</button>' : ''}
-            </td>
-            <td class="userNev">${r.nev ?? ''}</td>
-            <td>
-                <input type="number" class="form-control userOraber" min="0" placeholder="Ft" value="${r.oraber ?? ''}">
-            </td>
-            <td>
-                <input type="number" class="form-control userNapiber" min="0" placeholder="Ft" value="${r.napiber ?? ''}">
-            </td>
-        `;
-
-        return tr;
-    }
-    // userLista_Tbl_Bdy.innerHTML = '';
 
     emHozza_select.addEventListener('change', function () {
         if (emHozza_select.value === '') return;
@@ -144,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const letezik = [...userLista_Tbl_Bdy.querySelectorAll('tr')].some(tr => tr.dataset.userId === userID);
         if (letezik) {
-            emHozza_select.valosKezd = '';
+            emHozza_select.value = '';
             alert('A kiválasztott személy már szerepel a lentebbi listában!');
             return;
         }
@@ -154,9 +177,9 @@ document.addEventListener('DOMContentLoaded', function () {
         tr.dataset.id = '';
         tr.innerHTML = `
             <td>
-                <button type="button" class="btn btn-outline-danger bttn_userTorol"> törlés </button
+                <button type="button" class="btn btn-outline-danger bttn_userTorol"> törlés </button>
             </td>
-            <td class="userNev align-middle">
+            <td class="userNev">
             </td>
             <td>
                 <input type="number" class="form-control userOraber" min="0" placeholder="Ft">
@@ -170,9 +193,26 @@ document.addEventListener('DOMContentLoaded', function () {
         emHozza_select.value = '';
     });
     
+    userLista_Tbl_Bdy.addEventListener('click', function (e) {
+        if (e.target.classList.contains('bttn_userTorol')) {
+            e.target.closest('tr').remove();
+        }
+    })
+    
+    form_Projekt.addEventListener('submit', function () {
+        const resztvevok = [];
 
-    
-    
+        userLista_Tbl_Bdy.querySelectorAll('tr').forEach(tr => {
+            resztvevok.push({
+                Id: tr.dataset.id || null,
+                UserId: tr.dataset.userId || null,
+                Nev: tr.querySelector('.userNev').textContent.trim(),
+                Oraber: tr.querySelector('.userOraber').value,
+                Napiber: tr.querySelector('.userNapiber').value
+            });
+        });
+        document.getElementById('Resztvevok_Json').value = JSON.stringify(resztvevok);
+    });
 
     document.querySelectorAll('.cim_Div').forEach(function (cim) {
         cim.addEventListener('click', function () {

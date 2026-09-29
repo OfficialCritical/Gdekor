@@ -48,9 +48,10 @@ namespace Gdekor.Pages.G_Oldalak
         [BindProperty]        
         public string? Leir_Edit { get; set; } = "";
 
-        [BindProperty]
+        /*[BindProperty]
         [Required(ErrorMessage = "a résztvevők megadása kötelező")]
         public string KikDolgoznak_Edit { get; set; } = "";
+        */
 
         [BindProperty]
         public List<Resztvevo_Projektben> ReszvevokList_Edit { get; set; } = new();
@@ -124,7 +125,6 @@ namespace Gdekor.Pages.G_Oldalak
             projekt.Pro_Nev = Nev_Edit.Trim();
             projekt.Pro_Allapot = Allapot_Edit;
             projekt.Pro_Leir = Leir_Edit?.Trim();
-            projekt.Pro_KikDolgoznak = KikDolgoznak_Edit?.Trim();
             projekt.Pro_Terv_Kezdet = TervKezd_Edit?.Trim();
             projekt.Pro_Terv_Veg = TervVeg_Edit?.Trim();
             projekt.Pro_Valos_Kezdet = ValosKezd_Edit?.Trim();
@@ -133,7 +133,7 @@ namespace Gdekor.Pages.G_Oldalak
             projekt.Pro_Koltseg = Koltseg_Edit?.Trim();
             projekt.Pro_Profit = Profit_Edit?.Trim();
 
-            await ResztvevokMentesAsync(projekt.Pro_ID);
+            ResztvevokMentes(projekt.Pro_ID);
 
             await _dbContext.SaveChangesAsync();
 
@@ -164,7 +164,7 @@ namespace Gdekor.Pages.G_Oldalak
                 .ToListAsync();            
         }
 
-        private async Task ResztvevokMentesAsync(string proId)
+        private void ResztvevokMentes(string proId)
         {
             var regiek = _dbContext.ResztvevokProBen_Tbl
                 .Where(r => r.Pro_ID == proId);
@@ -186,7 +186,6 @@ namespace Gdekor.Pages.G_Oldalak
                     Napiber = r.Napiber?.Trim()
                 });
             }
-            await Task.CompletedTask;
 
         }
 

@@ -123,8 +123,12 @@
         max-height: 1500px;            
     }
 
-    
-
+    .userLista_Tbl td{
+        vertical-align: middle;
+    }
+    .userLista_Tbl th{
+        text-align: center;
+    }
     .userDiv{
         display: flex;
         align-items: center;
@@ -168,9 +172,11 @@
     <div class="cardMezok card egyCard animatedDiv">
         <div class="card-header cardTeto">G Projektek</div>
         <div class="card-body cardKozep">
+
             <form id="form_Projekt" class="row" method="post" asp-page-handler="Mentes">
                 <input type="hidden" asp-for="Pro_ID_Edit" />
                 <input type="hidden" asp-for="Resztvevok_Json" id="Resztvevok_Json" />
+
                 @if (!ViewData.ModelState.IsValid)
                     {
                         <div asp-validation-summary="All" class="text-danger mb-3 col-12"></div>
@@ -241,7 +247,7 @@
                         <div class="reszletek_Div ms-3">
 
                             <div class="cimkeEsMezo mb-4" >
-                                <label asp-for="KikDolgoznak_Edit"  class="fw-bold form-label">Kik dolgoznak rajta?</label>
+                                <label class="fw-bold form-label">Kik dolgoznak rajta?</label>
                                 <select id="emHozza_select" class="form-select ms-2">
                                     <option value="" selected>hozzáadás</option>
                                     @foreach (var use in Model.Userek_Lista)
@@ -268,63 +274,40 @@
                                             <th>Név</th>
                                             <th>Órabér(Ft)</th>
                                             <th>Napibér(Ft)</th>
-                                        </thead>
-                                        @*
+                                        </thead>                                        
                                         <tbody>
+                                            @foreach (var emb in Model.Resztvevok_Lista)
+                                            {
+                                                <tr data-id="@emb.ID" data-user-id="@emb.User_ID">
+                                                    <td>
+                                                        <button type="button"
+                                                                class="btn btn-outline-danger bttn_userTorol">
+                                                            törlés
+                                                        </button>
+                                                    </td>
 
-                                                @foreach(var emb in Model.Resztvevok_Lista)
-                                                {
-                                                    <tr>
-                                                        <td>
-                                                            <button class="btn btn-outline-danger">törlés</button>
-                                                        </td>
-                                                        <td>
-                                                            @emb.Nev
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control userOraber" min="0" value="@emb.Oraber" placeholder="Ft">
-                                                            
-                                                        </td>
-                                                        <td>
-                                                        <input type="number" class="form-control userNapiber" value="@emb.Napiber" min="0" placeholder="Ft">
-                                                        </td>
-                                                    </tr>
-                                                }
+                                                    <td class="userNev">
+                                                        @emb.Nev
+                                                    </td>
+
+                                                    <td>
+                                                        <input type="number"
+                                                               class="form-control userOraber"
+                                                               min="0"
+                                                               value="@emb.Oraber"
+                                                               placeholder="Ft">
+                                                    </td>
+
+                                                    <td>
+                                                        <input type="number"
+                                                               class="form-control userNapiber"
+                                                               min="0"
+                                                               value="@emb.Napiber"
+                                                               placeholder="Ft">
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
-                                        *@
-                                        <tbody>
-    @foreach (var emb in Model.Resztvevok_Lista)
-    {
-        <tr data-id="@emb.ID" data-user-id="@emb.User_ID">
-            <td>
-                <button type="button"
-                        class="btn btn-outline-danger bttn_userTorol">
-                    törlés
-                </button>
-            </td>
-
-            <td class="userNev">
-                @emb.Nev
-            </td>
-
-            <td>
-                <input type="number"
-                       class="form-control userOraber"
-                       min="0"
-                       value="@emb.Oraber"
-                       placeholder="Ft">
-            </td>
-
-            <td>
-                <input type="number"
-                       class="form-control userNapiber"
-                       min="0"
-                       value="@emb.Napiber"
-                       placeholder="Ft">
-            </td>
-        </tr>
-    }
-</tbody>
                                     </table>
                                 </div>
                             </div>                            
