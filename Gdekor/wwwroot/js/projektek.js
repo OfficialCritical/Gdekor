@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const proId = document.getElementById('Pro_ID_Edit')?.value;
         if (proId) {
             p_Valaszto.value = proId;
-            betoltResztvevok(proId);
         }
     }
 
@@ -52,143 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } else {
             inp.value = value;
-        }
-    }
-
-    function resztvevoSorLetrehoz(r) {
-        const tr = document.createElement('tr');
-        tr.dataset.id = r.id || '';
-        tr.dataset.userId = r.userId || '';
-
-        const egyeni = szTipus_select?.value === 'egyeni';
-
-        tr.innerHTML = `
-            <td>
-                ${egyeni ? '<button type="button" class="btn btn-sm btn-outline-danger bttn_userTorol">törlés</button>' : ''}
-            </td>
-            <td class="userNev">${r.nev ?? ''}</td>
-            <td>
-                <input type="number" class="form-control userOraber" min="0" placeholder="Ft" value="${r.oraber ?? ''}">
-            </td>
-            <td>
-                <input type="number" class="form-control userNapiber" min="0" placeholder="Ft" value="${r.napiber ?? ''}">
-            </td>
-        `;
-
-        return tr;
-    }
-
-    function getResztvevokAktualis() {
-        if (!userLista_Tbl_Bdy) return [];
-
-        return [...userLista_Tbl_Bdy.querySelectorAll('tr')].map(tr => ({
-            id: tr.dataset.id || '',
-            userId: tr.dataset.userId || '',
-            nev: tr.querySelector('.userNev')?.textContent?.trim() ?? '',
-            oraber: tr.querySelector('.userOraber')?.value ?? '',
-            napiber: tr.querySelector('.userNapiber')?.value ?? ''
-        }));
-    }
-
-    function renderResztvevoTabla(lista) {
-        if (!userLista_Tbl_Bdy) return;
-
-        userLista_Tbl_Bdy.innerHTML = '';
-
-        if (!lista.length) return;
-
-        lista.forEach(r => {
-            userLista_Tbl_Bdy.appendChild(resztvevoSorLetrehoz(r));
-        });
-    }
-
-    function resztvevoListaUrit() {
-        if (userLista_Tbl_Bdy) {
-            userLista_Tbl_Bdy.innerHTML = '';
-        }
-    }
-
-    async function betoltResztvevok(proId) {
-        if (!proId) {
-            resztvevoListaUrit();
-            return;
-        }
-
-        const url = `/G_Oldalak/Projektek?handler=Resztvevok&proId=${encodeURIComponent(proId)}`;
-        const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
-
-        if (!resp.ok) {
-            resztvevoListaUrit();
-            return;
-        }
-
-        const lista = await resp.json();
-        renderResztvevoTabla(lista);
-    }
-
-    function resztvevokJsonBeallit() {
-        const hidden = document.getElementById('Resztvevok_Json');
-        if (!hidden) return;
-
-        hidden.value = JSON.stringify(getResztvevokAktualis());
-    }
-
-    function userSorHozzaad(option) {
-        if (!userLista_Tbl_Bdy || !option?.value) return;
-
-        const letezik = userLista_Tbl_Bdy.querySelector(`tr[data-user-id="${option.value}"]`);
-        if (letezik) return;
-
-        const tr = document.createElement('tr');
-        tr.dataset.userId = option.value;
-        tr.dataset.id = '';
-
-        if (szTipus_select.value === 'mindenki') {
-            tr.innerHTML = `
-                <td></td>
-                <td class="userNev">${option.textContent}</td>
-                <td>
-                    <input type="number" class="form-control userOraber" min="0" placeholder="Ft">
-                </td>
-                <td>
-                    <input type="number" class="form-control userNapiber" min="0" placeholder="Ft">
-                </td>
-            `;
-        } else {
-            tr.innerHTML = `
-                <td>
-                    <button type="button" class="btn btn-sm btn-outline-danger bttn_userTorol">törlés</button>
-                </td>
-                <td class="userNev">${option.textContent}</td>
-                <td>
-                    <input type="number" class="form-control userOraber" min="0" placeholder="Ft">
-                </td>
-                <td>
-                    <input type="number" class="form-control userNapiber" min="0" placeholder="Ft">
-                </td>
-            `;
-        }
-
-        userLista_Tbl_Bdy.appendChild(tr);
-    }
-
-    function szTipusFrissit() {
-        if (!szTipus_select || !userLista_Tbl_Bdy) return;
-
-        userLista_Tbl_Bdy.innerHTML = '';
-
-        if (szTipus_select.value === 'mindenki') {
-            if (emHozza_select) {
-                Array.from(emHozza_select.options).forEach(option => {
-                    if (option.value === '') return;
-                    userSorHozzaad(option);
-                });
-                emHozza_select.classList.remove('elohiv');
-            }
-        } else if (szTipus_select.value === 'egyeni') {
-            emHozza_select?.classList.add('elohiv');
-        } else {
-            emHozza_select?.classList.remove('elohiv');
         }
     }
 
@@ -224,18 +86,12 @@ document.addEventListener('DOMContentLoaded', function () {
             mezoBeallit('ValosKezd_Edit', d.valosKezd);
             mezoBeallit('ValosVeg_Edit', d.valosVeg);
 
-            if (d.kik === 'egyeni') {
-                emHozza_select?.classList.add('elohiv');
-            } else {
-                emHozza_select?.classList.remove('elohiv');
-            }
 
-            betoltResztvevok(p_Valaszto.value);
+
         } else {
             form_Projekt.reset();
             document.getElementById('Pro_ID_Edit').value = '';
             p_reszletek.classList.remove('aktiv');
-            resztvevoListaUrit();
         }
     });
 
@@ -253,93 +109,71 @@ document.addEventListener('DOMContentLoaded', function () {
             nyil.classList.add('srehen');
         });
 
-        resztvevoListaUrit();
-        emHozza_select?.classList.remove('elohiv');
+
     });
 
-    if (szTipus_select) {
-        szTipus_select.addEventListener('change', szTipusFrissit);
+    function resztvevoSorLetrehoz(r) {
+        const tr = document.createElement('tr');
+        tr.dataset.id = r.id || '';
+        tr.dataset.userId = r.userId || '';
+
+        const egyeni = szTipus_select?.value === 'egyeni';
+
+        tr.innerHTML = `
+            <td>
+                ${egyeni ? '<button type="button" class="btn btn-sm btn-outline-danger bttn_userTorol">törlés</button>' : ''}
+            </td>
+            <td class="userNev">${r.nev ?? ''}</td>
+            <td>
+                <input type="number" class="form-control userOraber" min="0" placeholder="Ft" value="${r.oraber ?? ''}">
+            </td>
+            <td>
+                <input type="number" class="form-control userNapiber" min="0" placeholder="Ft" value="${r.napiber ?? ''}">
+            </td>
+        `;
+
+        return tr;
     }
+    // userLista_Tbl_Bdy.innerHTML = '';
 
     emHozza_select.addEventListener('change', function () {
+        if (emHozza_select.value === '') return;
 
-        const option = this.selectedOptions[0];
+        const userID = emHozza_select.value;
+        const userNev = emHozza_select.selectedOptions[0].textContent.trim();
 
-        if (!option.value) return;
-
-        // Ellenőrizzük, hogy szerepel-e már a táblázatban
-        const letezik = Array.from(userLista_Tbl_Bdy.rows).some(
-            sor => sor.dataset.userId === option.value
-        );
-
+        const letezik = [...userLista_Tbl_Bdy.querySelectorAll('tr')].some(tr => tr.dataset.userId === userID);
         if (letezik) {
-            this.value = '';
+            emHozza_select.valosKezd = '';
+            alert('A kiválasztott személy már szerepel a lentebbi listában!');
             return;
         }
 
-        // Új sor létrehozása
         const tr = document.createElement('tr');
-
-        tr.dataset.userId = option.value;
+        tr.dataset.userId = userID;
         tr.dataset.id = '';
-
         tr.innerHTML = `
-        <td>
-            <button type="button"
-                    class="btn btn-outline-danger bttn_userTorol">
-                törlés
-            </button>
-        </td>
-
-        <td class="userNev"></td>
-
-        <td>
-            <input type="number"
-                   class="form-control userOraber"
-                   min="0"
-                   placeholder="Ft">
-        </td>
-
-        <td>
-            <input type="number"
-                   class="form-control userNapiber"
-                   min="0"
-                   placeholder="Ft">
-        </td>
-    `;
-
-        tr.querySelector('.userNev').textContent = option.textContent.trim();
-
+            <td>
+                <button type="button" class="btn btn-outline-danger bttn_userTorol"> törlés </button
+            </td>
+            <td class="userNev align-middle">
+            </td>
+            <td>
+                <input type="number" class="form-control userOraber" min="0" placeholder="Ft">
+            </td>
+            <td>
+                <input type="number" class="form-control userNapiber" min="0" placeholder="Ft">
+            </td>
+        `;
+        tr.querySelector('.userNev').textContent = userNev;
         userLista_Tbl_Bdy.appendChild(tr);
-
-        // Select visszaállítása
-        this.value = '';
+        emHozza_select.value = '';
     });
+    
 
-    /*
+    
+    
 
-    if (userLista_Tbl_Bdy) {
-        userLista_Tbl_Bdy.addEventListener('click', function (e) {
-            const torolGomb = e.target.closest('.bttn_userTorol');
-            if (!torolGomb) return;
-            torolGomb.closest('tr')?.remove();
-        });
-    }
-
-    if (form_Projekt) {
-        form_Projekt.addEventListener('submit', function () {
-            resztvevokJsonBeallit();
-        });
-    }
-    */
-    userLista_Tbl_Bdy.addEventListener('click', function (e) {
-
-        const torolGomb = e.target.closest('.bttn_userTorol');
-
-        if (!torolGomb) return;
-
-        torolGomb.closest('tr').remove();
-    });
     document.querySelectorAll('.cim_Div').forEach(function (cim) {
         cim.addEventListener('click', function () {
             const reszletek = cim.nextElementSibling;
