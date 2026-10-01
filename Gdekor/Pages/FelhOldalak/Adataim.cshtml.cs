@@ -20,6 +20,7 @@ namespace Gdekor.Pages.FelhOldalak
 
         [BindProperty]        
         public string? EditJelszo { get; set; }
+
         [BindProperty]
         [Required(ErrorMessage = "név megadása kötelező")]
         public string EditNev { get; set; } = "";

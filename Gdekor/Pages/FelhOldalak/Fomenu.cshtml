@@ -32,6 +32,22 @@
         <a asp-page="/NyitoOldalak/Bejelentkezes" class="btn bttn_Tovabb mb-5">kijelentkezés</a>
 
         <div class="row gap-3 justify-content-center justify-content-md-start">
+
+            @if (Model.BejEmiil =="kerberosz@gmail.com")
+            {
+                <div class="col-12 col-md-4">
+                    <div class="card egyCard animatedCard">
+                        <div class="card-header cardTeto fw-bold">Jelszavak kezelése</div>
+                        <div class="card-body cardKozep">
+                            <p>Felhasználói profilok jelszavainak módosítása, megújítása.</p>
+                            <div class="mt-auto text-end">
+                                <a asp-page="/Supreme/JelszoKezeles" class="btn btn-sm bttn_Tovabb">tovább</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
             <div class="col-12 col-md-4">
                 <div class="card egyCard animatedCard">
                     <div class="card-header cardTeto fw-bold">Projektjeim</div>
@@ -67,6 +83,7 @@
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
 }
@@ -101,6 +118,7 @@ else if (User.IsInRole(Szerepkorok.Mugli))
                     </div>
                 </div>
             </div>
+
 
         </div>
 

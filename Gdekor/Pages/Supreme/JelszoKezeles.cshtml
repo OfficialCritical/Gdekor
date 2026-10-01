@@ -1,0 +1,113 @@
+﻿@page
+@model Gdekor.Pages.Supreme.JelszoKezelesModel
+@{
+    ViewData["Title"] = "Jelszavak kezelése";
+}
+<style>
+
+    .egyCard{
+        overflow-x: hidden;
+    }
+    .cardTeto{
+        color: black;
+    }
+
+    #emb_valaszto{
+        border:1px solid #8f6b4f !important;
+    }
+    #emb_valaszto.solid{
+        border: revert !important;
+        outline: revert !important;
+    }
+
+    #uj_J_form{
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+    #uj_J_form.elohiv{
+        opacity: 1;
+    }
+
+    #fel_nev{
+        cursor: not-allowed;
+    }
+
+</style>
+
+<div class="py-1">
+
+    <a asp-page="/FelhOldalak/Fomenu" class="btn bttn_Tovabb mb-3">vissza</a>
+
+
+    @if (TempData["Hiba"] is string hibaUzenet)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mb-3">
+            @hibaUzenet
+            <button class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Siker"] is string sikerUzenet)
+    {
+        <div class="alert alert-success alert-dismissible fade show mb-3">
+            @sikerUzenet
+            <button class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="mb-2">
+
+        <div class="card egyCard mb-2">
+            <div class="cardTeto card-header">Jelszavak kezelése</div>
+            <div class="cardKozep card-body row ms-2">
+
+                <div class="col-12 col-md-4 flex-column">
+                    <select id="emb_valaszto" class="form-control mb-5">
+                        <option value="">Profil kiválasztása</option>
+                        @foreach (var p in Model.Profilok_Lst)
+                        {
+                            <option value="@p.Id" data-nev="@p.Nev">@p.Nev</option>
+                        }
+                    </select>
+
+                    <form id="uj_J_form" method="post" class="d-flex flex-column gap-2 @(ViewData.ModelState.IsValid ? "" : "elohiv")">
+                        <input id="fel_id" asp-for="Felh_id" type="hidden" />
+                        <div class="d-flex gap-3 mb-1">
+                            <input id="fel_nev" asp-for="Felh_nev" class="form-control" type="text" readonly placeholder="Név" />
+                            <input id="fel_jelsz" asp-for="Uj_jelszo" class="form-control" type="text" placeholder="új jelszó"/>                            
+                        </div>
+                        <span asp-validation-for="Uj_jelszo" class="align-self-end mb-3 text-danger"></span>
+                        <button type="submit" class="btn bttn_Action align-self-center mb-2">mentés</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+        const emb_valaszto = document.getElementById('emb_valaszto');
+        const uj_J_form = document.getElementById('uj_J_form');
+        const fel_id = document.getElementById('fel_id');
+        const fel_nev = document.getElementById('fel_nev');
+
+        emb_valaszto.addEventListener('change',function(){
+            if(emb_valaszto.value === ''){
+                fel_id.value='';
+                fel_nev.value='';
+                uj_J_form.classList.remove('elohiv');
+                emb_valaszto.classList.add('solid');
+                return;
+            }
+
+            emb_valaszto.classList.remove('solid');
+            uj_J_form.classList.add('elohiv');
+            const opt = emb_valaszto.selectedOptions[0];
+            fel_id.value=opt.value;
+            fel_nev.value=opt.dataset.nev;
+
+        });
+
+    </script>
+}
