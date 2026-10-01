@@ -8,10 +8,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const p_reszletek = document.getElementById('p_reszletek');
 
     //const szTipus_select = document.getElementById('szTipus_select');
-    const emHozza_select = document.getElementById('emHozza_select');
+    const emHozza_select = document.getElementById('emHozza_select');    
+    const userLista_Tbl_Head = document.querySelector('.userLista_Tbl thead');
+    const oraszam_Tbl_Head = document.querySelector('.oraszam_Tbl thead');
     const userLista_Tbl_Bdy = document.querySelector('.userLista_Tbl tbody');
+    const oraszam_Tbl_Bdy = document.querySelector('.oraszam_Tbl tbody');
 
-    if (!p_Valaszto || !p_reszletek) return;
+    if (!animatedDiv || !form_Projekt || !bttn_uj || !p_Valaszto || !p_reszletek || !emHozza_select || !userLista_Tbl_Head || !oraszam_Tbl_Head || !userLista_Tbl_Bdy || !oraszam_Tbl_Bdy) 
+        return;
 
     if (animatedDiv) {
         animatedDiv.classList.add('elohiv');
@@ -56,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function betoltResztvevok(proId) {
         userLista_Tbl_Bdy.innerHTML = '';
+        //oraszam_Tbl_Bdy.innerHTML = '';
         const response = await fetch(`?handler=Resztvevok&proId=${encodeURIComponent(proId)}`);
 
         if (!response.ok) {
@@ -68,7 +73,30 @@ document.addEventListener('DOMContentLoaded', function () {
         if (p_Valaszto.value !== proId) return;
 
         try {
-            lista.forEach(emberke => {
+            if(lista.length ===0){
+                userLista_Tbl_Head.style.display='none';
+                const tr = document.createElement('tr');
+                tr.classList.add('uresSor');
+                tr.innerHTML = `
+                    <td>
+                        Nincsenek elmentett béradatok.
+                    </td>
+                `;
+                userLista_Tbl_Bdy.appendChild(tr);
+
+                /*oraszam_Tbl_Head.style.display='none';
+                const tr_ = document.createElement('tr');
+                tr_.classList.add('uresSor');
+                tr_.innerHTML=`
+                    <td>
+                        Nincs megjeleníthető adat.
+                    </td>
+                `;
+                oraszam_Tbl_Bdy.appendChild(tr_);*/
+            }
+            else{
+                userLista_Tbl_Head.style.display='';
+                lista.forEach(emberke => {
                 const tr = document.createElement('tr');
                 tr.dataset.id = emberke.id || '';
                 tr.dataset.userId = emberke.userId || '';
@@ -87,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>
                     <input type="number" min="0" class="form-control userNapiber_Ora" placeholder="max hány óra">
                 </td>
-            `;
+                `;
                 tr.querySelector('.userNev').textContent = emberke.nev ?? '';
                 tr.querySelector('.userOraber').value = emberke.oraber ?? '';
                 tr.querySelector('.userNapiber_Ft').value = emberke.napiber_Ft ?? '';
@@ -95,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 userLista_Tbl_Bdy.appendChild(tr);
         })
+            }
         }
         catch (error) {
             alert('Hiba történt a résztvevő személyek adatainak betöltésekor!');
@@ -138,14 +167,12 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             form_Projekt.reset();
             document.getElementById('Pro_ID_Edit').value = '';
-            userLista_Tbl_Bdy.innerHTML = '';
             p_reszletek.classList.remove('aktiv');
         }
     });
 
     bttn_uj?.addEventListener('click', function () {
-        form_Projekt.reset();
-        userLista_Tbl_Bdy.innerHTML = '';
+        form_Projekt.reset();        
         document.getElementById('Pro_ID_Edit').value = '';
         p_Valaszto.value = '';
         bttn_uj.classList.add('aktiv');
@@ -165,6 +192,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     emHozza_select.addEventListener('change', function () {
         if (emHozza_select.value === '') return;
+
+        userLista_Tbl_Head.style.display='';
 
         const userID = emHozza_select.value;
         const userNev = emHozza_select.selectedOptions[0].textContent.trim();
@@ -198,18 +227,40 @@ document.addEventListener('DOMContentLoaded', function () {
         tr.querySelector('.userNev').textContent = userNev;
         userLista_Tbl_Bdy.appendChild(tr);
         emHozza_select.value = '';
+        userLista_Tbl_Bdy.querySelector('.uresSor')?.remove();
     });
     
     userLista_Tbl_Bdy.addEventListener('click', function (e) {
         if (e.target.classList.contains('bttn_userTorol')) {
             e.target.closest('tr').remove();
+
+            if (userLista_Tbl_Bdy.rows.length === 0) 
+            {
+                userLista_Tbl_Head.style.display = 'none';
+                userLista_Tbl_Bdy.innerHTML = `
+                    <tr class="uresSor">
+                        <td colspan="5">
+                            Nincsenek elmentett béradatok.
+                        </td>
+                    </tr>
+                `;
+
+                oraszam_Tbl_Head.style.display = 'none';
+                oraszam_Tbl_Bdy.innerHTML = `
+                    <tr class="uresSor">
+                        <td colspan="5">
+                            Nincs megjeleníthető adat.
+                        </td>
+                    </tr>
+                `;
+            }
         }
-    })
+    });
     
     form_Projekt.addEventListener('submit', function () {
         const resztvevok = [];
 
-        userLista_Tbl_Bdy.querySelectorAll('tr').forEach(tr => {
+        userLista_Tbl_Bdy.querySelectorAll('tr:not(.uresSor)').forEach(tr => {
             resztvevok.push({
                 Id: tr.dataset.id || null,
                 UserId: tr.dataset.userId || null,

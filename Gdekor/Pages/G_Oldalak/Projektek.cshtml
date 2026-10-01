@@ -249,7 +249,7 @@
                             <div class="cimkeEsMezo mb-4" >
                                 <label class="fw-bold form-label">Kik dolgoznak rajta?</label>
                                 <select id="emHozza_select" class="form-select ms-2">
-                                    <option value="" selected>hozzáadás</option>
+                                    <option value="" selected>kiválasztás</option>
                                     @foreach (var use in Model.Userek_Lista)
                                     {
                                         if (use.Email != "kerberosz@gmail.com")
@@ -263,59 +263,25 @@
                             <div class="szHozza_Div d-flex flex-column mb-2">
 
                                 <div class="d-flex align-items-center gap-3">
-                                    <label class="fw-bold form-label flex-shrink-0">Személyek listája</label>                                    
+                                    <label class="fw-bold form-label flex-shrink-0">Béradatok megadása</label>                                    
                                     
                                 </div>
 
-                                <div class="userLista_Div ms-2 mt-4">
+                                <div class="userLista_Div ms-2 mt-2">
                                     <table class="userLista_Tbl table">
-                                        <thead>
-                                            <th></th>
-                                            <th>Név</th>
-                                            <th>Órabér(Ft)</th>
-                                            <th>Napibér(Ft)</th>
-                                            <th>Napibér(órában)</th>
-                                        </thead>                                        
+                                         <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Név</th>
+                                                <th>Órabér(Ft)</th>
+                                                <th>Napibér(Ft)</th>
+                                                <th>Napibér(órában)</th>
+                                            </tr>
+                                        </thead>
                                         <tbody>
-                                            @foreach (var emb in Model.Resztvevok_Lista)
-                                            {
-                                                <tr data-id="@emb.ID" data-user-id="@emb.User_ID">
-                                                    <td>
-                                                        <button type="button"
-                                                                class="btn btn-outline-danger bttn_userTorol">
-                                                            törlés
-                                                        </button>
-                                                    </td>
-
-                                                    <td class="userNev">
-                                                        @emb.Nev
-                                                    </td>
-
-                                                    <td>
-                                                        <input type="number"
-                                                               class="form-control userOraber"
-                                                               min="0"
-                                                               value="@emb.Oraber"
-                                                               placeholder="Ft">
-                                                    </td>
-
-                                                    <td>
-                                                        <input type="number"
-                                                               class="form-control userNapiber_Ft"
-                                                               min="0"
-                                                               value="@emb.Napiber_Ft"
-                                                               placeholder="Ft">
-                                                    </td>
-
-                                                    <td>
-                                                        <input type="number"
-                                                               class="form-control userNapiber_Ora"
-                                                               min="0"
-                                                               value="@emb.Napiber_Ora"
-                                                               placeholder="max hány óra">
-                                                    </td>
-                                                </tr>
-                                            }
+                                            <tr class="uresSor">
+                                                <td>Nincsenek elmentett béradatok.</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -326,21 +292,28 @@
                                     <label class="fw-bold form-label flex-shrink-0">Ki mennyit dolgozott?</label>
                                 </div>
 
-                                <div class="oraszam_tbl_Div ms-2 mt-4">
+                                <div class="oraszam_tbl_Div ms-2 mt-2">
                                     <table class="oraszam_Tbl table">
                                         <thead>
                                             <tr>
                                                 <th>Név</th>
                                                 <th>Óraszám</th>
                                                 <th>Túlóra</th>
-                                                <th>Fizetés(Ft)</th>
+                                                <th>Fizetés (Ft)</th>
                                             </tr>
                                         </thead>
+                                        @*<tbody>
+                                            <tr class="uresSor">
+                                                <td>Nincs megjeleníthető adat.</td>
+                                            </tr>
+                                        </tbody>
+                                        *@
                                         <tbody>
-                                            <tr>
-                                                <td>Tamás</td>
-                                                <td>10</td>
-                                                <td>10000</td>
+                                            <tr class="uresSor">
+                                                <td>Mikulás</td>
+                                                <td>100</td>
+                                                <td>12</td>
+                                                <td>1 000 000</td>
                                             </tr>
                                         </tbody>
                                     </table>

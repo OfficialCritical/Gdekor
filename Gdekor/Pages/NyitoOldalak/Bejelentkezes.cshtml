@@ -85,6 +85,14 @@
         <a id="bejelentLink" class="btn nyito_link inaktiv btn-lg" asp-page="/NyitoOldalak/Regisztralas">Regisztrálás</a>
     </div>
 
+    @if (TempData["Hiba"] is string hibauzen)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mb-3">
+            @hibauzen
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     <div id="formDiv" class="d-flex flex-grow-1 align-items-center align-items-md-start">
 
         <form method="post" class="row animatedCard">
@@ -141,6 +149,7 @@
 </div>
 @section Scripts{
     <script>
+
         window.addEventListener("load",function(){
             setTimeout(()=>{
                 document.getElementById('focusAnchor')?.focus({preventScroll:true});
@@ -160,5 +169,6 @@
             
             formSzuk.classList.add('shAdOw');            
         });
+
     </script>
 }

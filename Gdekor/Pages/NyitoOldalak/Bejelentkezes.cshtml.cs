@@ -14,6 +14,7 @@ namespace Gdekor.Pages.NyitoOldalak
             _signInManager = signInManager;
         }
 
+        [BindProperty]
         public bool Emlekezz { get; set; }
 
         [BindProperty]
@@ -32,9 +33,13 @@ namespace Gdekor.Pages.NyitoOldalak
 
             if (result.Succeeded)
                 return RedirectToPage("/FelhOldalak/Fomenu");
+            else
+            {
+                TempData["Hiba"] = "Hibás email-jelszó kombináció!";
+                return Page();
+            }
 
-            ModelState.AddModelError(string.Empty, "Hibás email-jelszó kombináció!");
-            return Page();
+            
         }
         public void OnGet()
         {
