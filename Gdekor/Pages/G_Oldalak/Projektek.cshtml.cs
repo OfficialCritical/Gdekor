@@ -196,7 +196,7 @@ namespace Gdekor.Pages.G_Oldalak
             if (string.IsNullOrWhiteSpace(proId))
                 return BadRequest();
 
-            var lista = await _dbContext.ResztvevokProBen_Tbl
+            var resztv_list = await _dbContext.ResztvevokProBen_Tbl
                 .Where(r => r.Pro_ID == proId)
                 .Select(r=> new
                 {
@@ -209,8 +209,127 @@ namespace Gdekor.Pages.G_Oldalak
                 })
                 .ToListAsync();
 
-            return new JsonResult(lista);
+            var munkaorak = await _dbContext.Munkaorak_Tbl
+                .Where(m => m.M_ProID == proId)
+                .ToListAsync();
+
+            var ugyeskedok = munkaorak
+                .GroupBy(m => new { m.M_UserID, m.M_Nap })
+                .Where(g => g.Count() > 1)
+                .Select(g => new
+                {
+                    userId = g.Key.M_UserID,
+                    nap = g.Key.M_Nap,
+                    adatok = g.OrderBy(m => DateTime.Parse(m.Letrehoz!))
+                    .Select(m => new
+                    {
+                        kezdet = m.M_Kezdete,
+                        veg = m.M_Vege,
+                        letrehoz = m.Letrehoz
+                    })
+                    .ToList()
+                })
+                .ToList();
+
+            var ugyesUserIds = ugyeskedok
+                .Select(u => u.userId)
+                .Distinct()
+                .ToList();
+
+            var ugyesUserNevek = await _dbContext.Users
+                .Where(u => ugyesUserIds.Contains(u.Id))
+                .ToDictionaryAsync(
+                    u => u.Id,
+                    u => u.Nev
+                );
+
+            var ugyeskedok_List = ugyeskedok
+                .GroupBy(u => u.userId)
+                .Select(userGroup => new
+                {
+                    userId = userGroup.Key,
+
+                    nev = ugyesUserNevek.TryGetValue(userGroup.Key, out var nev)
+                        ? nev
+                        : "Ismeretlen",
+
+                    napok = userGroup
+                        .Select(u => new
+                        {
+                            nap = u.nap,
+                            adatok = u.adatok
+                        })
+                        .ToList()
+                })
+                .ToList();
+
+            //oraszamok
+            var legutolsoOrak = munkaorak
+                .GroupBy(m => new { m.M_UserID, m.M_Nap })
+                .Select(g => g
+                    .OrderByDescending(m => DateTime.Parse(m.Letrehoz!))
+                    .First())
+                .ToList();
+
+            var oraszamok_List = new List<object>();
+
+            foreach (var resztvevo in resztv_list)
+            {
+                var userOrai = legutolsoOrak
+                    .Where(m => m.M_UserID == resztvevo.userId)
+                    .ToList();
+
+                double osszOra = 0;
+                double tulora = 0;
+
+                double.TryParse(resztvevo.napiber_Ora, out double maxNapiOra);
+
+                foreach (var munka in userOrai)
+                {
+                    if (!TimeSpan.TryParse(munka.M_Kezdete, out var kezdet) || !TimeSpan.TryParse(munka.M_Vege, out var veg))
+                        continue;
+
+                    double napiOra = (veg - kezdet).TotalHours;
+
+                    osszOra += napiOra;
+
+                    if (maxNapiOra > 0 && napiOra > maxNapiOra)
+                    {
+                        tulora += napiOra - maxNapiOra;
+                    }
+                }
+
+                string fizetes="?";
+
+                if (double.TryParse(resztvevo.oraber, out double oraber))
+                {
+                    fizetes = Math.Round(osszOra * oraber).ToString();
+                }
+                else if (double.TryParse(resztvevo.napiber_Ft, out double napiber) && double.TryParse(resztvevo.napiber_Ora,out double maxOra) && maxOra > 0)
+                {
+                    double calcOraber = napiber / maxOra;
+                    fizetes = Math.Round(osszOra * calcOraber).ToString();
+                }
+
+                oraszamok_List.Add(new
+                {
+                    userId = resztvevo.userId,
+                    nev = resztvevo.nev,
+                    osszOra = Math.Round(osszOra, 2),
+                    tulora=Math.Round(tulora,2),
+                    fizetes=fizetes
+                });
+            }
+
+            return new JsonResult(new
+            {
+                resztvevok = resztv_list,
+                oraszamok = oraszamok_List,
+                ugyeskedok= ugyeskedok_List
+            });
         }
+
+        //public async Task<IActionResult> OnGetOraszamokAsync(string proId)
         //vege
     }
 }

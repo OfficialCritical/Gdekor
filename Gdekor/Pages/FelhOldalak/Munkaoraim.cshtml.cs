@@ -81,47 +81,21 @@ namespace Gdekor.Pages.FelhOldalak
                 await ListaBetolt();
                 return Page();
             }
+                        
 
-
-            var munkanap_ID = Guid.NewGuid().ToString();
-
-            Munkanap munka_Nap;
-            Munka_Ora munka_Ora = new Munka_Ora();
-
-            // NAP
-            if (!string.IsNullOrWhiteSpace(MNap_ID_Edit))
+            Munka_Ora munka_Ora = new Munka_Ora
             {
-                munka_Nap = await _dbcontext.Munkanaptok_Tbl.FirstOrDefaultAsync(mn => mn.MNap_ID == MNap_ID_Edit && mn.Prof_ID == user.Id && mn.Projekt_ID == Projekt_Id_Edit);
-
-                if (munka_Nap == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Hiba történt az elmentett munkanap megkeresésekor!");
-                    await ListaBetolt();
-                    return Page();
-                }
-                munkanap_ID = MNap_ID_Edit;
-
-            }
-            else
-            {
-                munka_Nap = new Munkanap
-                {
-                    MNap_ID = munkanap_ID,
-                    Projekt_ID = Projekt_Id_Edit,
-                    Prof_ID = user.Id,
-                    M_Datum = Datum_Edit
-                };
-                _dbcontext.Munkanaptok_Tbl.Add(munka_Nap);
-                //MNap_ID_Edit = munka_Nap.MNap_ID;
-            }
-
-            //ORA
-            munka_Ora.M_Nap_ID = munkanap_ID;
-            munka_Ora.MOra_ID = Guid.NewGuid().ToString();
-            munka_Ora.M_Kezdete = Munka_Kezdete_Edit;
-            munka_Ora.M_Vege = Munka_Vege_Edit;
-            munka_Ora.Letrehoz = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                MOra_ID = Guid.NewGuid().ToString(),
+                M_ProID = Projekt_Id_Edit,
+                M_UserID = user.Id,
+                M_Nap=Datum_Edit,
+                M_Kezdete = Munka_Kezdete_Edit,
+                M_Vege = Munka_Vege_Edit,
+                Letrehoz = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            };            
+            
             _dbcontext.Munkaorak_Tbl.Add(munka_Ora);
+
             /*
             //SZUNET
             var szunetek = string.IsNullOrWhiteSpace(Szunetek_Json) ? new List<SzunetDto>() : JsonSerializer.Deserialize<List<SzunetDto>>(Szunetek_Json) ?? new();
@@ -149,30 +123,10 @@ namespace Gdekor.Pages.FelhOldalak
             if (user == null) return Unauthorized();
 
             if (string.IsNullOrWhiteSpace(datum) || string.IsNullOrWhiteSpace(projektId))
-                return BadRequest();
-
-            // Munkanap: user + dátum + projekt
-            var munkanap = await _dbcontext.Munkanaptok_Tbl
-                .FirstOrDefaultAsync(m =>
-                    m.M_Datum == datum &&
-                    m.Prof_ID == user.Id &&
-                    m.Projekt_ID == projektId);
-
-            if (munkanap == null)
-            {
-                return new JsonResult(new
-                {
-                    vanMentett = false,
-                    datum = datum,
-                    mNapId = (string?)null,
-                    kezdete = (string?)null,
-                    vege = (string?)null
-                });
-            }
-
-            // Legutolsó munkaóra (audit: több sor is lehet)
+                return BadRequest();            
+            
             var legutobbiOra = await _dbcontext.Munkaorak_Tbl
-                .Where(o => o.M_Nap_ID == munkanap.MNap_ID)
+                .Where(o => o.M_ProID == projektId && o.M_UserID == user.Id && o.M_Nap == datum)
                 .OrderByDescending(o => o.Letrehoz)
                 .FirstOrDefaultAsync();
 
@@ -183,7 +137,6 @@ namespace Gdekor.Pages.FelhOldalak
                 {
                     vanMentett = false,
                     datum = datum,
-                    mNapId = munkanap.MNap_ID,
                     kezdete = (string?)null,
                     vege = (string?)null
                 });
@@ -193,7 +146,6 @@ namespace Gdekor.Pages.FelhOldalak
             {
                 vanMentett = true,
                 datum = datum,
-                mNapId = munkanap.MNap_ID,
                 kezdete = legutobbiOra.M_Kezdete,
                 vege = legutobbiOra.M_Vege
             });

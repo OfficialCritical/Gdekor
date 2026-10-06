@@ -33,7 +33,14 @@ namespace Gdekor.Migrations
                     b.Property<string>("M_Kezdete")
                         .HasColumnType("text");
 
-                    b.Property<string>("M_Nap_ID")
+                    b.Property<string>("M_Nap")
+                        .HasColumnType("text");
+
+                    b.Property<string>("M_ProID")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("M_UserID")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -44,7 +51,9 @@ namespace Gdekor.Migrations
 
                     b.HasIndex("MOra_ID");
 
-                    b.HasIndex("M_Nap_ID");
+                    b.HasIndex("M_ProID");
+
+                    b.HasIndex("M_UserID");
 
                     b.ToTable("Munkaorak_Tbl");
                 });
@@ -422,9 +431,15 @@ namespace Gdekor.Migrations
 
             modelBuilder.Entity("Gdekor.Munka_Ora", b =>
                 {
-                    b.HasOne("Gdekor.Munkanap", null)
+                    b.HasOne("Gdekor.Projekt", null)
                         .WithMany()
-                        .HasForeignKey("M_Nap_ID")
+                        .HasForeignKey("M_ProID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gdekor.UserProfil", null)
+                        .WithMany()
+                        .HasForeignKey("M_UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -52,11 +52,7 @@ namespace Gdekor
                     .WithMany()
                     .HasForeignKey(m => m.Prof_ID)
                     .OnDelete(DeleteBehavior.Cascade);
-
-                e.HasMany<Munka_Ora>()
-                    .WithOne()
-                    .HasForeignKey(mo => mo.M_Nap_ID)
-                    .OnDelete(DeleteBehavior.Cascade);
+               
 
                 e.HasMany<Munka_Szunet>()
                     .WithOne()
@@ -69,6 +65,16 @@ namespace Gdekor
                 e.HasKey(o => o.MOra_ID);
 
                 e.HasIndex(o => o.MOra_ID);
+
+                e.HasOne<Projekt>()
+                    .WithMany()
+                    .HasForeignKey(m => m.M_ProID)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasOne<UserProfil>()
+                    .WithMany()
+                    .HasForeignKey(m => m.M_UserID)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<Munka_Szunet>(e =>

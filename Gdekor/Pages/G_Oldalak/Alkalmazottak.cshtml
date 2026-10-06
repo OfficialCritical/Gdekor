@@ -54,7 +54,7 @@
         transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
     }
     .reszletek_Row.active{
-        max-height: 1000px;
+        max-height: 10000px;
         opacity: 1;
         
     }
@@ -66,13 +66,26 @@
         transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
     }
     .csoves_Tbl_Div.active{
-        max-height: 1000px;
+        max-height: 10000px;
         opacity: 1;
-        overflow: auto;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+    #csoves_Tbl{
+        max-height: 10000px;
+        opacity: 1;
+        transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+    }
+    #csoves_Tbl.elrejt{
+        max-height: 0;
+        opacity: 0;
+    }
+    #csoves_Tbl.teljesenElrejt{
+        display: none;
     }
 
     .modern_Tbl_Div{
-        max-height: 1000px;
+        max-height: 10000px;
         opacity: 1;
         overflow: hidden;
         transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
@@ -81,7 +94,9 @@
         max-height: 0;
         opacity: 0;
     }
-
+    .modern_Tbl_Div.teljesenElrejt{
+        display: none;
+    }
 
     th, td{
         white-space: nowrap;        
@@ -132,6 +147,37 @@
     #bttn_tbl.inactive{
         display: none;
     }
+
+    
+    #szurok_Nagy_div {
+        width: 100%;
+    }
+
+    #bttn_szurok {
+        width: fit-content;
+        padding: 0.5rem 2rem;
+    }
+
+    #szurok_kis_div{
+        width: 100%;
+        background: white;
+        opacity: 0;
+        max-height: 0;
+        pointer-events: none;
+        padding: 0;
+        border-radius: 10px;
+        transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
+    }
+    #szurok_kis_div.elohiv{
+        opacity: 1;
+        max-height: 10000px;
+        padding: 2rem 25%;
+        pointer-events: auto;
+    }
+    #szurok_kis_div.teljesenElrejt {
+        display: none;
+    }
+
 </style>
 
 
@@ -292,7 +338,104 @@
                     </tbody>
                 </table>
             </div>
-            <div class="csoves_Tbl_Div">
+            <div class="csoves_Tbl_Div flex-column gap-4">
+
+                <div id="szurok_Nagy_div" class="d-flex flex-column justify-content-center align-items-center gap-3">
+                    <button type="button" id="bttn_szurok" class="btn bttn_Action">szűrők</button>
+                    <div id="szurok_kis_div" class="d-flex gap-5">
+
+                        <div id="gyors_Szurok" class="d-flex flex-column gap-3 me-3">
+                            <label class="form-label fw-bold">Gyors szűrők</label>
+
+                            <div class="d-flex flex-column gap-1">
+                                <div class="form-check">
+                                    <input class="form-check-input n_oszlopSzuro" type="checkbox" id="n_szuro_MindIgen" checked />
+                                    <label class="form-check-label" for="n_szuro_MindIgen">Mind kiválaszt</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input n_oszlopSzuro" type="checkbox" id="n_szuro_MindNem"/>
+                                    <label class="form-check-label" for="n_szuro_MindNem">Mind töröl</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input n_oszlopSzuro" type="checkbox" id="n_szuro_NevEmailTel"/>
+                                    <label class="form-check-label" for="n_szuro_NevEmailTel">Név, e-mail, telefon</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="reszletes_Szurok" class="d-flex flex-column gap-3">
+
+
+                            <label class="form-label fw-bold">Részletes szűrők</label>
+
+                            <div class="d-flex flex-column gap-1">
+                                <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_nev" data-column="0" checked />
+                                <label class="form-check-label" for="szuro_nev">Név</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_email" data-column="1" checked />
+                                <label class="form-check-label" for="szuro_email">E-mail</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_tel" data-column="2" checked />
+                                <label class="form-check-label" for="szuro_tel">Telefon</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_lakcim" data-column="3" checked />
+                                <label class="form-check-label" for="szuro_lakcim">Lakcím</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_szulIdo" data-column="4" checked />
+                                <label class="form-check-label" for="szuro_szulIdo">Születési idő</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_szulHely" data-column="5" checked />
+                                <label class="form-check-label" for="szuro_szulHely">Születési hely</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_anyja" data-column="6" checked />
+                                <label class="form-check-label" for="szuro_anyja">Anyja neve</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_szemelyi" data-column="7" checked />
+                                <label class="form-check-label" for="szuro_szemelyi">Személyi azonosító</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_lakKartyaSzama" data-column="8" checked />
+                                <label class="form-check-label" for="szuro_lakKartyaSzama">Lakcímkártya száma</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_adoszam" data-column="9" checked />
+                                <label class="form-check-label" for="szuro_adoszam">Adószám</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_taj" data-column="10" checked />
+                                <label class="form-check-label" for="szuro_taj">Tajszám</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_jogsiSzam" data-column="11" checked />
+                                <label class="form-check-label" for="szuro_jogsiSzam">Jogosítvány száma</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_jogsiKateg" data-column="12" checked />
+                                <label class="form-check-label" for="szuro_jogsiKateg">Legmagasabb kategória</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_rendszam" data-column="13" checked />
+                                <label class="form-check-label" for="szuro_rendszam">Rendszám</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_ferohely" data-column="14" checked />
+                                <label class="form-check-label" for="szuro_ferohely">Férőhelyek száma</label>
+                            </div>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                </div>
+
                 <table id="csoves_Tbl" class="table">
                     <thead>
                         <tr>
@@ -345,9 +488,9 @@
     </div>
 
     <div class="menusor">
-        <button id="bttn_mdrn" class="btn bttn_Action">Modern</button>        
-        <button id="bttn_tbl" class="btn bttn_Action">Táblázat</button>        
-        <button id="bttn_tovabb" class="btn bttn_Action">Továbbítás ➤</button>
+        <button id="bttn_mdrn" class="btn bttn_Action">Modern megjelenítés</button>        
+        <button id="bttn_tbl" class="btn bttn_Action">Táblázatos megjelenítés</button>        
+        @*<button id="bttn_tovabb" class="btn bttn_Action">Továbbítás ➤</button>*@
     </div>
 </div>
 @section Scripts{
@@ -355,14 +498,28 @@
         document.addEventListener('DOMContentLoaded',function(){
             const bttn_mdrn = document.getElementById('bttn_mdrn');
             const bttn_tbl = document.getElementById('bttn_tbl');
+            const bttn_szurok = document.getElementById('bttn_szurok');
+            const szurok_kis_div = document.getElementById('szurok_kis_div');
+            const csoves_Tbl = document.getElementById('csoves_Tbl');
             const csoves_Tbl_Div = document.querySelector('.csoves_Tbl_Div');
             const modern_Tbl_Div = document.querySelector('.modern_Tbl_Div');
-            
+            const modern_Tbl = document.getElementById('modern_Tbl');
+
+            const n_szuro_MindIgen = document.getElementById('n_szuro_MindIgen');
+            const n_szuro_MindNem = document.getElementById('n_szuro_MindNem');
+            const n_szuro_NevEmailTel = document.getElementById('n_szuro_NevEmailTel');
+
+
             document.querySelector('.animatedDiv')?.classList.add('elohiv');
 
             bttn_tbl.addEventListener('click',function(){
+
                 modern_Tbl_Div.classList.add('inactive');
-                csoves_Tbl_Div.classList.add('active');
+                setTimeout(function(){
+                    modern_Tbl_Div.classList.add('teljesenElrejt');
+                }, 400);
+
+                csoves_Tbl_Div.classList.add('active');                
 
                 bttn_mdrn.classList.add('active');
                 bttn_tbl.classList.add('inactive');
@@ -370,8 +527,12 @@
             });
 
             bttn_mdrn.addEventListener('click',function(){
-                modern_Tbl_Div.classList.remove('inactive');
                 csoves_Tbl_Div.classList.remove('active');
+
+                modern_Tbl_Div.classList.remove('teljesenElrejt');
+                requestAnimationFrame(function(){
+                    modern_Tbl_Div.classList.remove('inactive');
+                    });  
 
                 bttn_mdrn.classList.remove('active');
                 bttn_tbl.classList.remove('inactive');
@@ -403,6 +564,92 @@
                     reszl_Td.classList.toggle('active');
                     nyil.classList.toggle('srehen');
                 });
+            });
+
+            bttn_szurok.addEventListener('click',function(){
+
+                bttn_szurok.blur();
+
+                if(!csoves_Tbl.classList.contains('elrejt'))
+                {
+                    csoves_Tbl_Div.style.overflow='hidden';
+                    csoves_Tbl.classList.add('elrejt');
+
+                    szurok_kis_div.classList.remove('teljesenElrejt');
+                    requestAnimationFrame(function(){
+                        szurok_kis_div.classList.add('elohiv');
+                    });
+
+                    bttn_szurok.textContent='szűrők elrejtése';
+                    setTimeout(function(){
+                        csoves_Tbl.classList.add('teljesenElrejt');
+                    }, 400);
+                }
+                else /* Table FELFEDÉSE */
+                {
+                    csoves_Tbl_Div.style.overflow='hidden';
+                    csoves_Tbl.classList.remove('teljesenElrejt');
+                    requestAnimationFrame(function(){
+                        csoves_Tbl.classList.remove('elrejt');
+                    });                    
+                    szurok_kis_div.classList.remove('elohiv');
+                    setTimeout(function(){
+                        szurok_kis_div.classList.add('teljesenElrejt');
+                        csoves_Tbl_Div.style.overflowX = 'auto';
+                        csoves_Tbl_Div.style.overflowY = 'hidden';
+                    }, 500);
+                    bttn_szurok.textContent='szűrők';
+
+                }               
+                
+            });
+
+            document.querySelectorAll('.oszlopSzuro').forEach(function(checkbox){
+                checkbox.addEventListener('change',function(){
+                
+                    const oszlop = Number(checkbox.dataset.column) +1;
+                    document.querySelectorAll(`#csoves_Tbl tr > *:nth-child(${oszlop})`
+                        ).forEach(function(cella){
+                            cella.style.display=checkbox.checked ? '' : 'none';
+                        });
+                });
+            });
+
+            n_szuro_MindIgen.addEventListener('change',function(){
+                if(n_szuro_MindIgen.checked)
+                {
+                    document.querySelectorAll('.oszlopSzuro').forEach(function(checkbox){
+                        checkbox.checked=true;
+                        checkbox.dispatchEvent(new Event('change'));
+                    });
+                    n_szuro_MindNem.checked=false;
+                    n_szuro_NevEmailTel.checked=false;
+                }
+            });
+
+            n_szuro_MindNem.addEventListener('change',function(){
+                if(n_szuro_MindNem.checked)
+                {
+                    document.querySelectorAll('.oszlopSzuro').forEach(function(checkbox){
+                        checkbox.checked=false;
+                        checkbox.dispatchEvent(new Event('change'));
+                    });
+                    n_szuro_MindIgen.checked=false;
+                    n_szuro_NevEmailTel.checked=false;
+                }
+            });
+
+            n_szuro_NevEmailTel.addEventListener('change',function(){
+                if(n_szuro_NevEmailTel.checked)
+                {
+                    document.querySelectorAll('.oszlopSzuro').forEach(function(checkbox){
+                        const oszlop= Number(checkbox.dataset.column);
+                        checkbox.checked=oszlop<=2;
+                        checkbox.dispatchEvent(new Event('change'));
+                    });
+                    n_szuro_MindIgen.checked=false;
+                    n_szuro_MindNem.checked=false;
+                }
             });
 
         });

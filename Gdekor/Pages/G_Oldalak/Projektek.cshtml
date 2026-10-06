@@ -123,6 +123,10 @@
         max-height: 1500px;            
     }
 
+    th{
+        color: #5c3a28 !important;
+    }
+
     .userLista_Tbl td, .oraszam_Tbl td{
         vertical-align: middle;
     }
@@ -139,6 +143,44 @@
         /*border-bottom: solid 0.5px gray;*/
         
     }
+
+    #ugyesMegtekint_lbl{
+        opacity: 1;
+        max-height: 30px;
+        cursor: pointer;
+        transition: opacity 0.4s ease-in-out, max-height 0.4s ease-in-out;
+    }
+    #ugyesMegtekint_lbl.elrejt{
+        opacity: 0;
+        max-height: 0;
+    }
+
+    .ugyeskedok_Tartalom{
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        pointer-events: none;
+        transition: opacity 0.4s ease-in-out, max-height 0.4s ease-in-out;
+    }
+    .ugyeskedok_Tartalom.elohiv{
+        opacity: 1;
+        max-height: none;
+        overflow: visible;
+        pointer-events: auto;
+    }
+
+    #ugyesElrejt_lbl{
+        opacity: 0;
+        max-height: 0;
+        cursor: pointer;
+        color: #5c3a28;
+        transition: opacity 0.4s ease-in-out, max-height 0.4s ease-in-out;
+    }
+    #ugyesElrejt_lbl.elohiv{
+        opacity: 1;
+        max-height: 30px;
+    }
+
     @@media (min-width:768px){
         .mezok {
             max-width: 55vw;
@@ -275,7 +317,7 @@
                                                 <th>Név</th>
                                                 <th>Órabér(Ft)</th>
                                                 <th>Napibér(Ft)</th>
-                                                <th>Napibér(órában)</th>
+                                                <th>Max óra (napibérnél)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -287,7 +329,7 @@
                                 </div>
                             </div>                            
                             
-                            <div class="oraszamok_Div d-flex flex-column mb-2">
+                            <div class="oraszamok_Div d-flex flex-column mb-4">
                                 <div class="d-flex align-items-center gap-3">
                                     <label class="fw-bold form-label flex-shrink-0">Ki mennyit dolgozott?</label>
                                 </div>
@@ -298,16 +340,10 @@
                                             <tr>
                                                 <th>Név</th>
                                                 <th>Óraszám</th>
-                                                <th>Túlóra</th>
+                                                <th>Ebből túlóra</th>
                                                 <th>Fizetés (Ft)</th>
                                             </tr>
-                                        </thead>
-                                        @*<tbody>
-                                            <tr class="uresSor">
-                                                <td>Nincs megjeleníthető adat.</td>
-                                            </tr>
-                                        </tbody>
-                                        *@
+                                        </thead>                                        
                                         <tbody>
                                             <tr class="uresSor">
                                                 <td>Mikulás</td>
@@ -317,6 +353,21 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                            </div>
+
+                            <div class="ugyeskedok_Div d-flex flex-column mb-2">
+
+                                <div class="d-flex align-items-center gap-3">
+                                    <label class="fw-bold form-label flex-shrink-0">Ügyeskedők listája</label>
+                                    <label id="ugyesElrejt_lbl" class="form-label text-decoration-underline">elrejtés</label>
+                                </div>
+
+                                <label id="ugyesMegtekint_lbl" class="form-label ms-4 mt-2 text-decoration-underline">megtekintés</label>
+                                <div class="ugyeskedok_Tartalom ms-3 mt-2">
+
+                                    <div id="ugyeskedok_Adatok"></div>
+
                                 </div>
                             </div>
                             
