@@ -127,6 +127,9 @@ namespace Gdekor.Migrations
                     b.Property<string>("Pro_Bevetel")
                         .HasColumnType("text");
 
+                    b.Property<string>("Pro_Egyeb_reszKolt")
+                        .HasColumnType("text");
+
                     b.Property<string>("Pro_KikDolgoznak")
                         .HasColumnType("text");
 

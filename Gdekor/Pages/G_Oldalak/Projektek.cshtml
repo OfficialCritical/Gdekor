@@ -79,9 +79,19 @@
     .reszletek_Div select{
         max-width:100%;
     }
+
+    .munkaber_reszletekD{
+        
+    }
+
     .cimkeEsMezo{
         display: flex;
         flex-direction: column;
+    }
+    .cimkeMezo_row{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
     
     .szHozza_Div {
@@ -181,6 +191,19 @@
         max-height: 30px;
     }
 
+    #inpt_berKoltseg{
+        cursor: not-allowed;
+    }
+    .osszKolt_Hiba{
+        margin-left: 24%;
+    }
+    .egyebKolt_Hiba{
+        margin-left: auto;
+    }
+    #Profit_Edit{
+        cursor: not-allowed;
+    }
+
     @@media (min-width:768px){
         .mezok {
             max-width: 55vw;
@@ -196,7 +219,15 @@
 
         .szHozza_Div {
             max-width: fit-content;
-        }        
+        }
+        
+        .osszKolt_Hiba{
+            margin-left: 17%;
+        }
+
+        .egyebKolt_Hiba{
+            margin-left: 25%;
+        }
     }
 </style>
 <div class="py-4">
@@ -240,6 +271,7 @@
                                         data-valos-veg="@pr.ProValos_Veg"
                                         data-bevetel="@pr.Pro_Bevetel"
                                         data-koltseg="@pr.Pro_Koltseg"
+                                        data-egyebkoltseg="@pr.Pro_Egyeb_reszKolt"
                                         data-profit="@pr.Pro_Profit">
                                     @pr.Pro_Nev
                                 </option>
@@ -286,7 +318,7 @@
                         <div class="cim_Div mb-2">
                             <span class="cim_Szoveg">Munkaórák / bérek </span><span class="forgoNyil">➤</span>
                         </div>
-                        <div class="reszletek_Div ms-3">
+                        <div class="reszletek_Div munkaber_reszletekD ms-3">
 
                             <div class="cimkeEsMezo mb-4" >
                                 <label class="fw-bold form-label">Kik dolgoznak rajta?</label>
@@ -309,7 +341,7 @@
                                     
                                 </div>
 
-                                <div class="userLista_Div ms-2 mt-2">
+                                <div class="userLista_Div table-responsive ms-2 mt-2">
                                     <table class="userLista_Tbl table">
                                          <thead>
                                             <tr>
@@ -334,7 +366,7 @@
                                     <label class="fw-bold form-label flex-shrink-0">Ki mennyit dolgozott?</label>
                                 </div>
 
-                                <div class="oraszam_tbl_Div ms-2 mt-2">
+                                <div class="oraszam_tbl_Div table-responsive ms-2 mt-2">
                                     <table class="oraszam_Tbl table">
                                         <thead>
                                             <tr>
@@ -366,7 +398,7 @@
                                 <label id="ugyesMegtekint_lbl" class="form-label ms-4 mt-2 text-decoration-underline">megtekintés</label>
                                 <div class="ugyeskedok_Tartalom ms-3 mt-2">
 
-                                    <div id="ugyeskedok_Adatok"></div>
+                                    <div id="ugyeskedok_Adatok" class="table-responsive"></div>
 
                                 </div>
                             </div>
@@ -424,20 +456,34 @@
 
                             <div class="cimkeEsMezo mb-3">
                                 <label asp-for="Bevetel_Edit" class="fw-bold form-label">Befolyt összeg (Ft)</label>
-                                <input asp-for="Bevetel_Edit" class="form-control" />
-                                <span asp-validation-for="Bevetel_Edit" class="text-danger"></span>
+                                <input asp-for="Bevetel_Edit" class="inpt_Penz inpt_egeszSzam form-control" />
+                                <span asp-validation-for="Bevetel_Edit" class="ms-4 text-danger"></span>
                             </div>
 
                             <div class="cimkeEsMezo mb-3">
-                                <label asp-for="Koltseg_Edit" class="fw-bold form-label">Költségek (Ft)</label>
-                                <input asp-for="Koltseg_Edit" class="form-control" />
-                                <span asp-validation-for="Koltseg_Edit" class="text-danger"></span>
+                                <label class="fw-bold form-label">Költségek (Ft)</label>
+                                <div class="cimkeMezo_row gap-2 ms-3">
+                                    <label asp-for="Koltseg_Edit" class="sim_brnaFont form-label">összesen</label>
+                                    <input asp-for="Koltseg_Edit" class="inpt_Penz inpt_egeszSzam form-control" placeholder="Ft" />                                    
+                                </div>
+                                <span asp-validation-for="Koltseg_Edit" class="osszKolt_Hiba text-danger"></span>
+                                <div class="d-flex flex-column gap-1 ms-5 mt-2">
+                                    <div class="cimkeMezo_row gap-2">
+                                        <label class="form-label">➥ ebből bérköltség</label>
+                                        <input id="inpt_berKoltseg" class="inpt_Penz inpt_egeszSzam form-control" readonly placeholder="Ft" />
+                                    </div>
+                                    <div class="cimkeMezo_row gap-2">
+                                        <label asp-for="Egyeb_reszKolt_Edit" class="form-label">➥ egyéb költségek</label>
+                                        <input asp-for="Egyeb_reszKolt_Edit" class="inpt_Penz inpt_egeszSzam form-control" placeholder="Ft" />                                        
+                                    </div>
+                                    <span asp-validation-for="Egyeb_reszKolt_Edit" class="egyebKolt_Hiba text-danger"></span>
+                                </div>
                             </div>
 
                             <div class="cimkeEsMezo mb-3">
                                 <label asp-for="Profit_Edit" class="fw-bold form-label">Profit (Ft)</label>
-                                <input asp-for="Profit_Edit" class="form-control" />
-                                <span asp-validation-for="Profit_Edit" class="text-danger"></span>
+                                <input asp-for="Profit_Edit" class="inpt_Penz inpt_egeszSzam form-control" readonly placeholder="Ft" style="background-color: #e9ecef;"/>
+                                <span asp-validation-for="Profit_Edit" class="ms-4 text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -467,8 +513,9 @@
 </div>
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/js//datum_valaszto.js" asp-append-version="true"></script>
+    <script src="~/js/datum_valaszto.js" asp-append-version="true"></script>
     <script src="~/js/projektek.js" asp-append-version="true"></script>
+    <script src="~/js/mindenClass.js" asp-append-version="true"></script>
 }
 
 

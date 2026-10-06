@@ -26,6 +26,7 @@ namespace Gdekor.Pages.Supreme
 
         [BindProperty]
         [Required(ErrorMessage ="jelszó megadása kötelező!")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{6,}$", ErrorMessage = "Min. 6 karakter, kis- és nagybetű, szám és speciális karakter szükséges.")]
         public string Uj_jelszo { get; set; }
 
 

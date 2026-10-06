@@ -20,6 +20,7 @@
 
         public string? Pro_Bevetel { get; set; }
         public string? Pro_Koltseg { get; set; }
+        public string? Pro_Egyeb_reszKolt { get; set; }
         public string? Pro_Profit { get; set; }
 
 

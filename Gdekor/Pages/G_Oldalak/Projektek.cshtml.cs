@@ -69,16 +69,22 @@ namespace Gdekor.Pages.G_Oldalak
         public string? ValosVeg_Edit { get; set; } = "";
 
         [BindProperty]
-        [RegularExpression(@"^\d*$", ErrorMessage = "bevétel csak szám lehet")]
+        //[RegularExpression(@"^\d*$", ErrorMessage = "bevétel csak egész szám lehet")]
         public string? Bevetel_Edit { get; set; } = "";
 
         [BindProperty]
-        [RegularExpression(@"^\d*$", ErrorMessage = "költség csak szám lehet")]
+        //[RegularExpression(@"^\d*$", ErrorMessage = "költség csak egész szám lehet")]
         public string? Koltseg_Edit { get; set; } = "";
 
         [BindProperty]
-        [RegularExpression(@"^\d*$", ErrorMessage = "profit csak szám lehet")]
+        //[RegularExpression(@"^\d*$", ErrorMessage = "az egyéb költség csak egész szám lehet")]
+        public string? Egyeb_reszKolt_Edit { get; set; } = "";
+
+        [BindProperty]
+        //[RegularExpression(@"^\d*$", ErrorMessage = "profit csak egész szám lehet")]
         public string? Profit_Edit { get; set; } = "";
+
+        
 
         #endregion
 
@@ -132,6 +138,7 @@ namespace Gdekor.Pages.G_Oldalak
             projekt.ProValos_Veg = ValosVeg_Edit?.Trim();
             projekt.Pro_Bevetel = Bevetel_Edit?.Trim();
             projekt.Pro_Koltseg = Koltseg_Edit?.Trim();
+            projekt.Pro_Egyeb_reszKolt = Egyeb_reszKolt_Edit?.Trim();
             projekt.Pro_Profit = Profit_Edit?.Trim();
 
             ResztvevokMentes(projekt.Pro_ID);
@@ -264,6 +271,8 @@ namespace Gdekor.Pages.G_Oldalak
                 .ToList();
 
             //oraszamok
+            string str_osszKolt = "";
+            double osszKoltseg = 0;
             var legutolsoOrak = munkaorak
                 .GroupBy(m => new { m.M_UserID, m.M_Nap })
                 .Select(g => g
@@ -310,6 +319,11 @@ namespace Gdekor.Pages.G_Oldalak
                     double calcOraber = napiber / maxOra;
                     fizetes = Math.Round(osszOra * calcOraber).ToString();
                 }
+                if (double.TryParse(fizetes,out double fzts))
+                {
+                    osszKoltseg += fzts;
+                }
+                
 
                 oraszamok_List.Add(new
                 {
@@ -320,12 +334,14 @@ namespace Gdekor.Pages.G_Oldalak
                     fizetes=fizetes
                 });
             }
+            str_osszKolt = osszKoltseg.ToString();
 
             return new JsonResult(new
             {
                 resztvevok = resztv_list,
                 oraszamok = oraszamok_List,
-                ugyeskedok= ugyeskedok_List
+                ugyeskedok= ugyeskedok_List,
+                osszesKoltseg = str_osszKolt
             });
         }
 

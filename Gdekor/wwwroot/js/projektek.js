@@ -19,6 +19,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const ugyeskedok_Tartalom = document.querySelector('.ugyeskedok_Tartalom');
     const ugyeskedok_Adatok = document.getElementById('ugyeskedok_Adatok');
 
+    const Bevetel_Edit= document.getElementById('Bevetel_Edit');
+    const Koltseg_Edit= document.getElementById('Koltseg_Edit');
+    const inpt_berKoltseg= document.getElementById('inpt_berKoltseg');
+    const Egyeb_reszKolt_Edit= document.getElementById('Egyeb_reszKolt_Edit');
+    const Profit_Edit= document.getElementById('Profit_Edit');
+
     if (!animatedDiv || !form_Projekt || !bttn_uj || !p_Valaszto || !p_reszletek || !emHozza_select || !userLista_Tbl_Head || !oraszam_Tbl_Head || !userLista_Tbl_Bdy || !oraszam_Tbl_Bdy) 
         return;
 
@@ -71,298 +77,309 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+
+    function penzFormaz(ertek){
+
+        const szam = String(ertek ?? '').replace(/\D/g,'');
+        return szam ? Number(szam).toLocaleString('hu-HU') : '';
+
+    };
+
+
     async function betoltResztvevok(proId) {
 
-    userLista_Tbl_Bdy.innerHTML = '';
-    oraszam_Tbl_Bdy.innerHTML = '';
+        userLista_Tbl_Bdy.innerHTML = '';
+        oraszam_Tbl_Bdy.innerHTML = '';
 
-    ugyeskedok_Adatok.innerHTML = '';
+        ugyeskedok_Adatok.innerHTML = '';
 
-    const response = await fetch(`?handler=Resztvevok&proId=${encodeURIComponent(proId)}`);
+        const response = await fetch(`?handler=Resztvevok&proId=${encodeURIComponent(proId)}`);
 
-    if (!response.ok) {
-        alert('Hiba lépet fel!');
-        return;
-    }
-
-    const adat = await response.json();
-
-    const lista = adat.resztvevok;
-    const oraszamok = adat.oraszamok;
-    const ugyeskedok = adat.ugyeskedok;
-
-    if (p_Valaszto.value !== proId) return;
-
-    try {
-
-        // ----------------------------------------
-        // RÉSZTVEVŐK / BÉRADATOK
-        // ----------------------------------------
-
-        if (lista.length === 0) {
-
-            userLista_Tbl_Head.style.display = 'none';
-
-            const tr = document.createElement('tr');
-            tr.classList.add('uresSor');
-
-            tr.innerHTML = `
-                <td>
-                    Nincsenek elmentett béradatok.
-                </td>
-            `;
-
-            userLista_Tbl_Bdy.appendChild(tr);
+        if (!response.ok) {
+            alert('Hiba lépet fel!');
+            return;
         }
-        else {
 
-            userLista_Tbl_Head.style.display = '';
+        const adat = await response.json();
+        const lista = adat.resztvevok;
+        const oraszamok = adat.oraszamok;
+        const ugyeskedok = adat.ugyeskedok;
+        const osszesKoltseg=adat.osszesKoltseg;
 
-            lista.forEach(emberke => {
+        inpt_berKoltseg.value = penzFormaz(osszesKoltseg);
+
+        if (p_Valaszto.value !== proId) return;
+
+        try {
+
+            // ----------------------------------------
+            // RÉSZTVEVŐK / BÉRADATOK
+            // ----------------------------------------
+
+            if (lista.length === 0) {
+
+                userLista_Tbl_Head.style.display = 'none';
 
                 const tr = document.createElement('tr');
-
-                tr.dataset.id = emberke.id || '';
-                tr.dataset.userId = emberke.userId || '';
+                tr.classList.add('uresSor');
 
                 tr.innerHTML = `
                     <td>
-                        <button type="button"
-                                class="btn btn-outline-danger bttn_userTorol">
-                            törlés
-                        </button>
-                    </td>
-
-                    <td class="userNev"></td>
-
-                    <td>
-                        <input type="number"
-                               min="0"
-                               class="form-control userOraber"
-                               placeholder="Ft">
-                    </td>
-
-                    <td>
-                        <input type="number"
-                               min="0"
-                               class="form-control userNapiber_Ft"
-                               placeholder="Ft">
-                    </td>
-
-                    <td>
-                        <input type="number"
-                               min="0"
-                               class="form-control userNapiber_Ora"
-                               placeholder="max hány óra">
+                        Nincsenek elmentett béradatok.
                     </td>
                 `;
-
-                tr.querySelector('.userNev').textContent =
-                    emberke.nev ?? '';
-
-                tr.querySelector('.userOraber').value =
-                    emberke.oraber ?? '';
-
-                tr.querySelector('.userNapiber_Ft').value =
-                    emberke.napiber_Ft ?? '';
-
-                tr.querySelector('.userNapiber_Ora').value =
-                    emberke.napiber_Ora ?? '';
 
                 userLista_Tbl_Bdy.appendChild(tr);
-            });
+            }
+            else {
 
+                userLista_Tbl_Head.style.display = '';
 
-            // ----------------------------------------
-            // ÓRASZÁMOK
-            // ----------------------------------------
+                lista.forEach(emberke => {
 
-            oraszam_Tbl_Head.style.display = '';
+                    const tr = document.createElement('tr');
 
-            oraszamok.forEach(ember => {
+                    tr.dataset.id = emberke.id || '';
+                    tr.dataset.userId = emberke.userId || '';
 
-                const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <button type="button"
+                                    class="btn btn-outline-danger bttn_userTorol">
+                                törlés
+                            </button>
+                        </td>
 
-                tr.innerHTML = `
-                    <td class="text-center">
-                        ${ember.nev ?? ''}
-                    </td>
+                        <td class="userNev"></td>
 
-                    <td class="text-center">
-                        ${ember.osszOra ?? ''}
-                    </td>
+                        <td>
+                            <input type="number"
+                                   min="0"
+                                   class="form-control userOraber inpt_egeszSzam inpt_Penz"
+                                   placeholder="Ft">
+                        </td>
 
-                    <td class="text-center">
-                        ${ember.tulora ?? ''}
-                    </td>
+                        <td>
+                            <input type="number"
+                                   min="0"
+                                   class="form-control userNapiber_Ft inpt_egeszSzam inpt_Penz"
+                                   placeholder="Ft">
+                        </td>
 
-                    <td class="text-center">
-                        ${ember.fizetes ?? '?'}
-                    </td>
-                `;
-
-                oraszam_Tbl_Bdy.appendChild(tr);
-            });
-        }
-
-
-        // ----------------------------------------
-        // ÜGYESKEDŐK
-        // ----------------------------------------
-
-        if (!ugyeskedok || ugyeskedok.length === 0) {
-
-            ugyeskedok_Adatok.innerHTML = `
-                <div class="ms-2 mb-3">
-                    Nincs többszörösen felvitt munkaidő.
-                </div>
-            `;
-        }
-        else {
-
-            ugyeskedok.forEach(user => {
-
-                // Egy ember teljes blokkja
-                const userDiv = document.createElement('div');
-                userDiv.classList.add('mb-4','d-flex','gap-3');
-
-
-                // Név
-                const nevDiv = document.createElement('div');
-
-                nevDiv.classList.add('mb-2', 'fst-italic');
-                nevDiv.style.color='orange';
-                nevDiv.style.whiteSpace='nowrap';
-                nevDiv.textContent = user.nev ?? 'Ismeretlen';
-
-                userDiv.appendChild(nevDiv);
-
-
-                // Az ember problémás napjai
-                user.napok.forEach(nap => {
-
-                    const table = document.createElement('table');
-
-                    table.classList.add(
-                        'table',
-                        'ugyeskedok_Tbl',
-                        'mb-3'
-                    );
-
-                    const darab = nap.adatok.length;
-
-                    let sorszamSor = '';
-                    let kezdetSor = '';
-                    let vegSor = '';
-                    let oraszamSor  = '';
-
-
-                    nap.adatok.forEach((munka, index) => {
-
-                        sorszamSor += `
-                            <td class="text-center">
-                                ${index + 1}.
-                            </td>
-                        `;
-
-                        kezdetSor += `
-                            <td class="text-center">
-                                ${munka.kezdet ?? ''}
-                            </td>
-                        `;
-
-                        vegSor += `
-                            <td class="text-center">
-                                ${munka.veg ?? ''}
-                            </td>
-                        `;
-
-                        let oraszam = '';
-
-                        if (munka.kezdet && munka.veg) {
-                            const [kOra, kPerc] = munka.kezdet.split(':').map(Number);
-                            const [vOra, vPerc] = munka.veg.split(':').map(Number);
-
-                            oraszam = ((vOra * 60 + vPerc) - (kOra * 60 + kPerc)) / 60;
-                        }
-
-                        oraszamSor += `
-                            <td class="text-center">
-                                ${oraszam}
-                            </td>
-                        `;
-                    });
-
-
-                    table.innerHTML = `
-
-                        <thead>
-                            <tr>
-                                <th></th>
-
-                                <th colspan="${darab}"
-                                    class="text-center">
-
-                                    ${nap.nap ?? ''}
-
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            <tr>
-                                <th>
-                                    Felvitel
-                                </th>
-
-                                ${sorszamSor}
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    Kezdet
-                                </th>
-
-                                ${kezdetSor}
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    Vég
-                                </th>
-
-                                ${vegSor}
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    Óraszám
-                                </th>
-
-                                ${oraszamSor}
-                            </tr>
-                        </tbody>
+                        <td>
+                            <input type="number"
+                                   min="0"
+                                   class="form-control userNapiber_Ora inpt_egeszSzam"
+                                   placeholder="max hány óra">
+                        </td>
                     `;
 
-                    userDiv.appendChild(table);
+                    tr.querySelector('.userNev').textContent =
+                        emberke.nev ?? '';
+
+                    tr.querySelector('.userOraber').value =
+                        emberke.oraber ?? '';
+
+                    tr.querySelector('.userNapiber_Ft').value =
+                        emberke.napiber_Ft ?? '';
+
+                    tr.querySelector('.userNapiber_Ora').value =
+                        emberke.napiber_Ora ?? '';
+
+                    userLista_Tbl_Bdy.appendChild(tr);
                 });
 
 
-                ugyeskedok_Adatok.appendChild(userDiv);
-            });
+                // ----------------------------------------
+                // ÓRASZÁMOK
+                // ----------------------------------------
+
+                oraszam_Tbl_Head.style.display = '';
+
+                oraszamok.forEach(ember => {
+
+                    const tr = document.createElement('tr');
+
+                    tr.innerHTML = `
+                        <td class="text-center">
+                            ${ember.nev ?? ''}
+                        </td>
+
+                        <td class="text-center">
+                            ${ember.osszOra ?? ''}
+                        </td>
+
+                        <td class="text-center">
+                            ${ember.tulora ?? ''}
+                        </td>
+
+                        <td class="text-center inpt_Penz">
+                            ${ember.fizetes ?? '?'}
+                        </td>
+                    `;
+
+                    oraszam_Tbl_Bdy.appendChild(tr);
+                });
+            }
+
+
+            // ----------------------------------------
+            // ÜGYESKEDŐK
+            // ----------------------------------------
+
+            if (!ugyeskedok || ugyeskedok.length === 0) {
+
+                ugyeskedok_Adatok.innerHTML = `
+                    <div class="ms-2 mb-3">
+                        Nincs többszörösen felvitt munkaidő.
+                    </div>
+                `;
+            }
+            else {
+
+                ugyeskedok.forEach(user => {
+
+                    // Egy ember teljes blokkja
+                    const userDiv = document.createElement('div');
+                    userDiv.classList.add('mb-4','d-flex','gap-3');
+
+
+                    // Név
+                    const nevDiv = document.createElement('div');
+
+                    nevDiv.classList.add('mb-2', 'fst-italic');
+                    nevDiv.style.color='orange';
+                    nevDiv.style.whiteSpace='nowrap';
+                    nevDiv.textContent = user.nev ?? 'Ismeretlen';
+
+                    userDiv.appendChild(nevDiv);
+
+
+                    // Az ember problémás napjai
+                    user.napok.forEach(nap => {
+
+                        const table = document.createElement('table');
+
+                        table.classList.add(
+                            'table',
+                            'ugyeskedok_Tbl',
+                            'mb-3'
+                        );
+
+                        const darab = nap.adatok.length;
+
+                        let sorszamSor = '';
+                        let kezdetSor = '';
+                        let vegSor = '';
+                        let oraszamSor  = '';
+
+
+                        nap.adatok.forEach((munka, index) => {
+
+                            sorszamSor += `
+                                <td class="text-center">
+                                    ${index + 1}.
+                                </td>
+                            `;
+
+                            kezdetSor += `
+                                <td class="text-center">
+                                    ${munka.kezdet ?? ''}
+                                </td>
+                            `;
+
+                            vegSor += `
+                                <td class="text-center">
+                                    ${munka.veg ?? ''}
+                                </td>
+                            `;
+
+                            let oraszam = '';
+
+                            if (munka.kezdet && munka.veg) {
+                                const [kOra, kPerc] = munka.kezdet.split(':').map(Number);
+                                const [vOra, vPerc] = munka.veg.split(':').map(Number);
+
+                                oraszam = ((vOra * 60 + vPerc) - (kOra * 60 + kPerc)) / 60;
+                            }
+
+                            oraszamSor += `
+                                <td class="text-center">
+                                    ${oraszam}
+                                </td>
+                            `;
+                        });
+
+
+                        table.innerHTML = `
+
+                            <thead>
+                                <tr>
+                                    <th></th>
+
+                                    <th colspan="${darab}"
+                                        class="text-center">
+
+                                        ${nap.nap ?? ''}
+
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <th>
+                                        Felvitel
+                                    </th>
+
+                                    ${sorszamSor}
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        Kezdet
+                                    </th>
+
+                                    ${kezdetSor}
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        Vég
+                                    </th>
+
+                                    ${vegSor}
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        Óraszám
+                                    </th>
+
+                                    ${oraszamSor}
+                                </tr>
+                            </tbody>
+                        `;
+
+                        userDiv.appendChild(table);
+                    });
+
+
+                    ugyeskedok_Adatok.appendChild(userDiv);
+                });
+            }
+
         }
+        catch (error) {
 
+            console.error(error);
+
+            alert(
+                'Hiba történt a résztvevő személyek adatainak betöltésekor!'
+            );
+        }
     }
-    catch (error) {
-
-        console.error(error);
-
-        alert(
-            'Hiba történt a résztvevő személyek adatainak betöltésekor!'
-        );
-    }
-}
 
     p_Valaszto.addEventListener('change', function () {
         const opt = p_Valaszto.selectedOptions[0];
@@ -388,7 +405,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             document.getElementById('Bevetel_Edit').value = d.bevetel ?? '';
             document.getElementById('Koltseg_Edit').value = d.koltseg ?? '';
+            document.getElementById('Egyeb_reszKolt_Edit').value = d.egyebkoltseg ?? '';
             document.getElementById('Profit_Edit').value = d.profit ?? '';
+
+            Bevetel_Edit.value = penzFormaz(d.bevetel);
+            Koltseg_Edit.value = penzFormaz(d.koltseg);
+            Egyeb_reszKolt_Edit.value = penzFormaz(d.egyebkoltseg);
+            Profit_Edit.value = penzFormaz(d.profit);
 
             mezoBeallit('TervKezd_Edit', d.tervKezd);
             mezoBeallit('TervVeg_Edit', d.tervVeg);
@@ -490,6 +513,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     
+
+    form_Projekt.querySelector('button[type="submit"]').addEventListener('click', function () {
+        document.querySelectorAll('.inpt_Penz').forEach(input => {
+            input.value = input.value.replace(/\D/g, '');
+        });
+    });
+
+    $('#form_Projekt').on('invalid-form.validate', function (event, validator) {
+
+        validator.errorList.forEach(function (error) {
+
+            const reszletek = error.element.closest('.reszletek_Div');
+
+            if (reszletek) {
+                reszletek.classList.add('elohiv');
+
+                const cim = reszletek.previousElementSibling;
+                cim?.querySelector('.forgoNyil')?.classList.add('srehen');
+            }
+        });
+
+    });
+
     form_Projekt.addEventListener('submit', function (e) {
         const resztvevok = [];
 
@@ -518,10 +564,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 Napiber_Ft: napiber_Ft,
                 Napiber_Ora: napiber_Ora
             });
-        }
-
+        }        
         document.getElementById('Resztvevok_Json').value = JSON.stringify(resztvevok);
+
     });
+
+
 
     document.querySelectorAll('.cim_Div').forEach(function (cim) {
         cim.addEventListener('click', function () {
@@ -555,4 +603,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+    Egyeb_reszKolt_Edit.addEventListener('input',function(){
+        const koltseg = Number(inpt_berKoltseg.value.replace(/\D/g,'') || 0) + Number(Egyeb_reszKolt_Edit.value.replace(/\D/g,'') || 0);
+        Koltseg_Edit.value = penzFormaz(koltseg);
+        const profit = Number(Bevetel_Edit.value.replace(/\D/g,'') || 0) - Number(Koltseg_Edit.value.replace(/\D/g,'') || 0);
+        Profit_Edit.value = penzFormaz(profit);
+    });
+
+    Koltseg_Edit.addEventListener('input',function(){
+        const egyebKolt = Number(Koltseg_Edit.value.replace(/\D/g,'') || 0) - Number(inpt_berKoltseg.value.replace(/\D/g,'') || 0);
+        Egyeb_reszKolt_Edit.value = penzFormaz(egyebKolt);
+        const profit = Number(Bevetel_Edit.value.replace(/\D/g,'') || 0) - Number(Koltseg_Edit.value.replace(/\D/g,'') || 0);
+        Profit_Edit.value = penzFormaz(profit);
+    });
+
+    Bevetel_Edit.addEventListener('input',function(){
+        const profit = Number(Bevetel_Edit.value.replace(/\D/g,'') || 0) - Number(Koltseg_Edit.value.replace(/\D/g,'') || 0);
+        Profit_Edit.value = penzFormaz(profit);
+    });
+
+    
 });
