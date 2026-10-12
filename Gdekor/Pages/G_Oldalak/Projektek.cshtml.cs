@@ -103,6 +103,9 @@ namespace Gdekor.Pages.G_Oldalak
             if (!ModelState.IsValid)
             {
                 await Frissit_Pro_Lista();
+                Userek_Lista = await _dbContext.Users
+                    .OrderBy(u => u.Nev)
+                    .ToListAsync();
                 return Page();
             }
 
@@ -125,6 +128,9 @@ namespace Gdekor.Pages.G_Oldalak
                 {
                     ModelState.AddModelError(string.Empty, "Kiválasztott projekt nem található!");
                     await Frissit_Pro_Lista();
+                    Userek_Lista = await _dbContext.Users
+                        .OrderBy(u => u.Nev)
+                        .ToListAsync();
                     return Page();
                 }
             }
@@ -141,7 +147,7 @@ namespace Gdekor.Pages.G_Oldalak
             projekt.Pro_Egyeb_reszKolt = Egyeb_reszKolt_Edit?.Trim();
             projekt.Pro_Profit = Profit_Edit?.Trim();
 
-            ResztvevokMentes(projekt.Pro_ID);
+            await ResztvevokMentes(projekt.Pro_ID);
 
             await _dbContext.SaveChangesAsync();
 
@@ -172,30 +178,61 @@ namespace Gdekor.Pages.G_Oldalak
                 .ToListAsync();            
         }
 
-        private void ResztvevokMentes(string proId)
+        private async Task ResztvevokMentes(string proId)
         {
-            var regiek = _dbContext.ResztvevokProBen_Tbl
-                .Where(r => r.Pro_ID == proId);
-            _dbContext.ResztvevokProBen_Tbl.RemoveRange(regiek);
+            if (Resztvevok_Json == null)
+                return;
 
-            var dtoLista = string.IsNullOrWhiteSpace(Resztvevok_Json) ? new List<ResztvevoDto>() : JsonSerializer.Deserialize<List<ResztvevoDto>>(Resztvevok_Json,new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+            var dtoLista = JsonSerializer.Deserialize<List<ResztvevoDto>>(
+                Resztvevok_Json,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }
+            ) ?? new();
+
+            var regiek = await _dbContext.ResztvevokProBen_Tbl
+                .Where(r => r.Pro_ID == proId)
+                .ToListAsync();
+
+            foreach (var regi in regiek)
+            {
+                if (!dtoLista.Any(r => r.Id == regi.ID && r.UserId == regi.User_ID))
+                {
+                    _dbContext.ResztvevokProBen_Tbl.Remove(regi);
+                }
+            }
 
             foreach (var r in dtoLista)
             {
-                if (string.IsNullOrWhiteSpace(r.Nev) && string.IsNullOrWhiteSpace(r.UserId))
+                if (string.IsNullOrWhiteSpace(r.UserId))
                     continue;
-                _dbContext.ResztvevokProBen_Tbl.Add(new Resztvevo_Projektben
-                {
-                    ID = Guid.NewGuid().ToString(),
-                    Pro_ID = proId,
-                    User_ID = r.UserId,
-                    Nev = r.Nev?.Trim(),
-                    Oraber = r.Oraber?.Trim(),
-                    Napiber_Ft = r.Napiber_Ft?.Trim(),
-                    Napiber_Ora = r.Napiber_Ora?.Trim()
-                });
-            }
 
+                var meglevo = regiek.FirstOrDefault(x =>
+                    x.ID == r.Id &&
+                    x.User_ID == r.UserId);
+
+                if (meglevo != null)
+                {
+                    meglevo.Nev = r.Nev?.Trim();
+                    meglevo.Oraber = r.Oraber?.Trim();
+                    meglevo.Napiber_Ft = r.Napiber_Ft?.Trim();
+                    meglevo.Napiber_Ora = r.Napiber_Ora?.Trim();
+                }
+                else
+                {
+                    _dbContext.ResztvevokProBen_Tbl.Add(new Resztvevo_Projektben
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        Pro_ID = proId,
+                        User_ID = r.UserId,
+                        Nev = r.Nev?.Trim(),
+                        Oraber = r.Oraber?.Trim(),
+                        Napiber_Ft = r.Napiber_Ft?.Trim(),
+                        Napiber_Ora = r.Napiber_Ora?.Trim()
+                    });
+                }
+            }
         }
 
         public async Task<IActionResult> OnGetResztvevokAsync(string proId)

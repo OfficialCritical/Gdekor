@@ -15,10 +15,12 @@
 
     .cardMezok {
         max-width: 100vw;
-        overflow-y: hidden;
+        height: auto;
+        max-height: none;
+        overflow-y: visible;
     }
     .cardMezok.aktiv {
-        overflow-y: auto;
+            overflow-y: visible;
     }
 
     #p_Valaszto{
@@ -38,7 +40,7 @@
     }
     #p_reszletek.aktiv{
         opacity: 1;
-        max-height: 1500px;
+        max-height: none;
         pointer-events: auto;
     }
 
@@ -73,7 +75,7 @@
     }
     .reszletek_Div.elohiv {
         opacity: 1;
-        max-height: 1500px;
+        max-height: none;
         pointer-events: auto;
     }
     .reszletek_Div select{
@@ -130,7 +132,7 @@
     }
     .userLista_Div.elohiv{
         opacity: 1;
-        max-height: 1500px;            
+        max-height: none;            
     }
 
     th{

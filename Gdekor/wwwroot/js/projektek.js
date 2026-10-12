@@ -80,38 +80,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function penzFormaz(ertek){
 
-        const szam = String(ertek ?? '').replace(/\D/g,'');
+        const szam = String(ertek ?? '').replace(/[^\d-]/g, '');
         return szam ? Number(szam).toLocaleString('hu-HU') : '';
 
     };
 
 
+    function penzSzam(ertek) {
+        return Number(String(ertek ?? '').replace(/[^\d-]/g, '')) || 0;
+    };
+
     async function betoltResztvevok(proId) {
-
-        userLista_Tbl_Bdy.innerHTML = '';
-        oraszam_Tbl_Bdy.innerHTML = '';
-
-        ugyeskedok_Adatok.innerHTML = '';
-
-        const response = await fetch(`?handler=Resztvevok&proId=${encodeURIComponent(proId)}`);
-
-        if (!response.ok) {
-            alert('Hiba lépet fel!');
-            return;
-        }
-
-        const adat = await response.json();
-        const lista = adat.resztvevok;
-        const oraszamok = adat.oraszamok;
-        const ugyeskedok = adat.ugyeskedok;
-        const osszesKoltseg=adat.osszesKoltseg;
-
-        inpt_berKoltseg.value = penzFormaz(osszesKoltseg);
-
-        if (p_Valaszto.value !== proId) return;
-
         try {
+            const response = await fetch(`?handler=Resztvevok&proId=${encodeURIComponent(proId)}`);
 
+            if (!response.ok)
+                throw new Error('Sikertelen adatbetöltés!');
+
+            const adat = await response.json();
+
+            if (p_Valaszto.value !== proId)
+                return false;
+
+            const lista = adat.resztvevok;
+            const oraszamok = adat.oraszamok;
+            const ugyeskedok = adat.ugyeskedok;
+            const osszesKoltseg = adat.osszesKoltseg;
+
+            if (!Array.isArray(lista) || !Array.isArray(oraszamok) || !Array.isArray(ugyeskedok))
+                throw new Error('Hibás szerverválasz!');
+
+            userLista_Tbl_Bdy.innerHTML = '';
+            oraszam_Tbl_Bdy.innerHTML = '';
+            ugyeskedok_Adatok.innerHTML = '';
+
+            inpt_berKoltseg.value = penzFormaz(osszesKoltseg);
             // ----------------------------------------
             // RÉSZTVEVŐK / BÉRADATOK
             // ----------------------------------------
@@ -130,6 +133,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
 
                 userLista_Tbl_Bdy.appendChild(tr);
+
+                oraszam_Tbl_Head.style.display = 'none';
+                oraszam_Tbl_Bdy.innerHTML = `
+                    <tr class="uresSor">
+                        <td colspan="4">Nincs megjeleníthető adat.</td>
+                    </tr>
+                `;
             }
             else {
 
@@ -153,21 +163,21 @@ document.addEventListener('DOMContentLoaded', function () {
                         <td class="userNev"></td>
 
                         <td>
-                            <input type="number"
+                            <input type="text"
                                    min="0"
                                    class="form-control userOraber inpt_egeszSzam inpt_Penz"
                                    placeholder="Ft">
                         </td>
 
                         <td>
-                            <input type="number"
+                            <input type="text"
                                    min="0"
                                    class="form-control userNapiber_Ft inpt_egeszSzam inpt_Penz"
                                    placeholder="Ft">
                         </td>
 
                         <td>
-                            <input type="number"
+                            <input type="text"
                                    min="0"
                                    class="form-control userNapiber_Ora inpt_egeszSzam"
                                    placeholder="max hány óra">
@@ -369,19 +379,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     ugyeskedok_Adatok.appendChild(userDiv);
                 });
             }
-
+            return true;
         }
         catch (error) {
 
             console.error(error);
-
-            alert(
-                'Hiba történt a résztvevő személyek adatainak betöltésekor!'
-            );
+            alert('Hiba történt a résztvevő személyek adatainak betöltésekor!');
+            return false;
         }
     }
 
-    p_Valaszto.addEventListener('change', function () {
+    p_Valaszto.addEventListener('change', async function () {
         const opt = p_Valaszto.selectedOptions[0];
 
         if (p_Valaszto.value) {
@@ -399,6 +407,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const d = opt.dataset;
 
             document.getElementById('Pro_ID_Edit').value = p_Valaszto.value;
+            document.getElementById('Resztvevok_Json').value = '';
             document.getElementById('Nev_Edit').value = d.nev ?? '';
             document.getElementById('Allapot_Edit').value = d.allapot ?? '';
             document.getElementById('Leir_Edit').value = d.leir ?? '';
@@ -418,12 +427,64 @@ document.addEventListener('DOMContentLoaded', function () {
             mezoBeallit('ValosKezd_Edit', d.valosKezd);
             mezoBeallit('ValosVeg_Edit', d.valosVeg);
 
-            betoltResztvevok(p_Valaszto.value);
+
+            const proId = p_Valaszto.value;
+            const sikeres = await betoltResztvevok(proId);
+
+            if (!sikeres || p_Valaszto.value !== proId)
+                return;
+
+            const koltseg = penzSzam(inpt_berKoltseg.value) + penzSzam(Egyeb_reszKolt_Edit.value);
+            Koltseg_Edit.value = penzFormaz(koltseg);
+            Profit_Edit.value = penzFormaz(penzSzam(Bevetel_Edit.value) - koltseg);
 
         } else {
             form_Projekt.reset();
             document.getElementById('Pro_ID_Edit').value = '';
             p_reszletek.classList.remove('aktiv');
+            document.getElementById('Resztvevok_Json').value = '[]';
+
+            inpt_berKoltseg.value = '';
+            Bevetel_Edit.value = '';
+            Koltseg_Edit.value = '';
+            Egyeb_reszKolt_Edit.value = '';
+            Profit_Edit.value = '';
+
+            ugyeskedok_Adatok.innerHTML = `
+            <div class="ms-2 mb-3">
+                Nincs többszörösen felvitt munkaidő.
+            </div>
+        `;
+
+            ugyeskedok_Tartalom.classList.remove('elohiv');
+            ugyesMegtekint_lbl.classList.remove('elrejt');
+            ugyesElrejt_lbl.classList.remove('elohiv');
+
+            userLista_Tbl_Head.style.display = 'none';
+            userLista_Tbl_Bdy.innerHTML = `
+                    <tr class="uresSor">
+                        <td colspan="5">
+                            Nincsenek elmentett béradatok.
+                        </td>
+                    </tr>
+                `;
+
+            oraszam_Tbl_Head.style.display = 'none';
+            oraszam_Tbl_Bdy.innerHTML = `
+                    <tr class="uresSor">
+                        <td colspan="5">
+                            Nincs megjeleníthető adat.
+                        </td>
+                    </tr>
+                `;
+
+            document.querySelectorAll('.cim_Div').forEach(function (cim) {
+                const reszletek = cim.nextElementSibling;
+                const nyil = cim.querySelector('.forgoNyil');
+
+                reszletek.classList.add('elohiv');
+                nyil.classList.add('srehen');
+            });
         }
     });
 
@@ -433,6 +494,42 @@ document.addEventListener('DOMContentLoaded', function () {
         p_Valaszto.value = '';
         bttn_uj.classList.add('aktiv');
         p_reszletek.classList.add('aktiv');
+
+        document.getElementById('Resztvevok_Json').value = '[]';
+
+        inpt_berKoltseg.value = '';
+        Bevetel_Edit.value = '';
+        Koltseg_Edit.value = '';
+        Egyeb_reszKolt_Edit.value = '';
+        Profit_Edit.value = '';
+
+        ugyeskedok_Adatok.innerHTML = `
+            <div class="ms-2 mb-3">
+                Nincs többszörösen felvitt munkaidő.
+            </div>
+        `;
+
+        ugyeskedok_Tartalom.classList.remove('elohiv');
+        ugyesMegtekint_lbl.classList.remove('elrejt');
+        ugyesElrejt_lbl.classList.remove('elohiv');
+
+        userLista_Tbl_Head.style.display = 'none';
+        userLista_Tbl_Bdy.innerHTML = `
+                    <tr class="uresSor">
+                        <td colspan="5">
+                            Nincsenek elmentett béradatok.
+                        </td>
+                    </tr>
+                `;
+
+        oraszam_Tbl_Head.style.display = 'none';
+        oraszam_Tbl_Bdy.innerHTML = `
+                    <tr class="uresSor">
+                        <td colspan="5">
+                            Nincs megjeleníthető adat.
+                        </td>
+                    </tr>
+                `;
 
         document.querySelectorAll('.cim_Div').forEach(function (cim) {
             const reszletek = cim.nextElementSibling;
@@ -471,13 +568,13 @@ document.addEventListener('DOMContentLoaded', function () {
             <td class="userNev">
             </td>
             <td>
-                <input type="number" class="form-control userOraber" step="1"  min="0" placeholder="Ft">
+                <input type="text" class="form-control userOraber inpt_egeszSzam inpt_Penz" placeholder="Ft">
             </td>
             <td>
-                <input type="number" class="form-control userNapiber_Ft" step="1" min="0" placeholder="Ft">
+                <input type="text" class="form-control userNapiber_Ft inpt_egeszSzam inpt_Penz" placeholder="Ft">
             </td>
             <td>
-                <input type="number" class="form-control userNapiber_Ora" step="1" min="0" placeholder="max hány óra">
+                <input type="text" class="form-control userNapiber_Ora inpt_egeszSzam" placeholder="max hány óra">
             </td>
         `;
         tr.querySelector('.userNev').textContent = userNev;
@@ -515,8 +612,8 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
     form_Projekt.querySelector('button[type="submit"]').addEventListener('click', function () {
-        document.querySelectorAll('.inpt_Penz').forEach(input => {
-            input.value = input.value.replace(/\D/g, '');
+        form_Projekt.querySelectorAll('input.inpt_Penz').forEach(input => {
+            input.value = input.value.replace(/[^\d-]/g, '');
         });
     });
 
@@ -543,9 +640,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         for (const tr of sorok) {
 
-            const oraber = tr.querySelector('.userOraber').value;
-            const napiber_Ft = tr.querySelector('.userNapiber_Ft').value;
-            const napiber_Ora = tr.querySelector('.userNapiber_Ora').value;
+            const oraber = tr.querySelector('.userOraber').value.replace(/\D/g, '');
+            const napiber_Ft = tr.querySelector('.userNapiber_Ft').value.replace(/\D/g, '');
+            const napiber_Ora = tr.querySelector('.userNapiber_Ora').value.trim();
             const nev = tr.querySelector('.userNev').textContent.trim();
 
             if (!oraber) {
@@ -604,21 +701,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     Egyeb_reszKolt_Edit.addEventListener('input',function(){
-        const koltseg = Number(inpt_berKoltseg.value.replace(/\D/g,'') || 0) + Number(Egyeb_reszKolt_Edit.value.replace(/\D/g,'') || 0);
+        const koltseg = penzSzam(inpt_berKoltseg.value) + penzSzam(Egyeb_reszKolt_Edit.value);
         Koltseg_Edit.value = penzFormaz(koltseg);
-        const profit = Number(Bevetel_Edit.value.replace(/\D/g,'') || 0) - Number(Koltseg_Edit.value.replace(/\D/g,'') || 0);
+        const profit = penzSzam(Bevetel_Edit.value) - koltseg;
         Profit_Edit.value = penzFormaz(profit);
     });
 
     Koltseg_Edit.addEventListener('input',function(){
-        const egyebKolt = Number(Koltseg_Edit.value.replace(/\D/g,'') || 0) - Number(inpt_berKoltseg.value.replace(/\D/g,'') || 0);
+        const egyebKolt = penzSzam(Koltseg_Edit.value) - penzSzam(inpt_berKoltseg.value);
         Egyeb_reszKolt_Edit.value = penzFormaz(egyebKolt);
-        const profit = Number(Bevetel_Edit.value.replace(/\D/g,'') || 0) - Number(Koltseg_Edit.value.replace(/\D/g,'') || 0);
+        const profit = penzSzam(Bevetel_Edit.value) - penzSzam(Koltseg_Edit.value);
         Profit_Edit.value = penzFormaz(profit);
     });
 
     Bevetel_Edit.addEventListener('input',function(){
-        const profit = Number(Bevetel_Edit.value.replace(/\D/g,'') || 0) - Number(Koltseg_Edit.value.replace(/\D/g,'') || 0);
+        const profit = penzSzam(Bevetel_Edit.value) - penzSzam(Koltseg_Edit.value);
         Profit_Edit.value = penzFormaz(profit);
     });
 

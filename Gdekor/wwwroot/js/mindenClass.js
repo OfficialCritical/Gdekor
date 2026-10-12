@@ -24,7 +24,7 @@
     document.addEventListener('input',function(e){
         if(e.target.classList.contains('inpt_Penz'))
         {
-            let ertek = e.target.value.replace(/\D/g,'');
+            let ertek = e.target.value.replace(/[^\d-]/g, '')
             e.target.value = ertek ? Number(ertek).toLocaleString('hu-HU') : '';
         }
     });
