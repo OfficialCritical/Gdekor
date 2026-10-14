@@ -149,7 +149,7 @@
     }
 
     
-    #szurok_Nagy_div {
+    #szurok_Kulso_div {
         width: 100%;
     }
 
@@ -158,26 +158,81 @@
         padding: 0.5rem 2rem;
     }
 
-    #szurok_kis_div{
+    #slct_szurokCsop{
+
+        opacity: 1;
+        max-height: none;        
+        transition: opacity 0.4s ease-in-out, max-height 0.4s ease-in-out;
+    }
+    #slct_szurokCsop.elrejt {
+        opacity: 0;
+        max-height: 0;
+    }
+
+    #emb_szuroCsoportok_div{
+        opacity: 0;
+        max-height: 0;
+        overflow-x: auto;
+        transition: opacity 0.4s ease-in-out, max-height 0.4s ease-in-out;
+    }
+    #emb_szuroCsoportok_div.elohiv{
+        opacity: 1;
+        max-height: none;
+        margin-left: 5%;
+        margin-right: 5%;
+        padding: 1.5rem 2%;
+        border: 1px solid #f5f5f5;
+    }
+
+    #ada_szuroCsoportok_div {
+        opacity: 0;
+        max-height: 0;
+        overflow-x: auto;
+        transition: opacity 0.4s ease-in-out, max-height 0.4s ease-in-out;
+    }
+    #ada_szuroCsoportok_div.elohiv{
+        opacity: 1;
+        max-height: none;
+        margin-left: 5%;
+        margin-right: 5%;
+        padding: 1.5rem 2%;
+        border: 1px solid #f5f5f5;
+    }
+
+    #szurok_Belso_div{
         width: 100%;
         background: white;
         opacity: 0;
         max-height: 0;
+        min-height: 50px;
         pointer-events: none;
-        padding: 0;
+        padding: 2.5rem 0;
         border-radius: 10px;
         transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
     }
-    #szurok_kis_div.elohiv{
+    #szurok_Belso_div.elohiv{
         opacity: 1;
-        max-height: 10000px;
-        padding: 2rem 25%;
+        max-height: none;        
         pointer-events: auto;
     }
-    #szurok_kis_div.teljesenElrejt {
+    #szurok_Belso_div.teljesenElrejt {
         display: none;
     }
 
+
+    @@media(min-height: 768px){
+        #szurok_Belso_div {
+            min-height: 250px;
+            padding: 0.5rem 0;
+        }
+
+        #ada_szuroCsoportok_div.elohiv {
+            padding: 1.5rem 25%;
+        }
+        #emb_szuroCsoportok_div.elohiv {
+            padding: 1.5rem 25%;
+        }
+    }
 </style>
 
 
@@ -340,97 +395,116 @@
             </div>
             <div class="csoves_Tbl_Div flex-column gap-4">
 
-                <div id="szurok_Nagy_div" class="d-flex flex-column justify-content-center align-items-center gap-3">
+                <div id="szurok_Kulso_div" class="d-flex flex-column justify-content-center align-items-center gap-3">
                     <button type="button" id="bttn_szurok" class="btn bttn_Action">szűrők</button>
-                    <div id="szurok_kis_div" class="d-flex gap-5">
+                    <div id="szurok_Belso_div" class="d-flex flex-column gap-2 gap-md-3">
 
-                        <div id="gyors_Szurok" class="d-flex flex-column gap-3 me-3">
-                            <label class="form-label fw-bold">Gyors szűrők</label>
+                        <select id="slct_szurokCsop" class="form-control w-auto align-self-center text-center">
+                            <option value="" selected>kérem, válasszon</option>
+                            <option value="emberek">emberek kiválasztása</option>
+                            <option value="adatok">adatok (oszlopok) szűrése</option>
+                        </select>
 
-                            <div class="d-flex flex-column gap-1">
-                                <div class="form-check">
-                                    <input class="form-check-input n_oszlopSzuro" type="checkbox" id="n_szuro_MindIgen" checked />
-                                    <label class="form-check-label" for="n_szuro_MindIgen">Mind kiválaszt</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input n_oszlopSzuro" type="checkbox" id="n_szuro_MindNem"/>
-                                    <label class="form-check-label" for="n_szuro_MindNem">Mind töröl</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input n_oszlopSzuro" type="checkbox" id="n_szuro_NevEmailTel"/>
-                                    <label class="form-check-label" for="n_szuro_NevEmailTel">Név, e-mail, telefon</label>
-                                </div>
-                            </div>
+                        <div id="emb_szuroCsoportok_div" class="">
+                            @foreach(var emb in Model.Felhasznalok_Lst){
+                                if(emb.Email !="kerberosz@gmail.com"){
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id=""/>
+                                        <label class="form-check-label" for="">@emb.Nev</label>
+                                    </div>
+                                }
+                            }
                         </div>
 
-                        <div id="reszletes_Szurok" class="d-flex flex-column gap-3">
+                        <div id="ada_szuroCsoportok_div" class="flex-column flex-md-row ">
+                            <div id="gyors_Szurok" class="d-flex flex-column gap-3 me-3">
+                                <label class="form-label fw-bold">Gyors szűrők</label>
 
-
-                            <label class="form-label fw-bold">Részletes szűrők</label>
-
-                            <div class="d-flex flex-column gap-1">
-                                <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_nev" data-column="0" checked />
-                                <label class="form-check-label" for="szuro_nev">Név</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_email" data-column="1" checked />
-                                <label class="form-check-label" for="szuro_email">E-mail</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_tel" data-column="2" checked />
-                                <label class="form-check-label" for="szuro_tel">Telefon</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_lakcim" data-column="3" checked />
-                                <label class="form-check-label" for="szuro_lakcim">Lakcím</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_szulIdo" data-column="4" checked />
-                                <label class="form-check-label" for="szuro_szulIdo">Születési idő</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_szulHely" data-column="5" checked />
-                                <label class="form-check-label" for="szuro_szulHely">Születési hely</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_anyja" data-column="6" checked />
-                                <label class="form-check-label" for="szuro_anyja">Anyja neve</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_szemelyi" data-column="7" checked />
-                                <label class="form-check-label" for="szuro_szemelyi">Személyi azonosító</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_lakKartyaSzama" data-column="8" checked />
-                                <label class="form-check-label" for="szuro_lakKartyaSzama">Lakcímkártya száma</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_adoszam" data-column="9" checked />
-                                <label class="form-check-label" for="szuro_adoszam">Adószám</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_taj" data-column="10" checked />
-                                <label class="form-check-label" for="szuro_taj">Tajszám</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_jogsiSzam" data-column="11" checked />
-                                <label class="form-check-label" for="szuro_jogsiSzam">Jogosítvány száma</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_jogsiKateg" data-column="12" checked />
-                                <label class="form-check-label" for="szuro_jogsiKateg">Legmagasabb kategória</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_rendszam" data-column="13" checked />
-                                <label class="form-check-label" for="szuro_rendszam">Rendszám</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_ferohely" data-column="14" checked />
-                                <label class="form-check-label" for="szuro_ferohely">Férőhelyek száma</label>
-                            </div>
+                                <div class="d-flex flex-column gap-1">
+                                    <div class="form-check">
+                                        <input class="form-check-input n_oszlopSzuro" type="checkbox" id="n_szuro_MindIgen" checked />
+                                        <label class="form-check-label" for="n_szuro_MindIgen">Mind kiválaszt</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input n_oszlopSzuro" type="checkbox" id="n_szuro_MindNem" />
+                                        <label class="form-check-label" for="n_szuro_MindNem">Mind töröl</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input n_oszlopSzuro" type="checkbox" id="n_szuro_NevEmailTel" />
+                                        <label class="form-check-label" for="n_szuro_NevEmailTel">Név, e-mail, telefon</label>
+                                    </div>
+                                </div>
                             </div>
 
+                            <div id="reszletes_Szurok" class="d-flex flex-column gap-3">
+
+
+                                <label class="form-label fw-bold">Részletes szűrők</label>
+
+                                <div class="d-flex flex-column gap-1">
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_nev" data-column="0" checked />
+                                        <label class="form-check-label" for="szuro_nev">Név</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_email" data-column="1" checked />
+                                        <label class="form-check-label" for="szuro_email">E-mail</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_tel" data-column="2" checked />
+                                        <label class="form-check-label" for="szuro_tel">Telefon</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_lakcim" data-column="3" checked />
+                                        <label class="form-check-label" for="szuro_lakcim">Lakcím</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_szulIdo" data-column="4" checked />
+                                        <label class="form-check-label" for="szuro_szulIdo">Születési idő</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_szulHely" data-column="5" checked />
+                                        <label class="form-check-label" for="szuro_szulHely">Születési hely</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_anyja" data-column="6" checked />
+                                        <label class="form-check-label" for="szuro_anyja">Anyja neve</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_szemelyi" data-column="7" checked />
+                                        <label class="form-check-label" for="szuro_szemelyi">Személyi azonosító</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_lakKartyaSzama" data-column="8" checked />
+                                        <label class="form-check-label" for="szuro_lakKartyaSzama">Lakcímkártya száma</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_adoszam" data-column="9" checked />
+                                        <label class="form-check-label" for="szuro_adoszam">Adószám</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_taj" data-column="10" checked />
+                                        <label class="form-check-label" for="szuro_taj">Tajszám</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_jogsiSzam" data-column="11" checked />
+                                        <label class="form-check-label" for="szuro_jogsiSzam">Jogosítvány száma</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_jogsiKateg" data-column="12" checked />
+                                        <label class="form-check-label" for="szuro_jogsiKateg">Legmagasabb kategória</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_rendszam" data-column="13" checked />
+                                        <label class="form-check-label" for="szuro_rendszam">Rendszám</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input oszlopSzuro" type="checkbox" id="szuro_ferohely" data-column="14" checked />
+                                        <label class="form-check-label" for="szuro_ferohely">Férőhelyek száma</label>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                         
                     </div>
@@ -499,12 +573,14 @@
             const bttn_mdrn = document.getElementById('bttn_mdrn');
             const bttn_tbl = document.getElementById('bttn_tbl');
             const bttn_szurok = document.getElementById('bttn_szurok');
-            const szurok_kis_div = document.getElementById('szurok_kis_div');
+            const szurok_Belso_div = document.getElementById('szurok_Belso_div');
             const csoves_Tbl = document.getElementById('csoves_Tbl');
             const csoves_Tbl_Div = document.querySelector('.csoves_Tbl_Div');
             const modern_Tbl_Div = document.querySelector('.modern_Tbl_Div');
             const modern_Tbl = document.getElementById('modern_Tbl');
 
+            const slct_szurokCsop = document.getElementById('slct_szurokCsop');
+            const emb_szuroCsoportok_div = document.getElementById('emb_szuroCsoportok_div');
             const n_szuro_MindIgen = document.getElementById('n_szuro_MindIgen');
             const n_szuro_MindNem = document.getElementById('n_szuro_MindNem');
             const n_szuro_NevEmailTel = document.getElementById('n_szuro_NevEmailTel');
@@ -575,9 +651,9 @@
                     csoves_Tbl_Div.style.overflow='hidden';
                     csoves_Tbl.classList.add('elrejt');
 
-                    szurok_kis_div.classList.remove('teljesenElrejt');
+                    szurok_Belso_div.classList.remove('teljesenElrejt');
                     requestAnimationFrame(function(){
-                        szurok_kis_div.classList.add('elohiv');
+                        szurok_Belso_div.classList.add('elohiv');
                     });
 
                     bttn_szurok.textContent='szűrők elrejtése';
@@ -592,9 +668,9 @@
                     requestAnimationFrame(function(){
                         csoves_Tbl.classList.remove('elrejt');
                     });                    
-                    szurok_kis_div.classList.remove('elohiv');
+                    szurok_Belso_div.classList.remove('elohiv');
                     setTimeout(function(){
-                        szurok_kis_div.classList.add('teljesenElrejt');
+                        szurok_Belso_div.classList.add('teljesenElrejt');
                         csoves_Tbl_Div.style.overflowX = 'auto';
                         csoves_Tbl_Div.style.overflowY = 'hidden';
                     }, 500);
@@ -602,6 +678,24 @@
 
                 }               
                 
+            });
+
+            slct_szurokCsop?.addEventListener('change',function(){
+                if(slct_szurokCsop.value === '')
+                {
+                    emb_szuroCsoportok_div.classList.remove('elohiv');
+                    ada_szuroCsoportok_div.classList.remove('elohiv');
+                }
+                else if(slct_szurokCsop.value === "emberek")
+                {
+                    emb_szuroCsoportok_div.classList.add('elohiv');
+                    ada_szuroCsoportok_div.classList.remove('elohiv');                    
+                }
+                else if(slct_szurokCsop.value === "adatok")
+                {
+                    ada_szuroCsoportok_div.classList.add('elohiv');
+                    emb_szuroCsoportok_div.classList.remove('elohiv');
+                }
             });
 
             document.querySelectorAll('.oszlopSzuro').forEach(function(checkbox){
