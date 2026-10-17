@@ -180,7 +180,7 @@
         max-height: none;
         margin-left: 5%;
         margin-right: 5%;
-        padding: 1.5rem 2%;
+        padding: 1.5rem 7%;
         border: 1px solid #f5f5f5;
     }
 
@@ -195,7 +195,7 @@
         max-height: none;
         margin-left: 5%;
         margin-right: 5%;
-        padding: 1.5rem 2%;
+        padding: 1.5rem 5%;
         border: 1px solid #f5f5f5;
     }
 
@@ -204,15 +204,17 @@
         background: white;
         opacity: 0;
         max-height: 0;
-        min-height: 50px;
+        min-height: 0;
+        overflow: hidden;
         pointer-events: none;
-        padding: 2.5rem 0;
+        padding: 0;
         border-radius: 10px;
         transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
     }
     #szurok_Belso_div.elohiv{
         opacity: 1;
-        max-height: none;        
+        max-height: 2000px;
+        padding: 0.5rem 0;        
         pointer-events: auto;
     }
     #szurok_Belso_div.teljesenElrejt {
@@ -221,10 +223,6 @@
 
 
     @@media(min-height: 768px){
-        #szurok_Belso_div {
-            min-height: 250px;
-            padding: 0.5rem 0;
-        }
 
         #ada_szuroCsoportok_div.elohiv {
             padding: 1.5rem 25%;
@@ -287,7 +285,7 @@
                                             <span class="brwn_Grdnt_Font">@ember.Nev</span>
                                         </td>
                                         <td class="col-5 col-md-2 text-center align-middle">
-                                            <a class="teloLink" href="tel:+35@(ember.Tel_Korzet)@(ember.PhoneNumber)">+36 @ember.Tel_Korzet @ember.PhoneNumber</a>
+                                            <a class="teloLink" href="tel:+36@(ember.Tel_Korzet)@(ember.PhoneNumber)">+36 @ember.Tel_Korzet @ember.PhoneNumber</a>
                                         </td>
                                         <td class="col-2 col-md-2 text-center align-middle">
                                             <span class="forgoNyil brwn_Grdnt_Font fs-2">➤</span>
@@ -393,31 +391,33 @@
                     </tbody>
                 </table>
             </div>
-            <div class="csoves_Tbl_Div flex-column gap-4">
+            <div class="csoves_Tbl_Div flex-column gap-0">
 
                 <div id="szurok_Kulso_div" class="d-flex flex-column justify-content-center align-items-center gap-3">
                     <button type="button" id="bttn_szurok" class="btn bttn_Action">szűrők</button>
-                    <div id="szurok_Belso_div" class="d-flex flex-column gap-2 gap-md-3">
+                    <div id="szurok_Belso_div" class="d-flex flex-column gap-3">
 
                         <select id="slct_szurokCsop" class="form-control w-auto align-self-center text-center">
                             <option value="" selected>kérem, válasszon</option>
-                            <option value="emberek">emberek kiválasztása</option>
+                            <option value="emberek">emberek (sorok) kiválasztása</option>
                             <option value="adatok">adatok (oszlopok) szűrése</option>
                         </select>
 
                         <div id="emb_szuroCsoportok_div" class="">
+                            @{int sorSzam=0;}
                             @foreach(var emb in Model.Felhasznalok_Lst){
                                 if(emb.Email !="kerberosz@gmail.com"){
+                                    sorSzam++;
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id=""/>
-                                        <label class="form-check-label" for="">@emb.Nev</label>
+                                        <input class="form-check-input sorSzuro" data-row="@sorSzam" type="checkbox" checked/>
+                                        <label class="form-check-label fw-medium" for="">@emb.Nev</label>
                                     </div>
                                 }
                             }
                         </div>
 
-                        <div id="ada_szuroCsoportok_div" class="flex-column flex-md-row ">
-                            <div id="gyors_Szurok" class="d-flex flex-column gap-3 me-3">
+                        <div id="ada_szuroCsoportok_div" class="d-flex flex-column flex-md-row gap-3 gap-md-5 ">
+                            <div id="gyors_Szurok" class="d-flex flex-column gap-2">
                                 <label class="form-label fw-bold">Gyors szűrők</label>
 
                                 <div class="d-flex flex-column gap-1">
@@ -436,7 +436,7 @@
                                 </div>
                             </div>
 
-                            <div id="reszletes_Szurok" class="d-flex flex-column gap-3">
+                            <div id="reszletes_Szurok" class="d-flex flex-column gap-2 mt-5 mt-md-0 ms-md-5">
 
 
                                 <label class="form-label fw-bold">Részletes szűrők</label>
@@ -538,7 +538,9 @@
                                 <tr>
                                 <td>@ember.Nev</td>
                                 <td>@ember.Email</td>
-                                <td>@ember.Tel_Korzet @ember.PhoneNumber</td>
+                                <td>
+                                    <a href="tel:+36@(ember.Tel_Korzet)@(ember.PhoneNumber)" style="color:inherit;">+36 @ember.Tel_Korzet @ember.PhoneNumber</a>
+                                </td>
                                 <td>@ember.Lakcim</td>
                                 <td>@ember.SzulIdo</td>
                                 <td>@ember.SzulHely</td>
@@ -706,6 +708,13 @@
                         ).forEach(function(cella){
                             cella.style.display=checkbox.checked ? '' : 'none';
                         });
+                });
+            });
+
+            document.querySelectorAll('.sorSzuro').forEach(function(checkbox){
+                checkbox.addEventListener('change', function(){
+                    const sor = Number(checkbox.dataset.row);
+                    document.querySelector(`#csoves_Tbl tbody tr:nth-child(${sor})`).style.display = checkbox.checked ? '' : 'none';
                 });
             });
 
