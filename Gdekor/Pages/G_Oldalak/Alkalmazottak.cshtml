@@ -68,9 +68,13 @@
     .csoves_Tbl_Div.active{
         max-height: 10000px;
         opacity: 1;
-        overflow-x: auto;
-        overflow-y: hidden;
+        overflow: visible;
     }
+
+    #gorgetheto_Tbl{
+        overflow-x: auto;
+    }
+
     #csoves_Tbl{
         max-height: 10000px;
         opacity: 1;
@@ -510,7 +514,8 @@
                     </div>
                 </div>
 
-                <table id="csoves_Tbl" class="table">
+                <div id="gorgetheto_Tbl">
+                    <table id="csoves_Tbl" class="table">
                     <thead>
                         <tr>
                             <th class="text-center">Név</th>
@@ -558,6 +563,7 @@
                         }
                     </tbody>
                 </table>
+                </div>
             </div>
             
         </div>
@@ -650,7 +656,7 @@
 
                 if(!csoves_Tbl.classList.contains('elrejt'))
                 {
-                    csoves_Tbl_Div.style.overflow='hidden';
+                    
                     csoves_Tbl.classList.add('elrejt');
 
                     szurok_Belso_div.classList.remove('teljesenElrejt');
@@ -665,7 +671,7 @@
                 }
                 else /* Table FELFEDÉSE */
                 {
-                    csoves_Tbl_Div.style.overflow='hidden';
+                    
                     csoves_Tbl.classList.remove('teljesenElrejt');
                     requestAnimationFrame(function(){
                         csoves_Tbl.classList.remove('elrejt');
@@ -673,8 +679,7 @@
                     szurok_Belso_div.classList.remove('elohiv');
                     setTimeout(function(){
                         szurok_Belso_div.classList.add('teljesenElrejt');
-                        csoves_Tbl_Div.style.overflowX = 'auto';
-                        csoves_Tbl_Div.style.overflowY = 'hidden';
+                        
                     }, 500);
                     bttn_szurok.textContent='szűrők';
 
